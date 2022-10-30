@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import useGrid from "../hooks/useGrid";
 import Cell from "./Cell";
 
 type GameGridProps = {
@@ -9,16 +9,14 @@ type GameGridProps = {
 }
 
 const GameGrid = (props: GameGridProps) => {
-    const [ grid, setGrid ] = useState([...Array(props.height)].map((_) => 
-        [...Array(props.height)].map((_) => Math.random() < props.birthFactor ? true : false)
-    ))
+    const { get: grid } = useGrid(props.height, props.width, props.birthFactor)
 
     return (
         <div>
-            { grid.map((_, y) => (
-                grid[y].map((_, x) => (
+            { [...Array(props.height)].map((_, y) => (
+                [...Array(props.width)].map((_, x) => (
                     x < (props.width-1) 
-                    ? <Cell isAlive={grid[y][x]} aliveElement={<span>X</span>} deadElement={<span>O</span>} />
+                    ? <Cell isAlive={grid(x, y)} aliveElement={<span>X</span>} deadElement={<span>O</span>} />
                     : <br/>
                 ))
             ))}

@@ -14,7 +14,7 @@ const useGrid = (height: number, width: number, birthFactor: number): Grid => {
         ))
     }
 
-    return { get, set}
+    return { height, width, get, set }
 }
 
 export default useGrid;

@@ -1,5 +1,5 @@
 
-import useGrid from "../hooks/useGrid";
+import useArrayGrid from "../hooks/useArrayGrid";
 import Cell from "./Cell";
 
 type GameGridProps = {
@@ -9,7 +9,7 @@ type GameGridProps = {
 }
 
 const GameGrid = (props: GameGridProps) => {
-    const { get: grid } = useGrid(props.height, props.width, props.birthFactor)
+    const { get: grid } = useArrayGrid(props.height, props.width, props.birthFactor)
 
     return (
         <div>

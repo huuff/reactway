@@ -25,6 +25,8 @@ const GameSettingsView = (props: GameSettingsViewProps & { className: string }) 
                     className="w-1/4"
                     type="number" 
                     name="height" 
+                    min="0"
+                    max="50"
                     value={props.settings.height} 
                     onChange={createSettingsChangeHandler("setHeight")}
                 />
@@ -36,6 +38,8 @@ const GameSettingsView = (props: GameSettingsViewProps & { className: string }) 
                     className="w-1/4"
                     type="number"
                     name="width" 
+                    min="0"
+                    max="50"
                     value={props.settings.width} 
                     onChange={createSettingsChangeHandler("setWidth")}
                 />
@@ -48,6 +52,9 @@ const GameSettingsView = (props: GameSettingsViewProps & { className: string }) 
                     className="w-1/4"
                     type="number" 
                     name="birth-factor"
+                    step="0.05"
+                    min="0"
+                    max="1"
                     value={props.settings.birthFactor}
                     onChange={createSettingsChangeHandler("setBirthFactor")}
                 />

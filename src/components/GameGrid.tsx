@@ -1,9 +1,8 @@
 
-import React, { useEffect } from "react";
+import { useEffect, Fragment } from "react";
 import { defaultConwayStrategy } from "../game/conway-strategy";
 import { GameSettings } from "../game/settings";
 import useArrayGrid from "../hooks/use-array-grid";
-import Cell from "./Cell";
 
 type GameGridProps = {
     settings: GameSettings
@@ -29,26 +28,20 @@ const GameGrid = (props: GameGridProps & { className: string }) => {
         }
     })
 
-    // TODO: There's a key missing here... but what one?
     return (
         <div className={`${props.className} font-mono leading-none text-lg`}>
             {[...Array(height)].map((_, y) => (
-                <>
-                    {
-                        [...Array(width)].map((_, x) => (
-                                <Cell
-                                    key={`${x}-${y}`}
-                                    isAlive={grid.get(x, y)}
-                                    aliveElement={<span>X</span>}
-                                    deadElement={<span>O</span>}
-                                />
-                        ))
-                    }
-                    <br/>
-                </>
+                        <Fragment key={`row-${y}`}>
+                            {
+                            [...Array(width)].map((_, x) => (
+                                <span key={`${x}-${y}`}>{ grid.get(x, y) ? "X" : "O" }</span>
+                            ))
+                            }
+                            <br key={`row-break-${y}`}/>
+                        </Fragment>
             ))}
         </div>
     )
 }
 
-export default GameGrid
+export default GameGrid;

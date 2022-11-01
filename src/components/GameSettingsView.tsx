@@ -47,7 +47,7 @@ const GameSettingsView = (props: GameSettingsViewProps & { className: string }) 
 
 
             <div className="flex justify-between">
-                <label htmlFor="birth-factor" className="w-1/2 mr-2">Birth Factor:</label>
+                <label htmlFor="birth-factor" className="w-1/2 mr-2">Birth factor:</label>
                 <input 
                     className="w-1/4"
                     type="number" 
@@ -59,6 +59,21 @@ const GameSettingsView = (props: GameSettingsViewProps & { className: string }) 
                     onChange={createSettingsChangeHandler("setBirthFactor")}
                 />
             </div>
+
+            <div className="flex justify-between">
+                <label htmlFor="birth-factor" className="w-1/2 mr-2">Tick duration (ms):</label>
+                <input 
+                    className="w-1/4"
+                    type="number" 
+                    name="tick-duration"
+                    step="100"
+                    min="100"
+                    max="10000"
+                    value={props.settings.tickDuration}
+                    onChange={createSettingsChangeHandler("setTickDuration")}
+                />
+            </div>
+
 
         </div>
     )

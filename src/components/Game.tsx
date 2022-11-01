@@ -14,7 +14,7 @@ const Game = () => {
                 settings={settings}
              />
             <GameSettingsView 
-                className="w-1/4 mx-auto mt-5" 
+                className="w-1/3 mx-auto mt-5" 
                 settings={settings}
                 dispatchSettings={dispatchSettings}
             />

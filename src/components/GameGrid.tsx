@@ -10,9 +10,8 @@ type GameGridProps = {
 
 // TODO: Should maybe be in a context
 let tickTimer: ReturnType<typeof setInterval>
-const tickDurationMs = 1000;
 const GameGrid = (props: GameGridProps & { className: string }) => {
-    const { height, width, birthFactor } = props.settings;
+    const { height, width, birthFactor, tickDuration } = props.settings;
 
     // TODO: The grid should be moved to the parent
     const [grid, setGrid] = useState(ArrayGrid.create(height, width, birthFactor))
@@ -20,7 +19,7 @@ const GameGrid = (props: GameGridProps & { className: string }) => {
     useEffect(() => {
         tickTimer = setInterval(() => {
             setGrid(grid.tick(defaultConwayStrategy))
-        }, tickDurationMs)
+        }, tickDuration)
     })
 
     useEffect(() => {
@@ -32,6 +31,13 @@ const GameGrid = (props: GameGridProps & { className: string }) => {
     useEffect(() => {
         setGrid(ArrayGrid.create(height, width, birthFactor))
     }, [ height, width, birthFactor ])
+
+    useEffect(() => {
+        clearInterval(tickTimer)
+        tickTimer = setInterval(() => {
+            setGrid(grid.tick(defaultConwayStrategy))
+        }, tickDuration)
+    }, [ tickDuration ])
 
     return (
         <div className={`${props.className} font-mono leading-none text-lg`}>

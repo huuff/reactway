@@ -18,7 +18,7 @@ const GameGrid = (props: GameGridProps & { className: string }) => {
 
     useEffect(() => {
         tickTimer = setInterval(() => {
-            setGrid(grid.tick(defaultConwayStrategy))
+            setGrid((it) => it.tick(defaultConwayStrategy))
         }, tickDuration)
     })
 
@@ -35,7 +35,7 @@ const GameGrid = (props: GameGridProps & { className: string }) => {
     useEffect(() => {
         clearInterval(tickTimer)
         tickTimer = setInterval(() => {
-            setGrid(grid.tick(defaultConwayStrategy))
+            setGrid((it) => it.tick(defaultConwayStrategy))
         }, tickDuration)
     }, [ tickDuration ])
 

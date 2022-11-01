@@ -1,5 +1,3 @@
-import { isConstructorDeclaration } from "typescript"
-
 type BaseParamsType = {
     [key: string]: string
 }

@@ -4,7 +4,9 @@ import GameSettingsView from "./GameSettingsView";
 import { settingsReducer, defaultSettings } from "../game/settings";
 import { ArrayGrid  } from "../game/array-grid";
 import { defaultConwayStrategy } from "../game/conway-strategy";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { seedRoute } from "../routes/active-routes";
+import { randomSeed } from "../game/birth-function";
 
 type GameRouteParams = {
     readonly seed: string;
@@ -54,6 +56,12 @@ const Game = () => {
                 settings={settings}
                 dispatchSettings={dispatchSettings}
             />
+            <div className="mt-10 text-center">
+                {/* Doesn't seem to be working... */}
+                <Link to={seedRoute.build({ seed: randomSeed()}, {})}>
+                    <button type="button" className="rounded-full bg-sky-500 p-2 text-slate-100">Restart</button>
+                </Link>
+            </div>
         </div>
     )
 } 

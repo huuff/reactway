@@ -13,15 +13,20 @@ const useGrid = (height: number, width: number, birthFactor: number): Grid => {
     ))
 
     const get = (x: number, y: number): boolean => grid[y][x]
-    // TODO: All of these are wrong because they don't use setGrid
     const toggle = (x: number, y: number): void => {
-        grid[y][x] = !grid[y][x];
+        setGrid(grid.map((_, y_2) => 
+            grid[y_2].map((_, x_2) => x === x_2 && y === y_2 ? !grid[y][x] : grid[y][x])
+        ))
     }
     const kill = (x: number, y: number): void => {
-        grid[y][x] = false;
+        setGrid(grid.map((_, y_2) => 
+            grid[y_2].map((_, x_2) => x === x_2 && y === y_2 ? false : grid[y][x])
+        ))
     }
     const revive = (x: number, y: number): void => {
-        grid[y][x] = true;
+        setGrid(grid.map((_, y_2) => 
+            grid[y_2].map((_, x_2) => x === x_2 && y === y_2 ? true : grid[y][x])
+        ))
     }
 
     return { get, toggle, kill, revive }

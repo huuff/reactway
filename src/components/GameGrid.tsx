@@ -1,44 +1,13 @@
 
-import { useEffect, Fragment, useState } from "react";
-import { ArrayGrid } from "../game/array-grid";
-import { defaultConwayStrategy } from "../game/conway-strategy";
-import { GameSettings } from "../game/settings";
-import { randomSeed } from "../game/birth-function";
+import { Fragment } from "react";
+import { Grid } from "../game/grid";
 
 type GameGridProps = {
-    settings: GameSettings
+    grid: Grid<any>
 }
 
-// TODO: Should maybe be in a context
-let tickTimer: ReturnType<typeof setInterval>
 const GameGrid = (props: GameGridProps & { className: string }) => {
-    const { height, width, birthFactor, tickDuration } = props.settings;
-
-    // TODO: The grid should be moved to the parent
-    const [grid, setGrid] = useState(ArrayGrid.create(height, width, birthFactor, randomSeed()))
-
-    useEffect(() => {
-        tickTimer = setInterval(() => {
-            setGrid((it) => it.tick(defaultConwayStrategy))
-        }, tickDuration)
-    })
-
-    useEffect(() => {
-        return () => {
-            clearInterval(tickTimer);
-        }
-    })
-
-    useEffect(() => {
-        setGrid(ArrayGrid.create(height, width, birthFactor, randomSeed()))
-    }, [ height, width, birthFactor ])
-
-    useEffect(() => {
-        clearInterval(tickTimer)
-        tickTimer = setInterval(() => {
-            setGrid((it) => it.tick(defaultConwayStrategy))
-        }, tickDuration)
-    }, [ tickDuration ])
+    const { grid } = props;
 
     return (
         <div className={`${props.className} font-mono leading-none text-lg`}>

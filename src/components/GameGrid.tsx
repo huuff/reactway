@@ -24,7 +24,7 @@ const GameGrid = (props: GameSettings & { className: string }) => {
     })
 
     return (
-        <div className={props.className}>
+        <div className={`${props.className} font-mono leading-none text-lg`}>
             {[...Array(props.height)].map((_, y) => (
                 [...Array(props.width)].map((_, x) => (
                     x < (props.width - 1)

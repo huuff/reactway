@@ -1,8 +1,8 @@
 
-import { useEffect, Fragment } from "react";
+import { useEffect, Fragment, useState } from "react";
+import { ArrayGrid } from "../game/array-grid";
 import { defaultConwayStrategy } from "../game/conway-strategy";
 import { GameSettings } from "../game/settings";
-import useArrayGrid from "../hooks/use-array-grid";
 
 type GameGridProps = {
     settings: GameSettings
@@ -14,7 +14,8 @@ const tickDurationMs = 1000;
 const GameGrid = (props: GameGridProps & { className: string }) => {
     const { height, width, birthFactor } = props.settings;
 
-    const [grid, setGrid] = useArrayGrid(height, width, birthFactor)
+    // TODO: The grid should be moved to the parent
+    const [grid, setGrid] = useState(ArrayGrid.create(height, width, birthFactor))
 
     useEffect(() => {
         tickTimer = setInterval(() => {
@@ -28,12 +29,16 @@ const GameGrid = (props: GameGridProps & { className: string }) => {
         }
     })
 
+    useEffect(() => {
+        setGrid(ArrayGrid.create(height, width, birthFactor))
+    }, [ height, width, birthFactor ])
+
     return (
         <div className={`${props.className} font-mono leading-none text-lg`}>
-            {[...Array(height)].map((_, y) => (
+            {[...Array(grid.height)].map((_, y) => (
                         <Fragment key={`row-${y}`}>
                             {
-                                [...Array(width)].map((_, x) => (
+                                [...Array(grid.width)].map((_, x) => (
                                     <span key={`${x}-${y}`}>{ grid.get(x, y) ? "X" : "O" }</span>
                                 ))
                             }

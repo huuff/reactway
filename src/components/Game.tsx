@@ -21,8 +21,8 @@ const Game = () => {
 
     return (
         <div>
-            <GameGrid {...settings} />
-            <GameSettingsView {...settings} />
+            <GameGrid className="w-1/2 mx-auto text-center" {...settings} />
+            <GameSettingsView className="w-3/4 mx-auto text-center" {...settings} />
         </div>
     )
 } 

@@ -1,11 +1,7 @@
 
-type GameSettingsProps = {
-    readonly height: number;
-    readonly width: number;
-    readonly birthFactor: number;
-};
+import { GameSettings } from "./Game";
 
-const GameSettings = (props: GameSettingsProps) => {
+const GameSettingsView = (props: GameSettings) => {
     return (
         <div>
             <input type="number" name="height" value={props.height} />
@@ -15,4 +11,4 @@ const GameSettings = (props: GameSettingsProps) => {
     )
 }
 
-export default GameSettings;
+export default GameSettingsView;

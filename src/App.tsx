@@ -1,9 +1,9 @@
-import GameGrid from "./components/GameGrid";
+import Game from "./components/Game";
 
 function App() {
   return (
     <div className="App">
-      <GameGrid />
+      <Game />
     </div>
   );
 }

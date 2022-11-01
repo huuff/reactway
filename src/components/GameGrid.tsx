@@ -1,19 +1,15 @@
 
 import { useEffect } from "react";
 import { defaultConwayStrategy } from "../game/conway-strategy";
+import { GameSettings } from "./Game";
 import useArrayGrid from "../hooks/use-array-grid";
 import Cell from "./Cell";
-import GameSettings from "./GameSettings";
 
-type GameGridProps = {
-    height: number;
-    width: number;
-    birthFactor: number;
-}
+
 
 let tickTimer: ReturnType<typeof setInterval>
 const tickDurationMs = 1000;
-const GameGrid = (props: GameGridProps) => {
+const GameGrid = (props: GameSettings) => {
     const [grid, setGrid] = useArrayGrid(props.height, props.width, props.birthFactor)
 
     useEffect(() => {
@@ -41,15 +37,8 @@ const GameGrid = (props: GameGridProps) => {
                         : <br />
                 ))
             ))}
-            <GameSettings height={props.height} width={props.width} birthFactor={props.birthFactor} />
         </div>
     )
-}
-
-GameGrid.defaultProps = {
-    height: 10,
-    width: 10,
-    birthFactor: 0.2,
 }
 
 export default GameGrid

@@ -1,3 +1,5 @@
+import { ConwayStrategy } from "./conway-strategy";
+
 type Coordinates = Readonly<[x: number, y: number]>;
 
 abstract class Grid<T extends Grid<any>> {
@@ -5,7 +7,7 @@ abstract class Grid<T extends Grid<any>> {
     abstract readonly width: number;
 
     abstract get(x: number, y: number): boolean;
-    abstract tick(): T;
+    abstract tick(strategy: ConwayStrategy): T;
 
     contains(x: number, y: number): boolean {
         return x >= 0 && y >= 0 && x <= (this.width - 1) && y <= (this.height - 1);

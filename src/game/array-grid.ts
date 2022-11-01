@@ -1,3 +1,4 @@
+import { ConwayStrategy } from "./conway-strategy";
 import { Grid } from "./grid";
 
 type InternalGrid = boolean[][];
@@ -32,8 +33,12 @@ class ArrayGrid extends Grid<ArrayGrid> {
         return this.internalGrid[y][x];
     }
 
-    tick(): ArrayGrid {
-        return new ArrayGrid(this.internalGrid);
+    tick(strategy: ConwayStrategy): ArrayGrid {
+        const newInternalGrid = this.internalGrid.map((_, y) => 
+            this.internalGrid[y].map((_, x) => strategy(this, [x, y]))
+        )
+
+        return new ArrayGrid(newInternalGrid);
     }
 }
 

@@ -29,6 +29,7 @@ const GameGrid = (props: GameGridProps & { className: string }) => {
         }
     })
 
+    // TODO: There's a key missing here... but what one?
     return (
         <div className={`${props.className} font-mono leading-none text-lg`}>
             {[...Array(height)].map((_, y) => (
@@ -36,6 +37,7 @@ const GameGrid = (props: GameGridProps & { className: string }) => {
                     {
                         [...Array(width)].map((_, x) => (
                                 <Cell
+                                    key={`${x}-${y}`}
                                     isAlive={grid.get(x, y)}
                                     aliveElement={<span>X</span>}
                                     deadElement={<span>O</span>}

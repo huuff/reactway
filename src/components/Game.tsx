@@ -13,7 +13,7 @@ type GameSettings = {
 const defaultSettings: GameSettings = {
     height: 10,
     width: 10,
-    birthFactor: 10,
+    birthFactor: 0.2,
 }
 
 const Game = () => {
@@ -22,7 +22,7 @@ const Game = () => {
     return (
         <div>
             <GameGrid className="w-1/2 mx-auto text-center" {...settings} />
-            <GameSettingsView className="w-3/4 mx-auto text-center" {...settings} />
+            <GameSettingsView className="w-1/2 mx-auto text-left" {...settings} />
         </div>
     )
 } 

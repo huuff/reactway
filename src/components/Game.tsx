@@ -1,31 +1,25 @@
-import { useState } from "react";
+import { useReducer } from "react";
 import GameGrid from "./GameGrid";
 import GameSettingsView from "./GameSettingsView";
+import { settingsReducer, defaultSettings } from "../game/settings";
 
-// TODO: Should maybe be somewhere else
-type GameSettings = {
-    readonly height: number;
-    readonly width: number;
-    readonly birthFactor: number;
-}
-
-// TODO: A reducer for settings?
-const defaultSettings: GameSettings = {
-    height: 10,
-    width: 10,
-    birthFactor: 0.2,
-}
 
 const Game = () => {
-    const [ settings, setSettings ] = useState<GameSettings>(defaultSettings)
+    const [ settings, dispatchSettings ] = useReducer(settingsReducer, defaultSettings)
 
     return (
         <div>
-            <GameGrid className="w-1/2 mx-auto text-center" {...settings} />
-            <GameSettingsView className="w-1/4 mx-auto mt-5" {...settings} />
+            <GameGrid 
+                className="w-1/2 mx-auto text-center"
+                settings={settings}
+             />
+            <GameSettingsView 
+                className="w-1/4 mx-auto mt-5" 
+                settings={settings}
+                dispatchSettings={dispatchSettings}
+            />
         </div>
     )
 } 
 
-export type { GameSettings };
 export default Game;

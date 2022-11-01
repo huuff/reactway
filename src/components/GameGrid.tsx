@@ -1,15 +1,21 @@
 
 import React, { useEffect } from "react";
 import { defaultConwayStrategy } from "../game/conway-strategy";
-import { GameSettings } from "./Game";
+import { GameSettings } from "../game/settings";
 import useArrayGrid from "../hooks/use-array-grid";
 import Cell from "./Cell";
 
+type GameGridProps = {
+    settings: GameSettings
+}
 
+// TODO: Should maybe be in a context
 let tickTimer: ReturnType<typeof setInterval>
 const tickDurationMs = 1000;
-const GameGrid = (props: GameSettings & { className: string }) => {
-    const [grid, setGrid] = useArrayGrid(props.height, props.width, props.birthFactor)
+const GameGrid = (props: GameGridProps & { className: string }) => {
+    const { height, width, birthFactor } = props.settings;
+
+    const [grid, setGrid] = useArrayGrid(height, width, birthFactor)
 
     useEffect(() => {
         tickTimer = setInterval(() => {
@@ -25,16 +31,19 @@ const GameGrid = (props: GameSettings & { className: string }) => {
 
     return (
         <div className={`${props.className} font-mono leading-none text-lg`}>
-            {[...Array(props.height)].map((_, y) => (
-                [...Array(props.width)].map((_, x) => (
-                    x < (props.width - 1)
-                        ? <Cell
-                            isAlive={grid.get(x, y)}
-                            aliveElement={<span>X</span>}
-                            deadElement={<span>O</span>}
-                        />
-                        : <br />
-                ))
+            {[...Array(height)].map((_, y) => (
+                <>
+                    {
+                        [...Array(width)].map((_, x) => (
+                                <Cell
+                                    isAlive={grid.get(x, y)}
+                                    aliveElement={<span>X</span>}
+                                    deadElement={<span>O</span>}
+                                />
+                        ))
+                    }
+                    <br/>
+                </>
             ))}
         </div>
     )

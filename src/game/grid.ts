@@ -1,11 +1,32 @@
 type Coordinates = Readonly<[x: number, y: number]>;
 
-type Grid = {
-    readonly height: number;
-    readonly width: number;
+abstract class Grid {
+    abstract readonly height: number;
+    abstract readonly width: number;
 
-    get(x: number, y: number): boolean;
-    set(x: number, y: number, state: boolean): void;
+    abstract get(x: number, y: number): boolean;
+
+    contains(x: number, y: number): boolean {
+        return x >= 0 && y >= 0 && x <= (this.width - 1) && y <= (this.height - 1);
+    }
+    
+    getNeighbours(x: number, y: number): Coordinates[] {
+        return [
+            [x-1, y] as const,
+            [x, y+1] as const,
+            [x+1, y] as const,
+            [x, y-1] as const,
+        ].filter((it) => this.contains(...it))
+    }
+    
+    liveNeighbours(x: number, y: number): number {
+        const boolToInt = (b: boolean): number => b ? 1 : 0;
+        return this.getNeighbours(x, y)
+            .map((it) => boolToInt(this.get(...it)))
+            .reduce((acc, it) => acc + 1)
+    }
+    
 }
 
-export type { Coordinates, Grid };
+export { Grid }
+export type { Coordinates };

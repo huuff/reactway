@@ -1,5 +1,5 @@
 
-import useArrayGrid from "../hooks/useArrayGrid";
+import useArrayGrid from "../hooks/use-array-grid";
 import Cell from "./Cell";
 
 type GameGridProps = {
@@ -9,14 +9,14 @@ type GameGridProps = {
 }
 
 const GameGrid = (props: GameGridProps) => {
-    const { get: grid } = useArrayGrid(props.height, props.width, props.birthFactor)
+    const [ grid, setGrid ] = useArrayGrid(props.height, props.width, props.birthFactor)
 
     return (
         <div>
             { [...Array(props.height)].map((_, y) => (
                 [...Array(props.width)].map((_, x) => (
                     x < (props.width-1) 
-                    ? <Cell isAlive={grid(x, y)} aliveElement={<span>X</span>} deadElement={<span>O</span>} />
+                    ? <Cell isAlive={grid.get(x, y)} aliveElement={<span>X</span>} deadElement={<span>O</span>} />
                     : <br/>
                 ))
             ))}

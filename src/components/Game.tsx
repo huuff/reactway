@@ -27,7 +27,7 @@ const Game = () => {
     })
 
     useEffect(() => {
-        setGrid(ArrayGrid.create(settings, randomSeed()))
+        setGrid(ArrayGrid.create({height, width, birthFactor}, randomSeed()))
     }, [ height, width, birthFactor ])
 
     useEffect(() => {

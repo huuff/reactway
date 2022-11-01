@@ -1,4 +1,4 @@
-import { Dispatch, ChangeEvent } from "react";
+import { ChangeEvent } from "react";
 import { GameSettings, GameSettingsAction, GameSettingsActionType } from "../game/settings";
 
 type GameSettingsViewProps = {

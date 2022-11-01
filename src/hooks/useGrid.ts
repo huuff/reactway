@@ -1,11 +1,6 @@
 import { useState } from "react";
+import { Grid } from "../game/grid";
 
-type Grid = {
-    get(x: number, y: number): boolean;
-    toggle(x: number, y: number): void;
-    kill(x: number, y:number): void;
-    revive(x: number, y: number): void;
-}
 
 const useGrid = (height: number, width: number, birthFactor: number): Grid => {
     const [ grid, setGrid ] = useState([...Array(height)].map((_) => 

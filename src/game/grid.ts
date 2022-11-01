@@ -1,10 +1,11 @@
 type Coordinates = Readonly<[x: number, y: number]>;
 
-abstract class Grid {
+abstract class Grid<T extends Grid<any>> {
     abstract readonly height: number;
     abstract readonly width: number;
 
     abstract get(x: number, y: number): boolean;
+    abstract tick(): T;
 
     contains(x: number, y: number): boolean {
         return x >= 0 && y >= 0 && x <= (this.width - 1) && y <= (this.height - 1);
@@ -24,8 +25,7 @@ abstract class Grid {
         return this.getNeighbours(x, y)
             .map((it) => boolToInt(this.get(...it)))
             .reduce((acc, it) => acc + 1)
-    }
-    
+    }    
 }
 
 export { Grid }

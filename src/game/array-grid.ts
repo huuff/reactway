@@ -1,18 +1,30 @@
 import { Grid } from "./grid";
 
-class ArrayGrid extends Grid {
-    private readonly internalGrid: Readonly<Readonly<boolean[]>[]>
+type InternalGrid = boolean[][];
+
+class ArrayGrid extends Grid<ArrayGrid> {
+    private readonly internalGrid: InternalGrid; // TODO: DeepReadonly
+
+    public readonly height: number;
+    public readonly width: number;
+
+
+    private constructor(internalGrid: InternalGrid) {
+        super();
+        this.internalGrid = internalGrid;
+        this.height = internalGrid.length;
+        this.width = internalGrid[0]?.length ?? 0;
+    }
 
     // TODO: Extract `birthFactor` logic somewhere else
-    constructor(
-        public readonly height: number,
-        public readonly width: number,
+    static create(
+        height: number,
+        width: number,
         birthFactor: number,
-    ) {
-        super()
-        this.internalGrid = [...Array(height)].map((_) =>
+    ): ArrayGrid {
+        return new ArrayGrid([...Array(height)].map((_) =>
             [...Array(width)].map((_) => Math.random() < birthFactor ? true : false)
-        );
+        ));
     }
 
 
@@ -20,6 +32,9 @@ class ArrayGrid extends Grid {
         return this.internalGrid[y][x];
     }
 
+    tick(): ArrayGrid {
+        return new ArrayGrid(this.internalGrid);
+    }
 }
 
 export { ArrayGrid };

@@ -5,7 +5,7 @@ import { GridHook, UseGridHook } from "../game/grid-hook";
 
 const useArrayGrid: UseGridHook<ArrayGrid> 
     = (height: number, width: number, birthFactor: number): GridHook<ArrayGrid> => {
-    return useState(new ArrayGrid(height, width, birthFactor));
+    return useState(ArrayGrid.create(height, width, birthFactor));
 }
 
 export default useArrayGrid;

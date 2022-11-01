@@ -9,7 +9,7 @@ function App() {
       <h1 className="text-5xl text-center mb-5">Reactway</h1>
       <BrowserRouter>
         <Routes>
-          <Route path={seedRoute.base} element={<Game />} />
+          <Route path={seedRoute.base} element={<Game />}/>
           <Route path="/" element={
             <Navigate replace to={seedRoute.build({seed: randomSeed()}, {})} />
           } />

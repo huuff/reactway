@@ -36,7 +36,7 @@ const Game = () => {
 
     useEffect(() => {
         setGrid(ArrayGrid.create({height, width, birthFactor}, seed))
-    }, [ height, width, birthFactor ])
+    }, [ height, width, birthFactor, seed ])
 
     useEffect(() => {
         clearInterval(tickTimer)
@@ -57,7 +57,6 @@ const Game = () => {
                 dispatchSettings={dispatchSettings}
             />
             <div className="mt-10 text-center">
-                {/* Doesn't seem to be working... */}
                 <Link to={seedRoute.build({ seed: randomSeed()}, {})}>
                     <button type="button" className="rounded-full bg-sky-500 p-2 text-slate-100">Restart</button>
                 </Link>

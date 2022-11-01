@@ -33,9 +33,9 @@ const GameGrid = (props: GameGridProps & { className: string }) => {
             {[...Array(height)].map((_, y) => (
                         <Fragment key={`row-${y}`}>
                             {
-                            [...Array(width)].map((_, x) => (
-                                <span key={`${x}-${y}`}>{ grid.get(x, y) ? "X" : "O" }</span>
-                            ))
+                                [...Array(width)].map((_, x) => (
+                                    <span key={`${x}-${y}`}>{ grid.get(x, y) ? "X" : "O" }</span>
+                                ))
                             }
                             <br key={`row-break-${y}`}/>
                         </Fragment>

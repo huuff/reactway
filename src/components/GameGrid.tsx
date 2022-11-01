@@ -3,6 +3,7 @@ import { useEffect, Fragment, useState } from "react";
 import { ArrayGrid } from "../game/array-grid";
 import { defaultConwayStrategy } from "../game/conway-strategy";
 import { GameSettings } from "../game/settings";
+import { randomSeed } from "../game/birth-function";
 
 type GameGridProps = {
     settings: GameSettings
@@ -14,7 +15,7 @@ const GameGrid = (props: GameGridProps & { className: string }) => {
     const { height, width, birthFactor, tickDuration } = props.settings;
 
     // TODO: The grid should be moved to the parent
-    const [grid, setGrid] = useState(ArrayGrid.create(height, width, birthFactor))
+    const [grid, setGrid] = useState(ArrayGrid.create(height, width, birthFactor, randomSeed()))
 
     useEffect(() => {
         tickTimer = setInterval(() => {
@@ -29,7 +30,7 @@ const GameGrid = (props: GameGridProps & { className: string }) => {
     })
 
     useEffect(() => {
-        setGrid(ArrayGrid.create(height, width, birthFactor))
+        setGrid(ArrayGrid.create(height, width, birthFactor, randomSeed()))
     }, [ height, width, birthFactor ])
 
     useEffect(() => {

@@ -1,5 +1,7 @@
 import { ConwayStrategy } from "./conway-strategy";
 import { Grid } from "./grid";
+import seedrandom from "seedrandom";
+import { shouldBeBornAlive } from "./birth-function";
 
 type InternalGrid = boolean[][];
 
@@ -17,14 +19,15 @@ class ArrayGrid extends Grid<ArrayGrid> {
         this.width = internalGrid[0]?.length ?? 0;
     }
 
-    // TODO: Extract `birthFactor` logic somewhere else
     static create(
         height: number,
         width: number,
         birthFactor: number,
+        seed: string,
     ): ArrayGrid {
+        const random = seedrandom(seed)
         return new ArrayGrid([...Array(height)].map((_) =>
-            [...Array(width)].map((_) => Math.random() < birthFactor ? true : false)
+            [...Array(width)].map((_) => shouldBeBornAlive(random, birthFactor))
         ));
     }
 

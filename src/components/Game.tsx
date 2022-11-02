@@ -5,18 +5,15 @@ import { settingsReducer, defaultSettings } from "../game/settings";
 import { ArrayGrid  } from "../game/array-grid";
 import { defaultConwayStrategy } from "../game/conway-strategy";
 import { Link, useParams } from "react-router-dom";
-import { seedRoute } from "../routes/active-routes";
+import { seedRoute, SeedRoutePathParams } from "../routes/active-routes";
 import { randomSeed } from "../game/birth-function";
 
-type GameRouteParams = {
-    readonly seed: string;
-}
 
 // TODO: Should maybe be in a context
 let tickTimer: ReturnType<typeof setInterval>
 const Game = () => {
     // https://stackoverflow.com/a/70000958/15768984
-    const { seed } = useParams<keyof GameRouteParams>() as GameRouteParams
+    const { seed } = useParams<keyof SeedRoutePathParams>() as SeedRoutePathParams
     const [ settings, dispatchSettings ] = useReducer(settingsReducer, defaultSettings)
     const [ grid, setGrid ] = useState(ArrayGrid.create(settings, seed))
 

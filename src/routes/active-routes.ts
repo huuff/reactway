@@ -1,5 +1,10 @@
 import { RouteSpec } from "./route-spec";
 
-const seedRoute = new RouteSpec<{ seed: string }, {}>("/seed/:seed");
+type SeedRoutePathParams = {
+    seed: string;
+}
+
+const seedRoute = new RouteSpec<SeedRoutePathParams, {}>("/seed/:seed");
 
 export { seedRoute };
+export type { SeedRoutePathParams };

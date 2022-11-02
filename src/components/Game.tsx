@@ -4,9 +4,10 @@ import GameSettingsView from "./GameSettingsView";
 import { settingsReducer, defaultSettings } from "../game/settings";
 import { ArrayGrid  } from "../game/array-grid";
 import { defaultConwayStrategy } from "../game/conway-strategy";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { seedRoute, SeedRoutePathParams } from "../routes/active-routes";
 import { randomSeed } from "../game/birth-function";
+import { toStringObject } from "../util/to-string-object";
 
 
 // TODO: Should maybe be in a context
@@ -14,6 +15,9 @@ let tickTimer: ReturnType<typeof setInterval>
 const Game = () => {
     // https://stackoverflow.com/a/70000958/15768984
     const { seed } = useParams<keyof SeedRoutePathParams>() as SeedRoutePathParams
+
+    // TODO: Get QueryParams to set default settings
+    const [ queryParams, setQueryParams ] = useSearchParams();
     const [ settings, dispatchSettings ] = useReducer(settingsReducer, defaultSettings)
     const [ grid, setGrid ] = useState(ArrayGrid.create(settings, seed))
 
@@ -23,24 +27,29 @@ const Game = () => {
         tickTimer = setInterval(() => {
             setGrid((it) => it.tick(defaultConwayStrategy))
         }, tickDuration)
-    })
+    });
+
+    // TODO: Maybe merge this with all other QueryParams stuff in a useSettings hook or something
+    useEffect(() => {
+        setQueryParams(toStringObject(settings));
+    }, [ settings ])
 
     useEffect(() => {
         return () => {
             clearInterval(tickTimer);
         }
-    })
+    });
 
     useEffect(() => {
         setGrid(ArrayGrid.create({height, width, birthFactor}, seed))
-    }, [ height, width, birthFactor, seed ])
+    }, [ height, width, birthFactor, seed ]);
 
     useEffect(() => {
         clearInterval(tickTimer)
         tickTimer = setInterval(() => {
             setGrid((it) => it.tick(defaultConwayStrategy))
         }, tickDuration)
-    }, [ tickDuration ])
+    }, [ tickDuration ]);
 
     return (
         <div>

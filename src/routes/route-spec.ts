@@ -1,8 +1,4 @@
-type BaseParamsType = {
-    [key: string]: string
-}
-
-class RouteSpec<PathParams extends BaseParamsType, QueryParams extends BaseParamsType> {
+class RouteSpec<PathParams, QueryParams> {
     
     constructor(public readonly base: string) {
 
@@ -13,7 +9,7 @@ class RouteSpec<PathParams extends BaseParamsType, QueryParams extends BaseParam
         let result = this.base;
 
         for (const key in pathParams) {
-            result = result.replaceAll(`:${key}`, pathParams[key])
+            result = result.replaceAll(`:${key}`, String(pathParams[key]))
         }
 
         return result;

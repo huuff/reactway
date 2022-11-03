@@ -26,7 +26,7 @@ abstract class Grid<T extends Grid<any>> {
         const boolToInt = (b: boolean): number => b ? 1 : 0;
         return this.getNeighbours(x, y)
             .map((it) => boolToInt(this.get(...it)))
-            .reduce((acc, it) => acc + 1)
+            .reduce((acc, it) => acc + it)
     }    
 }
 

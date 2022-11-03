@@ -1,13 +1,11 @@
-import { GameSettings } from "../game/settings";
+import { GameSettingsQueryParams } from "../game/settings";
 import { RouteSpec } from "./route-spec";
 
 type SeedRoutePathParams = {
     seed: string;
 }
 
-type SeedRouteQueryParams = Partial<GameSettings>
-
-const seedRoute = new RouteSpec<SeedRoutePathParams, SeedRouteQueryParams>("/seed/:seed");
+const seedRoute = new RouteSpec<SeedRoutePathParams, GameSettingsQueryParams>("/seed/:seed");
 
 export { seedRoute };
 export type { SeedRoutePathParams };

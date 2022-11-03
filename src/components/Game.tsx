@@ -1,13 +1,12 @@
-import { useReducer, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import GameGrid from "./GameGrid";
 import GameSettingsView from "./GameSettingsView";
-import { settingsReducer, defaultSettings } from "../game/settings";
+import { useSettings, defaultSettings } from "../game/settings";
 import { ArrayGrid  } from "../game/array-grid";
 import { defaultConwayStrategy } from "../game/conway-strategy";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { seedRoute, SeedRoutePathParams } from "../routes/active-routes";
 import { randomSeed } from "../game/birth-function";
-import { toStringObject } from "../util/to-string-object";
 
 
 // TODO: Should maybe be in a context
@@ -17,8 +16,7 @@ const Game = () => {
     const { seed } = useParams<keyof SeedRoutePathParams>() as SeedRoutePathParams
 
     // TODO: Get QueryParams to set default settings
-    const [ queryParams, setQueryParams ] = useSearchParams();
-    const [ settings, dispatchSettings ] = useReducer(settingsReducer, defaultSettings)
+    const [ settings, dispatchSettings ] = useSettings(defaultSettings)
     const [ grid, setGrid ] = useState(ArrayGrid.create(settings, seed))
 
     const { height, width, birthFactor, tickDuration } = settings
@@ -28,11 +26,6 @@ const Game = () => {
             setGrid((it) => it.tick(defaultConwayStrategy))
         }, tickDuration)
     });
-
-    // TODO: Maybe merge this with all other QueryParams stuff in a useSettings hook or something
-    useEffect(() => {
-        setQueryParams(toStringObject(settings));
-    }, [ settings ])
 
     useEffect(() => {
         return () => {

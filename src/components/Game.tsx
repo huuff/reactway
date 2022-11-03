@@ -15,7 +15,6 @@ const Game = () => {
     // https://stackoverflow.com/a/70000958/15768984
     const { seed } = useParams<keyof SeedRoutePathParams>() as SeedRoutePathParams
 
-    // TODO: Get QueryParams to set default settings
     const [ settings, dispatchSettings ] = useSettings(defaultSettings)
     const [ grid, setGrid ] = useState(ArrayGrid.create(settings, seed))
 
@@ -56,8 +55,10 @@ const Game = () => {
                 dispatchSettings={dispatchSettings}
             />
             <div className="mt-10 text-center">
-                <Link to={seedRoute.build({ seed: randomSeed()}, {})}>
-                    <button type="button" className="rounded-full bg-sky-500 p-2 text-slate-100">Restart</button>
+                <Link to={seedRoute.build({ seed: randomSeed()}, settings)}>
+                    <button type="button" className="rounded-full bg-sky-500 p-2 text-slate-100">
+                        Restart
+                    </button>
                 </Link>
             </div>
         </div>

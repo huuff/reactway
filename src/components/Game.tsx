@@ -7,41 +7,36 @@ import { defaultConwayStrategy } from "../game/conway-strategy";
 import { Link, useParams } from "react-router-dom";
 import { seedRoute, SeedRoutePathParams } from "../routes/active-routes";
 import { randomSeed } from "../game/birth-function";
+import { useTimer } from "../game/use-timer";
 
 
-// TODO: Should maybe be in a context
-let tickTimer: ReturnType<typeof setInterval>
 const Game = () => {
     // https://stackoverflow.com/a/70000958/15768984
     const { seed } = useParams<keyof SeedRoutePathParams>() as SeedRoutePathParams
 
     const [ settings, dispatchSettings ] = useSettings(defaultSettings)
+    // TODO: useGrid that has a tickGrid function
     const [ grid, setGrid ] = useState(ArrayGrid.create(settings, seed))
 
     const { height, width, birthFactor, tickDuration } = settings
+    const [ startTimer, stopTimer ] = useTimer(defaultConwayStrategy, setGrid);
 
-    useEffect(() => {
-        tickTimer = setInterval(() => {
-            setGrid((it) => it.tick(defaultConwayStrategy))
-        }, tickDuration)
-    });
-
-    useEffect(() => {
-        return () => {
-            clearInterval(tickTimer);
-        }
-    });
 
     useEffect(() => {
         setGrid(ArrayGrid.create({height, width, birthFactor}, seed))
     }, [ height, width, birthFactor, seed ]);
 
     useEffect(() => {
-        clearInterval(tickTimer)
-        tickTimer = setInterval(() => {
-            setGrid((it) => it.tick(defaultConwayStrategy))
-        }, tickDuration)
+        startTimer(tickDuration);
     }, [ tickDuration ]);
+
+    
+    useEffect(() => {
+        return () => {
+            stopTimer();
+        }
+    }, []);
+    
 
     return (
         <div>

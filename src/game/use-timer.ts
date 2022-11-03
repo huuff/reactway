@@ -1,10 +1,10 @@
-import React from "react";
+import { Dispatch, SetStateAction } from "react";
 import { ConwayStrategy } from "./conway-strategy";
 import { Grid } from "./grid";
 
 function useTimer<T extends Grid<T>>(
     conwayStrategy: ConwayStrategy, 
-    setGrid: React.Dispatch<React.SetStateAction<T>>)
+    setGrid: Dispatch<SetStateAction<T>>)
     : [(duration: number) => void, () => void ] {
     let tickTimer: ReturnType<typeof setInterval>
 

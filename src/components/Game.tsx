@@ -7,7 +7,7 @@ import { defaultConwayStrategy } from "../game/conway-strategy";
 import { Link, useParams } from "react-router-dom";
 import { seedRoute, SeedRoutePathParams } from "../routes/active-routes";
 import { randomSeed } from "../game/birth-function";
-import { useTimer } from "../game/use-timer";
+import { useInterval } from "usehooks-ts";
 
 
 const Game = () => {
@@ -19,24 +19,14 @@ const Game = () => {
     const [ grid, setGrid ] = useState(ArrayGrid.create(settings, seed))
 
     const { height, width, birthFactor, tickDuration } = settings
-    const [ startTimer, stopTimer ] = useTimer(defaultConwayStrategy, setGrid);
-
 
     useEffect(() => {
         setGrid(ArrayGrid.create({height, width, birthFactor}, seed))
     }, [ height, width, birthFactor, seed ]);
 
-    useEffect(() => {
-        startTimer(tickDuration);
-    }, [ tickDuration ]);
-
-    
-    useEffect(() => {
-        return () => {
-            stopTimer();
-        }
-    }, []);
-    
+    useInterval(() => {
+        setGrid(grid.tick(defaultConwayStrategy))
+    }, tickDuration);
 
     return (
         <div>

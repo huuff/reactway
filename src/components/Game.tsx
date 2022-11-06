@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import GameGrid from "./GameGrid";
 import GameSettingsView from "./GameSettingsView";
 import { useSettings, defaultSettings } from "../game/settings";
@@ -8,6 +8,7 @@ import { Link, useParams } from "react-router-dom";
 import { seedRoute, SeedRoutePathParams } from "../routes/active-routes";
 import { randomSeed } from "../game/birth-function";
 import { useInterval } from "usehooks-ts";
+import { useGrid } from "../game/use-grid";
 
 
 const Game = () => {
@@ -15,17 +16,16 @@ const Game = () => {
     const { seed } = useParams<keyof SeedRoutePathParams>() as SeedRoutePathParams
 
     const [ settings, dispatchSettings ] = useSettings(defaultSettings)
-    // TODO: useGrid that has a tickGrid function
-    const [ grid, setGrid ] = useState(ArrayGrid.create(settings, seed))
+    const { grid, tick, setGrid } = useGrid(ArrayGrid.create(settings, seed), defaultConwayStrategy);
 
     const { height, width, birthFactor, tickDuration } = settings
 
     useEffect(() => {
         setGrid(ArrayGrid.create({height, width, birthFactor}, seed))
-    }, [ height, width, birthFactor, seed ]);
+    }, [ height, width, birthFactor, seed, setGrid ]);
 
     useInterval(() => {
-        setGrid(grid.tick(defaultConwayStrategy))
+        tick();
     }, tickDuration);
 
     return (

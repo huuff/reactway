@@ -2,11 +2,12 @@ import { ConwayStrategy } from "./conway-strategy";
 import { Grid } from "./grid";
 import seedrandom from "seedrandom";
 import { shouldBeBornAlive } from "./birth-function";
+import { ReadonlyDeep } from "type-fest";
 
 type InternalGrid = boolean[][];
 
 class ArrayGrid extends Grid<ArrayGrid> {
-    private readonly internalGrid: InternalGrid; // TODO: DeepReadonly
+    private readonly internalGrid: ReadonlyDeep<InternalGrid>;
 
     public readonly height: number;
     public readonly width: number;

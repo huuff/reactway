@@ -4,12 +4,12 @@ import { GameSettings, GameSettingsAction, GameSettingsActionType } from "../gam
 type GameSettingsViewProps = {
     settings: GameSettings,
     dispatchSettings: React.Dispatch<GameSettingsAction>
-}
+} & { className: string }
 
-const GameSettingsView = (props: GameSettingsViewProps & { className: string }) => {
+const GameSettingsView = ({ settings, dispatchSettings, className }: GameSettingsViewProps) => {
     function createSettingsChangeHandler(eventType: GameSettingsActionType) {
         return (e: ChangeEvent<HTMLInputElement>) => {
-            props.dispatchSettings({
+            dispatchSettings({
                 type: eventType,
                 value: +e.target.value,
             })
@@ -17,17 +17,17 @@ const GameSettingsView = (props: GameSettingsViewProps & { className: string }) 
     }
 
     return (
-        <div className={props.className}>
+        <div className={className}>
 
             <div className="flex justify-between">
                 <label htmlFor="height" className="w-1/2 mr-2">Height:</label>
-                <input 
+                <input
                     className="w-1/4"
-                    type="number" 
-                    name="height" 
+                    type="number"
+                    name="height"
                     min="0"
                     max="50"
-                    value={props.settings.height} 
+                    value={settings.height}
                     onChange={createSettingsChangeHandler("setHeight")}
                 />
             </div>
@@ -37,10 +37,10 @@ const GameSettingsView = (props: GameSettingsViewProps & { className: string }) 
                 <input
                     className="w-1/4"
                     type="number"
-                    name="width" 
+                    name="width"
                     min="0"
                     max="50"
-                    value={props.settings.width} 
+                    value={settings.width}
                     onChange={createSettingsChangeHandler("setWidth")}
                 />
             </div>
@@ -48,28 +48,28 @@ const GameSettingsView = (props: GameSettingsViewProps & { className: string }) 
 
             <div className="flex justify-between">
                 <label htmlFor="birth-factor" className="w-1/2 mr-2">Birth factor:</label>
-                <input 
+                <input
                     className="w-1/4"
-                    type="number" 
+                    type="number"
                     name="birth-factor"
                     step="0.05"
                     min="0"
                     max="1"
-                    value={props.settings.birthFactor}
+                    value={settings.birthFactor}
                     onChange={createSettingsChangeHandler("setBirthFactor")}
                 />
             </div>
 
             <div className="flex justify-between">
                 <label htmlFor="birth-factor" className="w-1/2 mr-2">Tick duration (ms):</label>
-                <input 
+                <input
                     className="w-1/4"
-                    type="number" 
+                    type="number"
                     name="tick-duration"
                     step="100"
                     min="100"
                     max="10000"
-                    value={props.settings.tickDuration}
+                    value={settings.tickDuration}
                     onChange={createSettingsChangeHandler("setTickDuration")}
                 />
             </div>

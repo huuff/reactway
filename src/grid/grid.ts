@@ -1,4 +1,4 @@
-import { ConwayStrategy } from "./conway-strategy";
+import { ConwayStrategy } from "../game/conway-strategy";
 
 type Coordinates = Readonly<[x: number, y: number]>;
 

@@ -1,6 +1,6 @@
 
 import { Fragment } from "react";
-import { Grid } from "../game/grid";
+import { Grid } from "../grid/grid";
 
 type GameGridProps = {
     grid: Grid<any>

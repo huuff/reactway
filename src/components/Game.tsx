@@ -2,13 +2,13 @@ import { useEffect } from "react";
 import GameGrid from "./GameGrid";
 import GameSettingsView from "./GameSettingsView";
 import { useSettings, defaultSettings } from "../game/settings";
-import { ArrayGrid  } from "../game/array-grid";
+import { ArrayGrid  } from "../grid/array-grid";
 import { defaultConwayStrategy } from "../game/conway-strategy";
 import { Link, useParams } from "react-router-dom";
 import { seedRoute, SeedRoutePathParams } from "../routes/active-routes";
 import { randomSeed } from "../game/birth-function";
 import { useInterval } from "usehooks-ts";
-import { useGrid } from "../game/use-grid";
+import { useGrid } from "../grid/use-grid";
 
 
 const Game = () => {

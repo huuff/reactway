@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useState } from "react";
-import { ConwayStrategy } from "./conway-strategy";
+import { ConwayStrategy } from "../game/conway-strategy";
 import { Grid } from "./grid";
 
 type GridState = {

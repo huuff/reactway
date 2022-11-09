@@ -1,5 +1,7 @@
 import { ArrayGrid } from "./array-grid";
 
+// TODO: Create a fake Grid subclass and test these defaults with it
+
 test("returns correct neighbours", () => {
   // ARRANGE
   const grid = ArrayGrid.create({

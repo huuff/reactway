@@ -1,4 +1,4 @@
-import { Grid, Coordinates } from "./grid";
+import { Grid, Coordinates } from "../grid/grid";
 
 type ConwayStrategy = (grid: Grid<any>, coordinates: Coordinates) => boolean;
 

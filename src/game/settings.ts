@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
 import { toStringObject } from "../util/to-string-object";
 
 type GameSettings = {
@@ -27,15 +26,9 @@ const defaultSettings: GameSettings = {
 }
 
 
-// TODO: This doesn't work when manually changing query params
+// TODO: From query params
 function useSettings(defaultSettings: GameSettings): [GameSettings, (action: GameSettingsAction) => void] {
-    const [ queryParams, setQueryParams ] = useSearchParams();
-    const queryParamsSettings = queryParamsToSettings(queryParams)
-    const [ settings, setSettings] = useState<GameSettings>({...defaultSettings, ...queryParamsSettings})
-
-    useEffect(() => {
-        setQueryParams(toStringObject(settings))
-    }, [ settings, setQueryParams ]);
+    const [ settings, setSettings ] = useState<GameSettings>(defaultSettings)
 
     const dispatchSettings = (action: GameSettingsAction) => {
         setSettings((previousSettings) => {
@@ -53,25 +46,6 @@ function useSettings(defaultSettings: GameSettings): [GameSettings, (action: Gam
     }
 
     return [ settings, dispatchSettings ];
-}
-
-function queryParamsToSettings(queryParams: URLSearchParams): GameSettingsQueryParams {
-    const queryParamsAsObject = Object.fromEntries(new URLSearchParams(queryParams));
-
-    const areSettings = Object.keys(queryParamsAsObject).every(
-        (it) => ["height", "width", "birthFactor", "tickDuration"].includes(it)
-    ) && Object.values(queryParamsAsObject).every (
-        (it) => /(\d+\.)?\d+/.test(it) // Is a number
-    );
-
-    if (!areSettings) {
-        throw new Error("Query params not in the expected format");
-    }
-
-    return Object.fromEntries(
-        Object.entries(queryParamsAsObject)
-        .map<[string, number]>(([key, value]) => [key, +value])
-    )
 }
 
 

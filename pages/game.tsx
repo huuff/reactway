@@ -1,17 +1,21 @@
+import "tailwindcss/tailwind.css";
 import { useEffect, useMemo } from "react";
-import GameGrid from "./GameGrid";
-import GameSettingsView from "./GameSettingsView";
-import { useSettings, defaultSettings } from "../game/settings";
-import { ArrayGrid } from "../grid/array-grid";
-import { defaultConwayStrategy } from "../game/conway-strategy";
-import { randomSeed } from "../game/birth-function";
+import GameGrid from "../src/components/GameGrid";
+import GameSettingsView from "../src/components/GameSettingsView";
+import { useSettings, defaultSettings } from "../src/game/settings";
+import { ArrayGrid } from "../src/grid/array-grid";
+import { defaultConwayStrategy } from "../src/game/conway-strategy";
 import { useInterval } from "usehooks-ts";
-import { useGrid } from "../grid/use-grid";
+import { useGrid } from "../src/grid/use-grid";
+import { useRouter } from "next/router";
 
 
-const Game = () => {
-    // https://stackoverflow.com/a/70000958/15768984
-    const seed = useMemo(() => randomSeed(), []); // TODO: From query params
+export default () => {
+    const { seed } = useRouter().query;
+
+    if (!seed || typeof seed != "string") {
+        return <h1>You must provide a valid seed!</h1>
+    }
 
     const [settings, dispatchSettings] = useSettings(defaultSettings);
     const { grid, tick, setGrid } = useGrid(ArrayGrid.create(settings, seed), defaultConwayStrategy);
@@ -48,5 +52,3 @@ const Game = () => {
         </div>
     )
 }
-
-export default Game;

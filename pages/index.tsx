@@ -1,9 +1,18 @@
-import dynamic from "next/dynamic";
 import "tailwindcss/tailwind.css";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { randomSeed } from "../src/game/birth-function";
 
-const Home = dynamic(
-  () => import("../src/components/Game"),
-  { ssr: false },
-)
 
-export default Home;
+export default () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push({
+      pathname: "/game",
+      query: {
+        seed: randomSeed(),
+      }
+    });
+  }, [])
+}

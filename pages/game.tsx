@@ -46,7 +46,6 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                 dispatchSettings={dispatchSettings}
             />
             <div className="mt-10 text-center">
-                {/* TODO: Preserve settings on restart */}
                 <button
                      type="button" 
                      className="rounded-full bg-sky-500 p-2 text-slate-100"

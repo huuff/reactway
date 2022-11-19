@@ -18,7 +18,6 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
 
     return (
         <div className={className}>
-
             <div className="flex justify-between">
                 <label htmlFor="height" className="w-1/2 mr-2">Height:</label>
                 <input

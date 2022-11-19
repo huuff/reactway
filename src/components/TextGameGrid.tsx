@@ -1,12 +1,13 @@
 
-import { Fragment } from "react";
 import { Grid } from "../grid/grid";
+import { Fragment } from "react";
 
 type GameGridProps = {
     grid: Grid<any>
 } & { className: string };
 
-const GameGrid = ({ grid, className }: GameGridProps) => (
+// TODO: Rename to ascii
+const TextGameGrid = ({ grid, className }: GameGridProps) => (
     <div className={`${className} font-mono leading-none text-lg`}>
         {[...Array(grid.height)].map((_, y) => (
             <Fragment key={`row-${y}`}>
@@ -21,4 +22,4 @@ const GameGrid = ({ grid, className }: GameGridProps) => (
     </div>
 )
 
-export default GameGrid;
+export default TextGameGrid;

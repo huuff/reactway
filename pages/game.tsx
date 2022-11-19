@@ -1,8 +1,9 @@
 import "tailwindcss/tailwind.css";
-import { useEffect, useMemo } from "react";
-import GameGrid from "../src/components/GameGrid";
+import { useEffect } from "react";
+import TextGameGrid from "../src/components/TextGameGrid";
+import TableGameGrid from "../src/components/TableGameGrid";
 import GameSettingsView from "../src/components/GameSettingsView";
-import { useSettings, defaultSettings } from "../src/game/settings";
+import { useSettings } from "../src/game/settings";
 import { ArrayGrid } from "../src/grid/array-grid";
 import { defaultConwayStrategy } from "../src/game/conway-strategy";
 import { useInterval } from "usehooks-ts";
@@ -19,10 +20,10 @@ type GameProps = {
 const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     const router = useRouter();
 
-    const [settings, dispatchSettings] = useSettings(defaultSettings);
+    const [settings, dispatchSettings] = useSettings();
     const { grid, tick, setGrid } = useGrid(ArrayGrid.create(settings, seed), defaultConwayStrategy);
 
-    const { height, width, birthFactor, tickDuration } = settings
+    const { height, width, birthFactor, tickDuration, view } = settings
 
     
     useEffect(() => {
@@ -36,10 +37,12 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
 
     return (
         <div>
-            <GameGrid
-                className="w-1/2 mx-auto text-center"
-                grid={grid}
-            />
+            {
+                view === "table"
+                    ? <TableGameGrid className="w-1/2 mx-auto text-center" grid={grid} />
+                    : <TextGameGrid className="w-1/2 mx-auto text-center" grid={grid} />
+            }
+
             <GameSettingsView
                 className="w-1/3 mx-auto mt-5"
                 settings={settings}

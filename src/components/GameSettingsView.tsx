@@ -1,23 +1,47 @@
-import { ChangeEvent } from "react";
-import { GameSettings, GameSettingsAction, GameSettingsActionType } from "../game/settings";
+import { ChangeEvent, useCallback } from "react";
+import { GameSettings, AnyGameSettingsAction, GameSettingsActionType } from "../game/settings";
 
 type GameSettingsViewProps = {
     settings: GameSettings,
-    dispatchSettings: React.Dispatch<GameSettingsAction>
+    dispatchSettings: React.Dispatch<AnyGameSettingsAction>
 } & { className: string }
 
 const GameSettingsView = ({ settings, dispatchSettings, className }: GameSettingsViewProps) => {
-    function createSettingsChangeHandler(eventType: GameSettingsActionType) {
-        return (e: ChangeEvent<HTMLInputElement>) => {
+    const createNumberSettingsChangeHandler = useCallback(
+        (eventType: Exclude<GameSettingsActionType, "setView">) => {
+            return (e: ChangeEvent<HTMLInputElement>) => {
+                dispatchSettings({
+                    type: eventType,
+                    value: +e.target.value,
+                })
+            }
+        }, [dispatchSettings]
+    );
+    const handleViewSettingsChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+
+        if (value === "ascii" || value === "table") {
             dispatchSettings({
-                type: eventType,
-                value: +e.target.value,
+                type: "setView",
+                value 
             })
         }
-    }
+    }, [dispatchSettings]);
 
     return (
         <div className={className}>
+            <div className="flex justify-between">
+                <label htmlFor="view" className="w-1/2 mr-2">View::</label>
+                <select
+                    className="w-1/4"
+                    name="view"
+                    onChange={handleViewSettingsChange}
+                >
+                    <option value="ascii">ascii</option>
+                    <option value="table">table</option>
+                </select>
+            </div>
+
             <div className="flex justify-between">
                 <label htmlFor="height" className="w-1/2 mr-2">Height:</label>
                 <input
@@ -27,7 +51,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                     min="0"
                     max="50"
                     value={settings.height}
-                    onChange={createSettingsChangeHandler("setHeight")}
+                    onChange={createNumberSettingsChangeHandler("setHeight")}
                 />
             </div>
 
@@ -40,7 +64,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                     min="0"
                     max="50"
                     value={settings.width}
-                    onChange={createSettingsChangeHandler("setWidth")}
+                    onChange={createNumberSettingsChangeHandler("setWidth")}
                 />
             </div>
 
@@ -55,7 +79,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                     min="0"
                     max="1"
                     value={settings.birthFactor}
-                    onChange={createSettingsChangeHandler("setBirthFactor")}
+                    onChange={createNumberSettingsChangeHandler("setBirthFactor")}
                 />
             </div>
 
@@ -69,7 +93,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                     min="100"
                     max="10000"
                     value={settings.tickDuration}
-                    onChange={createSettingsChangeHandler("setTickDuration")}
+                    onChange={createNumberSettingsChangeHandler("setTickDuration")}
                 />
             </div>
 

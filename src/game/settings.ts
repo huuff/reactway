@@ -15,11 +15,26 @@ type GameSettings = {
 // missing param is taken to be the default
 type GameSettingsQueryParams = StringObject<GameSettings>
 
-type GameSettingsActionType = "setHeight" | "setWidth" | "setBirthFactor" | "setTickDuration";
-type GameSettingsAction = {
+type GameSettingsActionType =
+     "setHeight" 
+     | "setWidth"
+     | "setBirthFactor" 
+     | "setTickDuration"
+     | "setView"
+     ;
+type GameSettingsAction<V> = {
     readonly type: GameSettingsActionType;
-    readonly value: number;
+    readonly value: V;
 }
+
+type NumberGameSettingsAction = GameSettingsAction<GameSettings[Exclude<keyof GameSettings, "view">]> & {
+    type: Exclude<GameSettingsActionType, "setView">;
+};
+type ViewGameSettingsAction = GameSettingsAction<GameSettings["view"]> & {
+    type: "setView";
+};
+
+type AnyGameSettingsAction = NumberGameSettingsAction | ViewGameSettingsAction;
 
 const defaultSettings: GameSettings = {
     height: 10,
@@ -48,7 +63,7 @@ function getQueryParamSettingOrDefault<S extends keyof GameSettings>(
 }
 
 
-function useSettings(): [GameSettings, (action: GameSettingsAction) => void] {
+function useSettings(): [GameSettings, (action: AnyGameSettingsAction) => void] {
     const router = useRouter();
 
     const settings: GameSettings = useMemo(() => ({
@@ -59,7 +74,7 @@ function useSettings(): [GameSettings, (action: GameSettingsAction) => void] {
         view: getQueryParamSettingOrDefault("view", router),
     }), [router.query]);
 
-    const dispatchSettings = (action: GameSettingsAction) => {
+    const dispatchSettings = (action: AnyGameSettingsAction) => {
         let nextQueryParams: { [key: string]: string };
         switch (action.type) {
             case "setHeight":
@@ -74,6 +89,9 @@ function useSettings(): [GameSettings, (action: GameSettingsAction) => void] {
             case "setTickDuration":
                 nextQueryParams = { ...router.query, tickDuration: action.value.toString() };
                 break;
+            case "setView":
+                nextQueryParams = { ...router.query, view: action.value }
+                break;
         }
         router.push({ pathname: "/game", query: nextQueryParams });
     }
@@ -82,5 +100,5 @@ function useSettings(): [GameSettings, (action: GameSettingsAction) => void] {
 }
 
 
-export type { GameSettings, GameSettingsQueryParams, GameSettingsAction, GameSettingsActionType, }
+export type { GameSettings, GameSettingsQueryParams, AnyGameSettingsAction, GameSettingsActionType, }
 export { useSettings, defaultSettings }

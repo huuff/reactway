@@ -1,14 +1,21 @@
-import { ArrayGrid } from "./array-grid";
+import { ConwayStrategy } from "../game/conway-strategy";
+import { Grid } from "./grid";
 
-// TODO: Create a fake Grid subclass and test these defaults with it
+class FakeGrid extends Grid<FakeGrid> {
+  constructor(
+    readonly height: number,
+    readonly width: number,
+  ) {
+    super();
+  }
 
-test("returns correct neighbours", () => {
+  get: (x: number, y: number) => boolean = jest.fn();
+  tick: (strategy: ConwayStrategy) => FakeGrid = jest.fn();
+}
+
+test("neighbours", () => {
   // ARRANGE
-  const grid = ArrayGrid.create({
-    height: 5,
-    width: 5,
-    birthFactor: 10,
-  }, "SEED")
+  const grid = new FakeGrid(5, 5);
   
   // ACT
   const neighbours = grid.getNeighbours(2, 2);
@@ -21,4 +28,23 @@ test("returns correct neighbours", () => {
     [2, 1],
     [2, 3],
   ].sort());
+});
+
+describe("contains", () => {
+  test("true", () => {
+    // ARRANGE
+    const grid = new FakeGrid(5, 5);
+
+    // ACT & ASSERT
+    expect(grid.contains(2, 2)).toBe(true);
+  });
+
+  test("false", () => {
+    // ARRANGE
+    const grid = new FakeGrid(5, 5);
+
+    // ACT & ASSERT
+    expect(grid.contains(10, 10)).toBe(false);
+  })
+
 });

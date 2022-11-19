@@ -9,6 +9,8 @@ type GridCreationSettings = {
     readonly seed: string;
 }
 
+type CreateGrid = (settings: GridCreationSettings) => Grid<any>;
+
 abstract class Grid<T extends Grid<any>> {
     abstract readonly height: number;
     abstract readonly width: number;
@@ -33,9 +35,9 @@ abstract class Grid<T extends Grid<any>> {
         const boolToInt = (b: boolean): number => b ? 1 : 0;
         return this.getNeighbours(x, y)
             .map((it) => boolToInt(this.get(...it)))
-            .reduce((acc, it) => acc + it)
+            .reduce((acc, it) => acc + it, 0)
     }    
 }
 
 export { Grid }
-export type { Coordinates, GridCreationSettings };
+export type { Coordinates, GridCreationSettings, CreateGrid, };

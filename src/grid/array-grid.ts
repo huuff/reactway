@@ -1,5 +1,5 @@
 import { ConwayStrategy } from "../game/conway-strategy";
-import { Grid, GridCreationSettings } from "./grid";
+import { Grid, GridCreationSettings, CreateGrid } from "./grid";
 import seedrandom from "seedrandom";
 import { shouldBeBornAlive } from "../game/birth-function";
 import { ReadonlyDeep } from "type-fest";
@@ -20,7 +20,7 @@ class ArrayGrid extends Grid<ArrayGrid> {
         this.width = internalGrid[0]?.length ?? 0;
     }
 
-    static create(settings: GridCreationSettings): ArrayGrid {
+    static create: CreateGrid = (settings: GridCreationSettings): ArrayGrid  => {
         const random = seedrandom(settings.seed);
         return new ArrayGrid([...Array(settings.height)].map((_) =>
             [...Array(settings.width)].map((_) => shouldBeBornAlive(random, settings.birthFactor))

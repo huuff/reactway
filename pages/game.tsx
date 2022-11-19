@@ -4,8 +4,6 @@ import AsciiGameGrid from "../src/components/AsciiGameGrid";
 import TableGameGrid from "../src/components/TableGameGrid";
 import GameSettingsView from "../src/components/GameSettingsView";
 import { useSettings } from "../src/game/settings";
-import { ArrayGrid } from "../src/grid/array-grid";
-import { MapGrid } from "../src/grid/map-grid";
 import { defaultConwayStrategy } from "../src/game/conway-strategy";
 import { useInterval } from "usehooks-ts";
 import { useGrid } from "../src/grid/use-grid";
@@ -13,6 +11,7 @@ import { useRouter } from "next/router";
 import { randomSeed } from "../src/game/birth-function";
 import { NextPage } from "next";
 import { toStringObject } from "../src/util/to-string-object";
+import { getGridFactory } from "../src/grid/grid-factory";
 
 type GameProps = {
     readonly seed: string;
@@ -22,14 +21,15 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     const router = useRouter();
 
     const [settings, dispatchSettings] = useSettings();
-    const { grid, tick, setGrid } = useGrid(MapGrid.create({...settings, seed}), defaultConwayStrategy);
-
-    const { height, width, birthFactor, tickDuration, view } = settings
+    const { height, width, birthFactor, tickDuration, view, type } = settings
+    const { grid, tick, setGrid } = useGrid(
+        getGridFactory(type)({...settings, seed}), defaultConwayStrategy
+    );
 
     
     useEffect(() => {
-        setGrid(ArrayGrid.create({ ...settings, seed }))
-    }, [height, width, birthFactor, seed]);
+        setGrid(getGridFactory(type)({ ...settings, seed }))
+    }, [height, width, birthFactor, seed, type]);
     
 
     useInterval(() => {

@@ -1,7 +1,7 @@
-import { NextServer } from "next/dist/server/next";
 import { NextRouter, useRouter } from "next/router";
 import { useMemo } from "react";
-import { toStringObject, StringObject } from "../util/to-string-object";
+import { GridType } from "../grid/grid-factory";
+import { StringObject } from "../util/to-string-object";
 
 type GameSettings = {
     readonly height: number;
@@ -9,6 +9,7 @@ type GameSettings = {
     readonly birthFactor: number;
     readonly tickDuration: number;
     readonly view: "table" | "ascii";
+    readonly type: GridType,
 }
 
 // Game Settings as query parameters are the same as game settings, but any
@@ -16,25 +17,32 @@ type GameSettings = {
 type GameSettingsQueryParams = StringObject<GameSettings>
 
 type GameSettingsActionType =
-     "setHeight" 
-     | "setWidth"
-     | "setBirthFactor" 
-     | "setTickDuration"
-     | "setView"
-     ;
+    "setHeight"
+    | "setWidth"
+    | "setBirthFactor"
+    | "setTickDuration"
+    | "setView"
+    | "setType"
+    ;
 type GameSettingsAction<V> = {
     readonly type: GameSettingsActionType;
     readonly value: V;
 }
 
-type NumberGameSettingsAction = GameSettingsAction<GameSettings[Exclude<keyof GameSettings, "view">]> & {
-    type: Exclude<GameSettingsActionType, "setView">;
-};
+type NumberGameSettingsActionType = Exclude<GameSettingsActionType, "setView" | "setType">;
+type NumberGameSettingsAction
+    = GameSettingsAction<GameSettings[Exclude<keyof GameSettings, "view" | "type">]> & {
+        type: NumberGameSettingsActionType;
+    };
 type ViewGameSettingsAction = GameSettingsAction<GameSettings["view"]> & {
     type: "setView";
 };
 
-type AnyGameSettingsAction = NumberGameSettingsAction | ViewGameSettingsAction;
+type TypeGameSettingsAction = GameSettingsAction<GameSettings["type"]> & {
+    type: "setType";
+}
+
+type AnyGameSettingsAction = NumberGameSettingsAction | ViewGameSettingsAction | TypeGameSettingsAction;
 
 const defaultSettings: GameSettings = {
     height: 10,
@@ -42,6 +50,7 @@ const defaultSettings: GameSettings = {
     birthFactor: 0.2,
     tickDuration: 1000,
     view: "table",
+    type: "array",
 }
 
 // XXX: Too many type assertions! I don't think there's a way around it
@@ -57,6 +66,12 @@ function getQueryParamSettingOrDefault<S extends keyof GameSettings>(
             return queryView as GameSettings[S];
         else
             return defaultSettings["view"] as GameSettings[S];
+    } else if (settingName === "type") {
+        const queryType = router.query[settingName];
+        if (queryType === "array" || queryType === "map")
+            return queryType as GameSettings[S];
+        else
+            return defaultSettings["type"] as GameSettings[S];
     } else {
         return +(router.query[settingName] ?? defaultSettings[settingName].toString()) as GameSettings[S];
     }
@@ -72,6 +87,7 @@ function useSettings(): [GameSettings, (action: AnyGameSettingsAction) => void] 
         birthFactor: getQueryParamSettingOrDefault("birthFactor", router),
         tickDuration: getQueryParamSettingOrDefault("tickDuration", router),
         view: getQueryParamSettingOrDefault("view", router),
+        type: getQueryParamSettingOrDefault("type", router),
     }), [router.query]);
 
     const dispatchSettings = (action: AnyGameSettingsAction) => {
@@ -92,6 +108,8 @@ function useSettings(): [GameSettings, (action: AnyGameSettingsAction) => void] 
             case "setView":
                 nextQueryParams = { ...router.query, view: action.value }
                 break;
+            case "setType":
+                nextQueryParams = { ...router.query, type: action.value }
         }
         router.push({ pathname: "/game", query: nextQueryParams });
     }
@@ -100,5 +118,11 @@ function useSettings(): [GameSettings, (action: AnyGameSettingsAction) => void] 
 }
 
 
-export type { GameSettings, GameSettingsQueryParams, AnyGameSettingsAction, GameSettingsActionType, }
+export type {
+    GameSettings,
+    GameSettingsQueryParams,
+    AnyGameSettingsAction,
+    GameSettingsActionType,
+    NumberGameSettingsActionType
+};
 export { useSettings, defaultSettings }

@@ -8,7 +8,7 @@ type GameSettingsViewProps = {
 
 const GameSettingsView = ({ settings, dispatchSettings, className }: GameSettingsViewProps) => {
     const createNumberSettingsChangeHandler = useCallback(
-        (eventType: Exclude<GameSettingsActionType, "setView">) => {
+        (eventType: Exclude<GameSettingsActionType, "setView" | "setType">) => {
             return (e: ChangeEvent<HTMLInputElement>) => {
                 dispatchSettings({
                     type: eventType,
@@ -23,7 +23,18 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
         if (value === "ascii" || value === "table") {
             dispatchSettings({
                 type: "setView",
-                value 
+                value,
+            })
+        }
+    }, [dispatchSettings]);
+
+    const handleTypeSettingsChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+
+        if (value === "array" || value === "map") {
+            dispatchSettings({
+                type: "setType",
+                value,
             })
         }
     }, [dispatchSettings]);
@@ -39,6 +50,18 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                 >
                     <option value="ascii">ascii</option>
                     <option value="table">table</option>
+                </select>
+            </div>
+
+            <div className="flex justify-between">
+                <label htmlFor="type" className="w-1/2 mr-2">Type:</label>
+                <select
+                    className="w-1/4"
+                    name="type"
+                    onChange={handleTypeSettingsChange}
+                >
+                    <option value="array">array</option>
+                    <option value="map">map</option>
                 </select>
             </div>
 

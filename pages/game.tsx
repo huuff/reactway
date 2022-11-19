@@ -39,17 +39,19 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
         tick();
     }, tickDuration);
 
-    const gridViewClassNames = classNames("text-center")
+    const gridViewClassNames = classNames("max-h-screen", "max-w-screen");
 
     return (
         <div>
-            <NoSsr>
-                {
-                    view === "table"
-                        ? <TableGameGrid className={`${gridViewClassNames} mx-auto`} grid={grid} />
-                        : <AsciiGameGrid className={`${gridViewClassNames} text-center`} grid={grid} />
-                }
-            </NoSsr>
+            <div className="max-h-screen overflow-scroll">
+                <NoSsr>
+                    {
+                        view === "table"
+                            ? <TableGameGrid className={`mx-auto`} grid={grid} />
+                            : <AsciiGameGrid className={`text-center`} grid={grid} />
+                    }
+                </NoSsr>
+            </div>
 
             <div className="
                 absolute

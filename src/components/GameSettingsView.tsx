@@ -73,8 +73,8 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                     className="w-1/4"
                     type="number"
                     name="height"
-                    min="0"
-                    max="50"
+                    min="5"
+                    max="100"
                     value={settings.height}
                     onChange={createNumberSettingsChangeHandler("setHeight")}
                 />
@@ -86,8 +86,8 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                     className="w-1/4"
                     type="number"
                     name="width"
-                    min="0"
-                    max="50"
+                    min="5"
+                    max="100"
                     value={settings.width}
                     onChange={createNumberSettingsChangeHandler("setWidth")}
                 />

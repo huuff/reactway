@@ -8,10 +8,12 @@ import { defaultConwayStrategy } from "../src/game/conway-strategy";
 import { useInterval } from "usehooks-ts";
 import { useGrid } from "../src/grid/use-grid";
 import { useRouter } from "next/router";
+import { randomSeed } from "../src/game/birth-function";
 
 
 export default () => {
-    const { seed } = useRouter().query;
+    const router = useRouter();
+    const { seed } = router.query;
 
     if (!seed || typeof seed != "string") {
         return <h1>You must provide a valid seed!</h1>
@@ -45,7 +47,11 @@ export default () => {
             />
             <div className="mt-10 text-center">
             { /* TODO: Make this a link to a new game with a new route*/ }
-                <button type="button" className="rounded-full bg-sky-500 p-2 text-slate-100">
+                <button
+                     type="button" 
+                     className="rounded-full bg-sky-500 p-2 text-slate-100"
+                     onClick={() => router.push(`/game?seed=${randomSeed()}`)}
+                     >
                     Restart
                 </button>
             </div>

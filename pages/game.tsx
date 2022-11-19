@@ -1,6 +1,6 @@
 import "tailwindcss/tailwind.css";
 import { useEffect } from "react";
-import TextGameGrid from "../src/components/TextGameGrid";
+import AsciiGameGrid from "../src/components/AsciiGameGrid";
 import TableGameGrid from "../src/components/TableGameGrid";
 import GameSettingsView from "../src/components/GameSettingsView";
 import { useSettings } from "../src/game/settings";
@@ -40,7 +40,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
             {
                 view === "table"
                     ? <TableGameGrid className="w-1/2 mx-auto text-center" grid={grid} />
-                    : <TextGameGrid className="w-1/2 mx-auto text-center" grid={grid} />
+                    : <AsciiGameGrid className="w-1/2 mx-auto text-center" grid={grid} />
             }
 
             <GameSettingsView

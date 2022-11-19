@@ -6,8 +6,7 @@ type GameGridProps = {
     grid: Grid<any>
 } & { className: string };
 
-// TODO: Rename to ascii
-const TextGameGrid = ({ grid, className }: GameGridProps) => (
+const AsciiGameGrid = ({ grid, className }: GameGridProps) => (
     <div className={`${className} font-mono leading-none text-lg`}>
         {[...Array(grid.height)].map((_, y) => (
             <Fragment key={`row-${y}`}>
@@ -22,4 +21,4 @@ const TextGameGrid = ({ grid, className }: GameGridProps) => (
     </div>
 )
 
-export default TextGameGrid;
+export default AsciiGameGrid;

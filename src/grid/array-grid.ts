@@ -1,7 +1,7 @@
 import { ConwayStrategy } from "../game/conway-strategy";
 import { Grid, GridCreationSettings, CreateGrid } from "./grid";
 import seedrandom from "seedrandom";
-import { shouldBeBornAlive } from "../game/birth-function";
+import { shouldBeBornAlive } from "../util/birth-function";
 import { ReadonlyDeep } from "type-fest";
 
 type InternalGrid = boolean[][];

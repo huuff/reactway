@@ -8,7 +8,7 @@ import { defaultConwayStrategy } from "../src/game/conway-strategy";
 import { useInterval } from "usehooks-ts";
 import { useGrid } from "../src/grid/use-grid";
 import { useRouter } from "next/router";
-import { randomSeed } from "../src/game/birth-function";
+import { randomSeed } from "../src/util/birth-function";
 import { NextPage } from "next";
 import { toStringObject } from "../src/util/to-string-object";
 import { getGridFactory } from "../src/grid/grid-factory";

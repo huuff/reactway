@@ -7,4 +7,5 @@ function toStringObject<T extends {}>(object: T): StringObject<T> {
     }), {} as StringObject<T>)
 }
 
-export { toStringObject }
+export { toStringObject };
+export type { StringObject };

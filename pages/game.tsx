@@ -10,6 +10,7 @@ import { useGrid } from "../src/grid/use-grid";
 import { useRouter } from "next/router";
 import { randomSeed } from "../src/game/birth-function";
 import { NextPage } from "next";
+import { toStringObject } from "../src/util/to-string-object";
 
 type GameProps = {
     readonly seed: string;
@@ -49,7 +50,9 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                 <button
                      type="button" 
                      className="rounded-full bg-sky-500 p-2 text-slate-100"
-                     onClick={() => router.push({ pathname: "game", query: { seed: randomSeed() } })}
+                     onClick={() => router.push({ pathname: "game", query: { 
+                        seed: randomSeed(), ...(toStringObject(settings))
+                     } })}
                      >
                     Restart
                 </button>

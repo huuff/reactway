@@ -31,7 +31,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
     return (
         <div className={className}>
             <div className="flex justify-between">
-                <label htmlFor="view" className="w-1/2 mr-2">View::</label>
+                <label htmlFor="view" className="w-1/2 mr-2">View:</label>
                 <select
                     className="w-1/4"
                     name="view"

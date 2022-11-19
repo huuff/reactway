@@ -2,6 +2,14 @@ import { ConwayStrategy } from "../game/conway-strategy";
 
 type Coordinates = Readonly<[x: number, y: number]>;
 
+// TODO: Use in arraygrid
+type GridCreationSettings = {
+    readonly height: number;
+    readonly width: number;
+    readonly birthFactor: number;
+    readonly seed: string;
+}
+
 abstract class Grid<T extends Grid<any>> {
     abstract readonly height: number;
     abstract readonly width: number;
@@ -31,4 +39,4 @@ abstract class Grid<T extends Grid<any>> {
 }
 
 export { Grid }
-export type { Coordinates };
+export type { Coordinates, GridCreationSettings };

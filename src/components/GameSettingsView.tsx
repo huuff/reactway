@@ -47,6 +47,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                     className="w-1/4"
                     name="view"
                     onChange={handleViewSettingsChange}
+                    value={settings.view}
                 >
                     <option value="ascii">ascii</option>
                     <option value="table">table</option>
@@ -59,6 +60,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                     className="w-1/4"
                     name="type"
                     onChange={handleTypeSettingsChange}
+                    value={settings.type}
                 >
                     <option value="array">array</option>
                     <option value="map">map</option>

@@ -13,11 +13,13 @@ import { NextPage } from "next";
 import { toStringObject } from "../src/util/to-string-object";
 import { getGridFactory } from "../src/grid/grid-factory";
 import NoSsr from "../src/components/NoSSR";
+import classNames from "classnames";
 
 type GameProps = {
     readonly seed: string;
 }
 
+const gridViewClassNames = "w-1/2 mx-auto text-center";
 const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     const router = useRouter();
 
@@ -37,23 +39,34 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
         tick();
     }, tickDuration);
 
+    const gridViewClassNames = classNames("text-center")
+
     return (
         <div>
             <NoSsr>
                 {
                     view === "table"
-                        ? <TableGameGrid className="w-1/2 mx-auto text-center" grid={grid} />
-                        : <AsciiGameGrid className="w-1/2 mx-auto text-center" grid={grid} />
+                        ? <TableGameGrid className={`${gridViewClassNames} mx-auto`} grid={grid} />
+                        : <AsciiGameGrid className={`${gridViewClassNames} text-center`} grid={grid} />
                 }
             </NoSsr>
 
-            <div className="absolute bottom-0 inset-x-0 mx-auto w-full md:w-1/2 lg:w-1/3 xl:w-1/4">
+            <div className="
+                absolute
+                bottom-0 
+                inset-x-0 
+                mx-auto 
+                w-full md:w-1/2 lg:w-1/3 xl:w-1/4
+                v-1/4
+                bg-white
+                mb-5
+                ">
                 <GameSettingsView
-                    className="mx-auto"
+                    className=""
                     settings={settings}
                     dispatchSettings={dispatchSettings}
                 />
-                <div className="mt-10 text-center">
+                <div className="mt-2 text-center">
                     <button
                         type="button" 
                         className="rounded-full bg-sky-500 p-2 text-slate-100"

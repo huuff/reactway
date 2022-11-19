@@ -12,6 +12,8 @@ import { randomSeed } from "../src/util/birth-function";
 import { NextPage } from "next";
 import { toStringObject } from "../src/util/to-string-object";
 import { getGridFactory } from "../src/grid/grid-factory";
+import dynamic from "next/dynamic";
+import NoSSR from "../src/components/NoSSR";
 
 type GameProps = {
     readonly seed: string;
@@ -38,11 +40,13 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
 
     return (
         <div>
-            {
-                view === "table"
-                    ? <TableGameGrid className="w-1/2 mx-auto text-center" grid={grid} />
-                    : <AsciiGameGrid className="w-1/2 mx-auto text-center" grid={grid} />
-            }
+            <NoSSR>
+                {
+                    view === "table"
+                        ? <TableGameGrid className="w-1/2 mx-auto text-center" grid={grid} />
+                        : <AsciiGameGrid className="w-1/2 mx-auto text-center" grid={grid} />
+                }
+            </NoSSR>
 
             <GameSettingsView
                 className="w-1/3 mx-auto mt-5"
@@ -65,8 +69,10 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
 }
 
 Game.getInitialProps = async ({ query }) => {
-    return {
-        seed: query.seed as string, // TODO: No type assertion please
+    if (typeof query.seed === "string") {
+        return { seed: query.seed };
+    } else {
+        return { seed: "asdf" };
     }
 }
 

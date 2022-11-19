@@ -10,8 +10,8 @@ function createInternalGrid(settings: GridCreationSettings): Map<string, boolean
     const random = seedrandom(settings.seed);
     const internalGrid = new Map<string, boolean>();
 
-    for (const y of range(0, settings.height - 1)) {
-        for (const x of range(0, settings.width - 1)) {
+    for (const y of range(0, settings.height+1)) {
+        for (const x of range(0, settings.width+1)) {
             const alive = shouldBeBornAlive(random, settings.birthFactor);
             internalGrid.set(JSON.stringify([x, y]), alive);
         }

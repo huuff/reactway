@@ -62,6 +62,9 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                 v-1/4
                 bg-white
                 mb-5
+                p-2
+                border rounded-lg
+                drop-shadow-lg
                 ">
                 <GameSettingsView
                     className=""

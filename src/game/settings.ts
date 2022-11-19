@@ -2,6 +2,7 @@ import { NextRouter, useRouter } from "next/router";
 import { useMemo } from "react";
 import { GridType } from "../grid/grid-factory";
 import { StringObject } from "../util/to-string-object";
+import { useLocalStorage } from "usehooks-ts";
 
 type GameSettings = {
     readonly height: number;
@@ -44,6 +45,7 @@ type TypeGameSettingsAction = GameSettingsAction<GameSettings["type"]> & {
 
 type AnyGameSettingsAction = NumberGameSettingsAction | ViewGameSettingsAction | TypeGameSettingsAction;
 
+// Default settings, not stored in localStorage
 const defaultSettings: GameSettings = {
     height: 10,
     width: 10,
@@ -59,6 +61,7 @@ const defaultSettings: GameSettings = {
 function getQueryParamSettingOrDefault<S extends keyof GameSettings>(
     settingName: S,
     router: NextRouter,
+    defaultSettings: GameSettings,
 ): GameSettings[S] {
     if (settingName === "view") {
         const queryView = router.query[settingName];
@@ -80,14 +83,15 @@ function getQueryParamSettingOrDefault<S extends keyof GameSettings>(
 
 function useSettings(): [GameSettings, (action: AnyGameSettingsAction) => void] {
     const router = useRouter();
+    const [ storedSettings, setStoredSettings ] = useLocalStorage("settings", defaultSettings);
 
     const settings: GameSettings = useMemo(() => ({
-        height: getQueryParamSettingOrDefault("height", router),
-        width: getQueryParamSettingOrDefault("width", router),
-        birthFactor: getQueryParamSettingOrDefault("birthFactor", router),
-        tickDuration: getQueryParamSettingOrDefault("tickDuration", router),
-        view: getQueryParamSettingOrDefault("view", router),
-        type: getQueryParamSettingOrDefault("type", router),
+        height: getQueryParamSettingOrDefault("height", router, storedSettings),
+        width: getQueryParamSettingOrDefault("width", router, storedSettings),
+        birthFactor: getQueryParamSettingOrDefault("birthFactor", router, storedSettings),
+        tickDuration: getQueryParamSettingOrDefault("tickDuration", router, storedSettings),
+        view: getQueryParamSettingOrDefault("view", router, storedSettings),
+        type: getQueryParamSettingOrDefault("type", router, storedSettings),
     }), [router.query]);
 
     const dispatchSettings = (action: AnyGameSettingsAction) => {
@@ -95,21 +99,28 @@ function useSettings(): [GameSettings, (action: AnyGameSettingsAction) => void] 
         switch (action.type) {
             case "setHeight":
                 nextQueryParams = { ...router.query, height: action.value.toString() };
+                setStoredSettings({ ...settings, height: action.value });
                 break;
             case "setWidth":
                 nextQueryParams = { ...router.query, width: action.value.toString() };
+                setStoredSettings({ ...settings, width: action.value });
                 break;
             case "setBirthFactor":
                 nextQueryParams = { ...router.query, birthFactor: action.value.toString() };
+                setStoredSettings({ ...settings, birthFactor: action.value });
                 break;
             case "setTickDuration":
                 nextQueryParams = { ...router.query, tickDuration: action.value.toString() };
+                setStoredSettings({ ...settings, tickDuration: action.value });
                 break;
             case "setView":
-                nextQueryParams = { ...router.query, view: action.value }
+                nextQueryParams = { ...router.query, view: action.value };
+                setStoredSettings({ ...settings, view: action.value } );
                 break;
             case "setType":
-                nextQueryParams = { ...router.query, type: action.value }
+                nextQueryParams = { ...router.query, type: action.value };
+                setStoredSettings({ ...settings, type: action.value } );
+                break;
         }
         router.push({ pathname: "/game", query: nextQueryParams });
     }
@@ -125,4 +136,4 @@ export type {
     GameSettingsActionType,
     NumberGameSettingsActionType
 };
-export { useSettings, defaultSettings }
+export { useSettings, defaultSettings as defaultSettings }

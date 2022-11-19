@@ -2,7 +2,6 @@ import { ConwayStrategy } from "../game/conway-strategy";
 
 type Coordinates = Readonly<[x: number, y: number]>;
 
-// TODO: Use in arraygrid
 type GridCreationSettings = {
     readonly height: number;
     readonly width: number;

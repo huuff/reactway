@@ -9,15 +9,14 @@ import { useInterval } from "usehooks-ts";
 import { useGrid } from "../src/grid/use-grid";
 import { useRouter } from "next/router";
 import { randomSeed } from "../src/game/birth-function";
+import { NextPage } from "next";
 
+type GameProps = {
+    readonly seed: string;
+}
 
-export default () => {
+const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     const router = useRouter();
-    const { seed } = router.query;
-
-    if (!seed || typeof seed != "string") {
-        return <h1>You must provide a valid seed!</h1>
-    }
 
     const [settings, dispatchSettings] = useSettings(defaultSettings);
     const { grid, tick, setGrid } = useGrid(ArrayGrid.create(settings, seed), defaultConwayStrategy);
@@ -57,3 +56,11 @@ export default () => {
         </div>
     )
 }
+
+Game.getInitialProps = async ({ query }) => {
+    return {
+        seed: query.seed as string, // TODO: No type assertion please
+    }
+}
+
+export default Game;

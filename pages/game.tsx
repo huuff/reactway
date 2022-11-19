@@ -12,8 +12,7 @@ import { randomSeed } from "../src/util/birth-function";
 import { NextPage } from "next";
 import { toStringObject } from "../src/util/to-string-object";
 import { getGridFactory } from "../src/grid/grid-factory";
-import dynamic from "next/dynamic";
-import NoSSR from "../src/components/NoSSR";
+import NoSsr from "../src/components/NoSSR";
 
 type GameProps = {
     readonly seed: string;
@@ -40,29 +39,31 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
 
     return (
         <div>
-            <NoSSR>
+            <NoSsr>
                 {
                     view === "table"
                         ? <TableGameGrid className="w-1/2 mx-auto text-center" grid={grid} />
                         : <AsciiGameGrid className="w-1/2 mx-auto text-center" grid={grid} />
                 }
-            </NoSSR>
+            </NoSsr>
 
-            <GameSettingsView
-                className="w-1/3 mx-auto mt-5"
-                settings={settings}
-                dispatchSettings={dispatchSettings}
-            />
-            <div className="mt-10 text-center">
-                <button
-                     type="button" 
-                     className="rounded-full bg-sky-500 p-2 text-slate-100"
-                     onClick={() => router.push({ pathname: "game", query: { 
-                        seed: randomSeed(), ...(toStringObject(settings))
-                     } })}
-                     >
-                    Restart
-                </button>
+            <div className="absolute bottom-0 inset-x-0 mx-auto w-full md:w-1/2 lg:w-1/3 xl:w-1/4">
+                <GameSettingsView
+                    className="mx-auto"
+                    settings={settings}
+                    dispatchSettings={dispatchSettings}
+                />
+                <div className="mt-10 text-center">
+                    <button
+                        type="button" 
+                        className="rounded-full bg-sky-500 p-2 text-slate-100"
+                        onClick={() => router.push({ pathname: "game", query: { 
+                            seed: randomSeed(), ...(toStringObject(settings))
+                        } })}
+                        >
+                        Restart
+                    </button>
+                </div>
             </div>
         </div>
     )

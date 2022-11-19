@@ -46,11 +46,10 @@ export default () => {
                 dispatchSettings={dispatchSettings}
             />
             <div className="mt-10 text-center">
-            { /* TODO: Make this a link to a new game with a new route*/ }
                 <button
                      type="button" 
                      className="rounded-full bg-sky-500 p-2 text-slate-100"
-                     onClick={() => router.push(`/game?seed=${randomSeed()}`)}
+                     onClick={() => router.push({ pathname: "game", query: { seed: randomSeed() } })}
                      >
                     Restart
                 </button>

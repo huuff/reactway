@@ -28,7 +28,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
 
     
     useEffect(() => {
-        setGrid(ArrayGrid.create({ height, width, birthFactor }, seed))
+        setGrid(ArrayGrid.create({ ...settings, seed }))
     }, [height, width, birthFactor, seed]);
     
 

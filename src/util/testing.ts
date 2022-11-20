@@ -1,6 +1,6 @@
 import { ConwayStrategy } from "../game/conway-strategy";
 import { Grid } from "../grid/grid";
-import coordinatesToString from "./coordinates-to-string";
+import { coordinatesToString }from "./coordinates-to-string";
 
 const liveCells: readonly [x: number, y: number][] = [
   [2, 3], [2, 1], [3, 2], [3,3]

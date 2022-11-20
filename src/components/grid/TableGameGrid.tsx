@@ -1,7 +1,7 @@
 
 import { Grid } from "../../grid/grid";
 import classNames from "classnames";
-import coordinatesToString from "../../util/coordinates-to-string";
+import { coordinatesToString } from "../../util/coordinates-to-string";
 
 type GameGridProps = {
     grid: Grid

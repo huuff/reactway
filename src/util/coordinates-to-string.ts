@@ -1,8 +1,17 @@
 import { Coordinates } from "../grid/grid";
 
-// TODO: Use this wherever I use JSON.stringify
-export function coordinatesToString([x, y]: Coordinates): string {
+function coordinatesToString([x, y]: Coordinates): string {
     return `(${x},${y})`;
 }
 
-export default coordinatesToString;
+const COORDINATES_REGEX = /\((\d+),(\d+)\)/
+function stringToCoordinates(string: string): Coordinates {
+    const match = string.match(COORDINATES_REGEX);
+
+    if (!match)
+        throw new Error(`String ${string} is not a coordinate`);
+
+    return [+match[0], +match[1]];
+}
+
+export { coordinatesToString, stringToCoordinates };

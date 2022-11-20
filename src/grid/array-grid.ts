@@ -6,7 +6,7 @@ import { ReadonlyDeep } from "type-fest";
 
 type InternalGrid = boolean[][];
 
-class ArrayGrid extends Grid<ArrayGrid> {
+class ArrayGrid extends Grid {
     private readonly internalGrid: ReadonlyDeep<InternalGrid>;
 
     public readonly height: number;
@@ -32,7 +32,7 @@ class ArrayGrid extends Grid<ArrayGrid> {
         return this.internalGrid[y][x];
     }
 
-    tick(strategy: ConwayStrategy): ArrayGrid {
+    tick(strategy: ConwayStrategy): Grid {
         const newInternalGrid = this.internalGrid.map((_, y) => 
             this.internalGrid[y].map((_, x) => strategy(this, [x, y]))
         )

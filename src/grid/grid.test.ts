@@ -1,4 +1,4 @@
-import { FakeGrid } from "../testing/fake-grid";
+import { FakeGrid } from "../util/testing";
 
 // Test for the default methods of Grid
 const grid = new FakeGrid(5, 5);

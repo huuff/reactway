@@ -9,14 +9,14 @@ type GridCreationSettings = {
     readonly seed: string;
 }
 
-type CreateGrid = (settings: GridCreationSettings) => Grid<any>;
+type CreateGrid = (settings: GridCreationSettings) => Grid;
 
-abstract class Grid<T extends Grid<any>> {
+abstract class Grid {
     abstract readonly height: number;
     abstract readonly width: number;
 
     abstract get(x: number, y: number): boolean;
-    abstract tick(strategy: ConwayStrategy): T;
+    abstract tick(strategy: ConwayStrategy): Grid;
 
     contains(x: number, y: number): boolean {
         return x >= 0 && y >= 0 && x <= (this.width - 1) && y <= (this.height - 1);

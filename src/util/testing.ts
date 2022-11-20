@@ -1,7 +1,7 @@
 import { ConwayStrategy } from "../game/conway-strategy";
 import { Grid } from "../grid/grid";
 
-class FakeGrid extends Grid<FakeGrid> {
+class FakeGrid extends Grid {
   constructor(
     readonly height: number,
     readonly width: number,
@@ -19,7 +19,16 @@ class FakeGrid extends Grid<FakeGrid> {
        ;
   }
 
-  tick: (strategy: ConwayStrategy) => FakeGrid = jest.fn();
+  tick: (strategy: ConwayStrategy) => this = jest.fn();
 }
 
-export { FakeGrid };
+const fakeConwayStrategy: ConwayStrategy = (grid: Grid, [x, y]: readonly [number, number]) => {
+  // Makes alive all cells around (2,2)
+  return (x === 2 && y === 1)
+      || (x === 2 && y === 3)
+      || (x === 1 && y === 2)
+      || (x === 3 && y === 2)
+      ;
+}
+
+export { FakeGrid, fakeConwayStrategy };

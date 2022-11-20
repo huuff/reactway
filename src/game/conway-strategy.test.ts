@@ -1,4 +1,4 @@
-import { FakeGrid  } from "../testing/fake-grid";
+import { FakeGrid  } from "../util/testing";
 import { defaultConwayStrategy } from "./conway-strategy";
 
 const grid = new FakeGrid(5, 5);

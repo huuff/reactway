@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import AsciiGameGrid from "../src/components/grid/AsciiGameGrid";
 import TableGameGrid from "../src/components/grid/TableGameGrid";
 import GameSettingsView from "../src/components/GameSettingsView";
-import { defaultSettings, useSettings } from "../src/game/settings";
+import { defaultSettings, PlaybackMode, useSettings } from "../src/game/settings";
 import { defaultConwayStrategy } from "../src/game/conway-strategy";
 import { useInterval } from "usehooks-ts";
 import { useGrid } from "../src/grid/use-grid";
@@ -13,6 +13,7 @@ import { NextPage } from "next";
 import { toStringObject } from "../src/util/to-string-object";
 import { getGridFactory } from "../src/grid/grid-factory";
 import NoSsr from "../src/components/NoSSR";
+import PlayBar from "../src/components/PlayBar";
 
 type GameProps = {
     readonly seed: string;
@@ -30,16 +31,20 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     const { grid, tick, setGrid } = useGrid(
         getGridFactory(type)({...settings, seed}), defaultConwayStrategy
     );
-
     
     useEffect(() => {
         setGrid(getGridFactory(type)({ height, width, birthFactor, seed }))
     }, [height, width, birthFactor, seed, type, setGrid]);
     
-
     useInterval(() => {
         tick();
     }, tickDuration);
+
+    const dispatchPlayback = (mode: PlaybackMode) => dispatchSettings({
+            type: "setPlayback",
+            value: mode,
+        })
+
 
     return (
         <div>
@@ -66,6 +71,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                 border rounded-lg
                 drop-shadow-lg
                 ">
+                <PlayBar tickDuration={tickDuration} setPlayback={dispatchPlayback} />
                 <GameSettingsView
                     className=""
                     settings={settings}

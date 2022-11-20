@@ -1,14 +1,14 @@
 import { ChangeEvent, useCallback } from "react";
-import { GameSettings, AnyGameSettingsAction, GameSettingsActionType } from "../game/settings";
+import { GameSettings, AnyGameSettingsAction, GameSettingsActionType, NumberGameSettingsActionType } from "../game/settings";
 
 type GameSettingsViewProps = {
     settings: GameSettings,
     dispatchSettings: React.Dispatch<AnyGameSettingsAction>
-} & { className: string }
+} & { className?: string }
 
 const GameSettingsView = ({ settings, dispatchSettings, className }: GameSettingsViewProps) => {
     const createNumberSettingsChangeHandler = useCallback(
-        (eventType: Exclude<GameSettingsActionType, "setView" | "setType">) => {
+        (eventType: NumberGameSettingsActionType) => {
             return (e: ChangeEvent<HTMLInputElement>) => {
                 dispatchSettings({
                     type: eventType,
@@ -40,7 +40,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
     }, [dispatchSettings]);
 
     return (
-        <div className={className}>
+        <div className={className || ""}>
             <div className="flex justify-between">
                 <label htmlFor="view" className="w-1/2 mr-2">View:</label>
                 <select
@@ -117,7 +117,8 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                     step="100"
                     min="100"
                     max="10000"
-                    value={settings.tickDuration}
+                    disabled={settings.tickDuration === null}
+                    value={settings.tickDuration || "paused"}
                     onChange={createNumberSettingsChangeHandler("setTickDuration")}
                 />
             </div>

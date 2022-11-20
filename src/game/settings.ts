@@ -1,16 +1,16 @@
-import { NextRouter, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useMemo } from "react";
 import { GridType } from "../grid/grid-factory";
 import { StringObject } from "../util/to-string-object";
 import { useLocalStorage } from "usehooks-ts";
-import { ParsedUrl } from "next/dist/shared/lib/router/utils/parse-url";
 import { ParsedUrlQuery } from "querystring";
+import { NoNullValues } from "../util/no-null-values";
 
 type GameSettings = {
     readonly height: number;
     readonly width: number;
     readonly birthFactor: number;
-    readonly tickDuration: number;
+    readonly tickDuration: number | null;
     readonly view: "table" | "ascii";
     readonly type: GridType,
 }
@@ -26,15 +26,18 @@ type GameSettingsActionType =
     | "setTickDuration"
     | "setView"
     | "setType"
+    | "setPlayback"
     ;
+
+type PlaybackMode = "play" | "pause";
 type GameSettingsAction<V> = {
     readonly type: GameSettingsActionType;
     readonly value: V;
 }
 
-type NumberGameSettingsActionType = Exclude<GameSettingsActionType, "setView" | "setType">;
+type NumberGameSettingsActionType = Exclude<GameSettingsActionType, "setView" | "setType" | "setPlayback">;
 type NumberGameSettingsAction
-    = GameSettingsAction<GameSettings[Exclude<keyof GameSettings, "view" | "type">]> & {
+    = GameSettingsAction<GameSettings[Exclude<keyof GameSettings, "view" | "type" | "tickDuration">]> & {
         type: NumberGameSettingsActionType;
     };
 type ViewGameSettingsAction = GameSettingsAction<GameSettings["view"]> & {
@@ -45,10 +48,18 @@ type TypeGameSettingsAction = GameSettingsAction<GameSettings["type"]> & {
     type: "setType";
 }
 
-type AnyGameSettingsAction = NumberGameSettingsAction | ViewGameSettingsAction | TypeGameSettingsAction;
+type PlaybackGameSettingsAction = GameSettingsAction<PlaybackMode> & {
+    type: "setPlayback";
+}
+
+type AnyGameSettingsAction = NumberGameSettingsAction
+    | ViewGameSettingsAction
+    | TypeGameSettingsAction
+    | PlaybackGameSettingsAction
+    ;
 
 // Default settings, not stored in localStorage
-const globalDefaultSettings: GameSettings = {
+const globalDefaultSettings: NoNullValues<GameSettings> = {
     height: 10,
     width: 10,
     birthFactor: 0.2,
@@ -60,10 +71,11 @@ const globalDefaultSettings: GameSettings = {
 // XXX: Too many type assertions! I don't think there's a way around it
 // (https://stackoverflow.com/a/68898908/15768984)
 // Other than overloads, which aren't much better
+// TODO: I should clean this up, at least with a switch
 function getQueryParamSettingOrDefault<S extends keyof GameSettings>(
     settingName: S,
     query: ParsedUrlQuery,
-    defaultSettings: GameSettings,
+    defaultSettings: NoNullValues<GameSettings>,
 ): GameSettings[S] {
     if (settingName === "view") {
         const queryView = query[settingName];
@@ -77,15 +89,24 @@ function getQueryParamSettingOrDefault<S extends keyof GameSettings>(
             return queryType as GameSettings[S];
         else
             return defaultSettings["type"] as GameSettings[S];
+    } else if (settingName === "tickDuration") {
+        const queryTickDuration = query["tickDuration"];
+        if (queryTickDuration === "null")
+            return null as GameSettings[S];
+        else {
+            return +(query[settingName] ?? defaultSettings[settingName].toString()) as GameSettings[S];
+        }
     } else {
         return +(query[settingName] ?? defaultSettings[settingName].toString()) as GameSettings[S];
     }
 }
 
 
-function useSettings(defaultSettings: GameSettings): [GameSettings, (action: AnyGameSettingsAction) => void] {
+function useSettings(
+    defaultSettings: NoNullValues<GameSettings>
+): [GameSettings, (action: AnyGameSettingsAction) => void] {
     const router = useRouter();
-    const [ storedSettings, setStoredSettings ] = useLocalStorage("settings", defaultSettings);
+    const [storedSettings, setStoredSettings] = useLocalStorage("settings", defaultSettings);
 
     const settings: GameSettings = useMemo(() => ({
         height: getQueryParamSettingOrDefault("height", router.query, storedSettings),
@@ -98,31 +119,47 @@ function useSettings(defaultSettings: GameSettings): [GameSettings, (action: Any
 
     const dispatchSettings = (action: AnyGameSettingsAction) => {
         let nextQueryParams: { [key: string]: string };
+        
+
         switch (action.type) {
             case "setHeight":
                 nextQueryParams = { ...router.query, height: action.value.toString() };
-                setStoredSettings({ ...settings, height: action.value });
+                setStoredSettings({ ...settings, ...storedSettings, height: action.value });
                 break;
             case "setWidth":
                 nextQueryParams = { ...router.query, width: action.value.toString() };
-                setStoredSettings({ ...settings, width: action.value });
+                setStoredSettings({ ...settings, ...storedSettings, width: action.value });
                 break;
             case "setBirthFactor":
                 nextQueryParams = { ...router.query, birthFactor: action.value.toString() };
-                setStoredSettings({ ...settings, birthFactor: action.value });
+                setStoredSettings({ ...settings, ...storedSettings, birthFactor: action.value });
                 break;
             case "setTickDuration":
                 nextQueryParams = { ...router.query, tickDuration: action.value.toString() };
-                setStoredSettings({ ...settings, tickDuration: action.value });
+                setStoredSettings({ ...storedSettings, ...settings, tickDuration: action.value });
                 break;
             case "setView":
                 nextQueryParams = { ...router.query, view: action.value };
-                setStoredSettings({ ...settings, view: action.value } );
+                setStoredSettings({ ...settings, ...storedSettings,  view: action.value });
                 break;
             case "setType":
                 nextQueryParams = { ...router.query, type: action.value };
-                setStoredSettings({ ...settings, type: action.value } );
+                setStoredSettings({ ...settings, ...storedSettings,  type: action.value });
                 break;
+            case "setPlayback": {
+                switch (action.value) {
+                    case "play":
+                        nextQueryParams = {
+                            ...router.query,
+                            tickDuration: storedSettings.tickDuration.toString()
+                        };
+                        break;
+                    case "pause":
+                        nextQueryParams = { ...router.query, tickDuration: "null" };
+                        break;
+                }
+                break;
+            }
         }
         router.push({ pathname: "/game", query: nextQueryParams });
     }
@@ -136,6 +173,8 @@ export type {
     GameSettingsQueryParams,
     AnyGameSettingsAction,
     GameSettingsActionType,
-    NumberGameSettingsActionType
+    NumberGameSettingsActionType,
+    PlaybackGameSettingsAction,
+    PlaybackMode,
 };
-export { useSettings, globalDefaultSettings as defaultSettings }
+export { useSettings, globalDefaultSettings as defaultSettings, }

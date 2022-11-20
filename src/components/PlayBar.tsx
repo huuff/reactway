@@ -1,5 +1,6 @@
-import classNames from "classnames";
-import { PlaybackGameSettingsAction, PlaybackMode } from "../game/settings";
+import { PlaybackMode } from "../game/settings";
+import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 type PlayBarProps = {
     tickDuration: number | null,
@@ -7,12 +8,13 @@ type PlayBarProps = {
 } & { className?: string }
 
 // TODO: Test
-const PlayBar = ({tickDuration, setPlayback, className }: PlayBarProps) => {
+const PlayBar = ({ tickDuration, setPlayback, className }: PlayBarProps) => {
     return (
-        <div className={className || ""}>
-            { tickDuration !== null ? "Playing" : "Paused" }
-            <span onClick={() => setPlayback("play")}> &gt; </span>
-            <span onClick={() => setPlayback("pause")}> || </span>
+        <div className={`${className || ""} pl-4`}>
+            {tickDuration !== null
+                ? <FontAwesomeIcon icon={faPause} onClick={() => setPlayback("pause")} />
+                : <FontAwesomeIcon icon={faPlay} onClick={() => setPlayback("play")} />
+            }
         </div>
     )
 }

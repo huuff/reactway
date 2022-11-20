@@ -5,10 +5,10 @@ import coordinatesToString from "../../util/coordinates-to-string";
 
 type GameGridProps = {
     grid: Grid
-} & { className: string };
+} & { className?: string };
 
 const TableGameGrid = ({ grid, className }: GameGridProps) => (
-    <table className={`${className}`}>
+    <table className={`${className || ""}`}>
         <tbody>
             {[...Array(grid.height)].map((_, y) => (
                 <tr key={`row-${y}`}>

@@ -10,11 +10,12 @@ type PlayBarProps = {
 // TODO: Test
 const PlayBar = ({ tickDuration, setPlayback, className }: PlayBarProps) => {
     return (
-        <div className={`${className || ""} pl-4`}>
-            {tickDuration !== null
-                ? <FontAwesomeIcon icon={faPause} width="16" onClick={() => setPlayback("pause")} />
-                : <FontAwesomeIcon icon={faPlay} width="16" onClick={() => setPlayback("play")} />
-            }
+        <div className={`${className || ""} px-4 flex h-8`}>
+                {tickDuration !== null
+                    ? <FontAwesomeIcon icon={faPause} width="16" onClick={() => setPlayback("pause")} />
+                    : <FontAwesomeIcon icon={faPlay} width="16" onClick={() => setPlayback("play")} />
+                }
+            <input type="range" className="ml-5 grow" />
         </div>
     )
 }

@@ -49,7 +49,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
 
     return (
         <div>
-            <div className="max-h-screen overflow-scroll dragscroll">
+            <div className="max-h-screen overflow-scroll dragscroll cursor-move">
                 <NoSsr>
                     { (view === "table") && <TableGameGrid className="mx-auto" grid={grid} /> }
                     { (view === "ascii") && <AsciiGameGrid className="text-center" grid={grid} /> }
@@ -62,7 +62,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                 bottom-0 
                 inset-x-0 
                 mx-auto 
-                w-full md:w-1/2 lg:w-1/3 xl:w-1/4
+                w-fit
                 v-1/4
                 mb-5
                 ">

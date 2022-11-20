@@ -71,7 +71,6 @@ const globalDefaultSettings: NoNullValues<GameSettings> = {
 // XXX: Too many type assertions! I don't think there's a way around it
 // (https://stackoverflow.com/a/68898908/15768984)
 // Other than overloads, which aren't much better
-// TODO: I should clean this up, at least with a switch
 function getQueryParamSettingOrDefault<S extends keyof GameSettings>(
     settingName: S,
     query: ParsedUrlQuery,

@@ -4,11 +4,11 @@ import { defaultConwayStrategy } from "./conway-strategy";
 const grid = new FakeGrid(5, 5);
 describe("defaultConwayStrategy", () => {
 
-    test("cell rebirths", () => {
+    test("cell is born", () => {
         expect(defaultConwayStrategy(grid, [2, 2])).toBe(true);
     });
 
-    test("cell dies", () => {
+    test("cell dies by underpopulation", () => {
         expect(defaultConwayStrategy(grid, [3, 2])).toBe(false);
     });
 

@@ -1,6 +1,9 @@
 import { ConwayStrategy } from "../game/conway-strategy";
 import { Grid } from "../grid/grid";
 
+const liveCells = [
+  [2, 3], [2, 1], [3, 2], [3,3]
+].map(coord => JSON.stringify(coord));
 class FakeGrid extends Grid {
   constructor(
     readonly height: number,
@@ -10,25 +13,16 @@ class FakeGrid extends Grid {
   }
 
   get(x: number, y: number): boolean {
-    // Live cells: (2, 3), (2, 1), (3, 2), (3, 3)
-    // These are useful for tests
-    return   (x === 2 && y === 3)
-       || (x === 2 && y === 1)
-       || (x === 3 && y === 2)
-       || (x === 3 && y === 3)
-       ;
+    const coordinates = JSON.stringify([x, y]);
+    return liveCells.some(liveCoordinates => coordinates == liveCoordinates);
   }
 
   tick: (strategy: ConwayStrategy) => this = jest.fn();
 }
 
-const fakeConwayStrategy: ConwayStrategy = (grid: Grid, [x, y]: readonly [number, number]) => {
-  // Makes alive all cells around (2,2)
-  return (x === 2 && y === 1)
-      || (x === 2 && y === 3)
-      || (x === 1 && y === 2)
-      || (x === 3 && y === 2)
-      ;
+const fakeConwayStrategy: ConwayStrategy = (grid: Grid, coordinates: readonly [number, number]) => {
+  const stringCoordinates = JSON.stringify(coordinates);
+  return liveCells.some(liveCoordinates => liveCoordinates == stringCoordinates);
 }
 
-export { FakeGrid, fakeConwayStrategy };
+export { FakeGrid, fakeConwayStrategy, liveCells as liveCellsInFakeGrid };

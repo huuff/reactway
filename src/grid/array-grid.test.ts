@@ -31,7 +31,6 @@ describe("ArrayGrid", () => {
         expect(nextStepGrid.get(2, 2)).toBe(false);
         expect(nextStepGrid.get(2, 1)).toBe(true);
         expect(nextStepGrid.get(2, 3)).toBe(true);
-        expect(nextStepGrid.get(1, 2)).toBe(true);
         expect(nextStepGrid.get(3, 2)).toBe(true);
     })
 

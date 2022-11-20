@@ -1,7 +1,7 @@
 import "tailwindcss/tailwind.css";
 import { useEffect } from "react";
-import AsciiGameGrid from "../src/components/AsciiGameGrid";
-import TableGameGrid from "../src/components/TableGameGrid";
+import AsciiGameGrid from "../src/components/grid/AsciiGameGrid";
+import TableGameGrid from "../src/components/grid/TableGameGrid";
 import GameSettingsView from "../src/components/GameSettingsView";
 import { defaultSettings, useSettings } from "../src/game/settings";
 import { defaultConwayStrategy } from "../src/game/conway-strategy";

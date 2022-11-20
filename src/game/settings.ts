@@ -77,27 +77,25 @@ function getQueryParamSettingOrDefault<S extends keyof GameSettings>(
     query: ParsedUrlQuery,
     defaultSettings: NoNullValues<GameSettings>,
 ): GameSettings[S] {
-    if (settingName === "view") {
-        const queryView = query[settingName];
-        if (queryView === "table" || queryView === "ascii")
-            return queryView as GameSettings[S];
-        else
-            return defaultSettings["view"] as GameSettings[S];
-    } else if (settingName === "type") {
-        const queryType = query[settingName];
-        if (queryType === "array" || queryType === "map")
-            return queryType as GameSettings[S];
-        else
-            return defaultSettings["type"] as GameSettings[S];
-    } else if (settingName === "tickDuration") {
-        const queryTickDuration = query["tickDuration"];
-        if (queryTickDuration === "null")
-            return null as GameSettings[S];
-        else {
+    switch (settingName) {
+        case "view":
+            const queryView = query[settingName];
+            if (queryView === "table" || queryView === "ascii")
+                return queryView as GameSettings[S];
+            else
+                return defaultSettings["view"] as GameSettings[S];
+        case "type":
+            const queryType = query[settingName];
+            if (queryType === "array" || queryType === "map")
+                return queryType as GameSettings[S];
+            else
+                return defaultSettings["type"] as GameSettings[S];
+        case "tickDuration":
+            const queryTickDuration = query["tickDuration"];
+            if (queryTickDuration === "null")
+                return null as GameSettings[S];
+        default:
             return +(query[settingName] ?? defaultSettings[settingName].toString()) as GameSettings[S];
-        }
-    } else {
-        return +(query[settingName] ?? defaultSettings[settingName].toString()) as GameSettings[S];
     }
 }
 

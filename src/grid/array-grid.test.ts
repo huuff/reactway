@@ -5,11 +5,13 @@ class FakeGrid extends Grid<FakeGrid> {
   constructor(
     readonly height: number,
     readonly width: number,
+    get: (x: number, y: number) => boolean = jest.fn()
   ) {
     super();
+    this.get = get;
   }
 
-  get: (x: number, y: number) => boolean = jest.fn();
+  //get: (x: number, y: number) => boolean
   tick: (strategy: ConwayStrategy) => FakeGrid = jest.fn();
 }
 

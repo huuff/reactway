@@ -3,14 +3,14 @@ import { ConwayStrategy } from "../game/conway-strategy";
 import { Grid } from "./grid";
 
 type GridState = {
-    readonly grid: Grid<any>;
+    readonly grid: Grid;
     readonly tick: () => void;
-    readonly setGrid: Dispatch<SetStateAction<Grid<any>>>;
+    readonly setGrid: Dispatch<SetStateAction<Grid>>;
     readonly conwayStrategy: ConwayStrategy;
     readonly setConwayStrategy: (newConwayStrategy: ConwayStrategy) => void;
 }
 
-function useGrid(initialGrid: Grid<any>, initialConwayStrategy: ConwayStrategy): GridState {
+function useGrid(initialGrid: Grid, initialConwayStrategy: ConwayStrategy): GridState {
     const [grid, setGrid] = useState(initialGrid);
     const [conwayStrategy, setConwayStrategy] = useState(() => initialConwayStrategy);
 

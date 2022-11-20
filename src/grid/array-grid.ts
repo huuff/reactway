@@ -32,7 +32,7 @@ class ArrayGrid extends Grid {
         return this.internalGrid[y][x];
     }
 
-    tick(strategy: ConwayStrategy): Grid {
+    tick(strategy: ConwayStrategy): ArrayGrid {
         const newInternalGrid = this.internalGrid.map((_, y) => 
             this.internalGrid[y].map((_, x) => strategy(this, [x, y]))
         )

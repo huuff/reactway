@@ -3,7 +3,7 @@ import { Grid } from "../grid/grid";
 import { Fragment } from "react";
 
 type GameGridProps = {
-    grid: Grid<any>
+    grid: Grid
 } & { className: string };
 
 const AsciiGameGrid = ({ grid, className }: GameGridProps) => (

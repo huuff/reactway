@@ -3,7 +3,7 @@ import { Grid } from "../grid/grid";
 import classNames from "classnames";
 
 type GameGridProps = {
-    grid: Grid<any>
+    grid: Grid
 } & { className: string };
 
 const TableGameGrid = ({ grid, className }: GameGridProps) => (

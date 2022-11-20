@@ -20,7 +20,7 @@ function createInternalGrid(settings: GridCreationSettings): Map<string, boolean
     return internalGrid;
 }
 
-class MapGrid extends Grid<MapGrid> {
+class MapGrid extends Grid {
     private readonly internalGrid: Readonly<Map<string, boolean>>
 
     public readonly height: number;

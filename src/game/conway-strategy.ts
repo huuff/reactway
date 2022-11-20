@@ -1,8 +1,8 @@
 import { Grid, Coordinates } from "../grid/grid";
 
-type ConwayStrategy = (grid: Grid<any>, coordinates: Coordinates) => boolean;
+type ConwayStrategy = (grid: Grid, coordinates: Coordinates) => boolean;
 
-const defaultConwayStrategy: ConwayStrategy = (grid: Grid<any>, coordinates: Coordinates): boolean => {
+const defaultConwayStrategy: ConwayStrategy = (grid: Grid, coordinates: Coordinates): boolean => {
     const currentState = grid.get(...coordinates);
     const liveNeighbours = grid.liveNeighbours(...coordinates);
 

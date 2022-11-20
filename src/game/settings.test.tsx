@@ -1,6 +1,5 @@
 import { defaultSettings, useSettings } from "./settings"
 import { fireEvent, render, screen } from "@testing-library/react"
-import "@testing-library/jest-dom/extend-expect"; // TODO: In setupTest
 import * as usehooks from "usehooks-ts";
 import mockRouter from "next-router-mock";
 import singletonRouter from "next/router";

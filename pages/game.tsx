@@ -13,7 +13,6 @@ import { NextPage } from "next";
 import { toStringObject } from "../src/util/to-string-object";
 import { getGridFactory } from "../src/grid/grid-factory";
 import NoSsr from "../src/components/NoSSR";
-import classNames from "classnames";
 
 type GameProps = {
     readonly seed: string;
@@ -37,8 +36,6 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     useInterval(() => {
         tick();
     }, tickDuration);
-
-    const gridViewClassNames = classNames("max-h-screen", "max-w-screen");
 
     return (
         <div>

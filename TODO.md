@@ -1,2 +1,6 @@
 # Tasks
-* Try to get table grid to overflow instead of getting clamped when resizing the window
+* Implement canvas grid view
+* Pausing/Unpausing ticker
+* Toggling single cells on click
+* Scrolling through grid by dragging
+* Being able to rewind/go forward the grid with a bar

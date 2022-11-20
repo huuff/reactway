@@ -8,7 +8,7 @@ type GameGridProps = {
 } & { className?: string };
 
 const TableGameGrid = ({ grid, className }: GameGridProps) => (
-    <table className={`${className || ""}`}>
+    <table className={`${className || ""} w-72 table-fixed`}>
         <tbody>
             {[...Array(grid.height)].map((_, y) => (
                 <tr key={`row-${y}`}>

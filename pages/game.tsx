@@ -65,15 +65,14 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                 mx-auto 
                 w-full md:w-1/2 lg:w-1/3 xl:w-1/4
                 v-1/4
-                bg-white
                 mb-5
-                p-2
-                border rounded-lg
-                drop-shadow-lg
                 ">
-                <PlayBar tickDuration={tickDuration} setPlayback={dispatchPlayback} />
+                <PlayBar 
+                    className="border rounded-lg drop-shadow-lg bg-white p-2 mb-5 opacity-95"
+                    tickDuration={tickDuration} setPlayback={dispatchPlayback} 
+                />
                 <GameSettingsView
-                    className=""
+                    className="border rounded-lg drop-shadow-lg bg-white p-2 opacity-95"
                     settings={settings}
                     dispatchSettings={dispatchSettings}
                 />

@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { PlaybackGameSettingsAction, PlaybackMode } from "../game/settings";
 
 type PlayBarProps = {
@@ -5,13 +6,14 @@ type PlayBarProps = {
     setPlayback: (mode: PlaybackMode) => void,
 } & { className?: string }
 
-const PlayBar = ({tickDuration, setPlayback }: PlayBarProps) => {
+// TODO: Test
+const PlayBar = ({tickDuration, setPlayback, className }: PlayBarProps) => {
     return (
-        <>
-            <div> { tickDuration !== null ? "Playing" : "Paused" }</div>
-            <button onClick={() => setPlayback("play")}> &gt; </button>
-            <button onClick={() => setPlayback("pause")}> || </button>
-        </>
+        <div className={className || ""}>
+            { tickDuration !== null ? "Playing" : "Paused" }
+            <span onClick={() => setPlayback("play")}> &gt; </span>
+            <span onClick={() => setPlayback("pause")}> || </span>
+        </div>
     )
 }
 

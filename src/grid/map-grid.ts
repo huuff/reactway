@@ -32,11 +32,11 @@ class MapGrid extends Grid {
         this.height = wu(internalGrid.keys())
             .map(key => JSON.parse(key))
             .map(([_, y]) => y)
-            .reduce(Math.max, 0);
+            .reduce(Math.max, 0) + 1;
         this.width = wu(internalGrid.keys())
             .map(key => JSON.parse(key))
             .map(([x, _]) => x)
-            .reduce(Math.max, 0);
+            .reduce(Math.max, 0) + 1;
     }
 
     static create: CreateGrid = (settings: GridCreationSettings): MapGrid => {

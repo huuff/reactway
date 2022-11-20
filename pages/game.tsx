@@ -68,7 +68,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                 mb-5
                 ">
                 <PlayBar 
-                    className="border rounded-lg drop-shadow-lg bg-white p-2 mb-5 opacity-95"
+                    className="border rounded-lg drop-shadow-lg bg-white p-2 mb-2 opacity-95"
                     tickDuration={tickDuration} setPlayback={dispatchPlayback} 
                 />
                 <GameSettingsView

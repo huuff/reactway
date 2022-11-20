@@ -12,8 +12,8 @@ const PlayBar = ({ tickDuration, setPlayback, className }: PlayBarProps) => {
     return (
         <div className={`${className || ""} pl-4`}>
             {tickDuration !== null
-                ? <FontAwesomeIcon icon={faPause} onClick={() => setPlayback("pause")} />
-                : <FontAwesomeIcon icon={faPlay} onClick={() => setPlayback("play")} />
+                ? <FontAwesomeIcon icon={faPause} width="16" onClick={() => setPlayback("pause")} />
+                : <FontAwesomeIcon icon={faPlay} width="16" onClick={() => setPlayback("play")} />
             }
         </div>
     )

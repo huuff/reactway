@@ -6,12 +6,14 @@ import { useLocalStorage } from "usehooks-ts";
 import { ParsedUrlQuery } from "querystring";
 import { NoNullValues } from "../util/no-null-values";
 
+type GridViewType = "table" | "ascii" | "canvas";
+
 type GameSettings = {
     readonly height: number;
     readonly width: number;
     readonly birthFactor: number;
     readonly tickDuration: number | null;
-    readonly view: "table" | "ascii";
+    readonly view: GridViewType,
     readonly type: GridType,
 }
 
@@ -64,7 +66,7 @@ const globalDefaultSettings: NoNullValues<GameSettings> = {
     width: 10,
     birthFactor: 0.2,
     tickDuration: 1000,
-    view: "table",
+    view: "canvas",
     type: "array",
 }
 
@@ -79,7 +81,7 @@ function getQueryParamSettingOrDefault<S extends keyof GameSettings>(
     switch (settingName) {
         case "view":
             const queryView = query[settingName];
-            if (queryView === "table" || queryView === "ascii")
+            if (queryView === "table" || queryView === "ascii" || queryView === "canvas")
                 return queryView as GameSettings[S];
             else
                 return defaultSettings["view"] as GameSettings[S];
@@ -173,5 +175,6 @@ export type {
     NumberGameSettingsActionType,
     PlaybackGameSettingsAction,
     PlaybackMode,
+    GridViewType,
 };
 export { useSettings, globalDefaultSettings as defaultSettings, }

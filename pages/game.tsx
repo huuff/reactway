@@ -14,6 +14,7 @@ import { toStringObject } from "../src/util/to-string-object";
 import { getGridFactory } from "../src/grid/grid-factory";
 import NoSsr from "../src/components/NoSSR";
 import PlayBar from "../src/components/PlayBar";
+import CanvasGameGrid from "../src/components/grid/CanvasGameGrid";
 
 type GameProps = {
     readonly seed: string;
@@ -29,32 +30,30 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     const [settings, dispatchSettings] = useSettings(defaultSettings);
     const { height, width, birthFactor, tickDuration, view, type } = settings
     const { grid, tick, setGrid } = useGrid(
-        getGridFactory(type)({...settings, seed}), defaultConwayStrategy
+        getGridFactory(type)({ ...settings, seed }), defaultConwayStrategy
     );
-    
+
     useEffect(() => {
         setGrid(getGridFactory(type)({ height, width, birthFactor, seed }))
     }, [height, width, birthFactor, seed, type, setGrid]);
-    
+
     useInterval(() => {
         tick();
     }, tickDuration);
 
     const dispatchPlayback = (mode: PlaybackMode) => dispatchSettings({
-            type: "setPlayback",
-            value: mode,
-        })
+        type: "setPlayback",
+        value: mode,
+    })
 
 
     return (
         <div>
             <div className="max-h-screen overflow-scroll dragscroll">
                 <NoSsr>
-                    {
-                        view === "table"
-                            ? <TableGameGrid className={`mx-auto`} grid={grid} />
-                            : <AsciiGameGrid className={`text-center`} grid={grid} />
-                    }
+                    { (view === "table") && <TableGameGrid className="mx-auto" grid={grid} /> }
+                    { (view === "ascii") && <AsciiGameGrid className="text-center" grid={grid} /> }
+                    { (view === "canvas") && <CanvasGameGrid className="mx-auto" grid={grid} /> }
                 </NoSsr>
             </div>
 
@@ -67,23 +66,25 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                 v-1/4
                 mb-5
                 ">
-                <PlayBar 
-                    className="border rounded-lg drop-shadow-lg bg-white p-2 mb-2 opacity-95"
-                    tickDuration={tickDuration} setPlayback={dispatchPlayback} 
+                <PlayBar
+                    className="border rounded-lg drop-shadow-lg bg-white p-2 mb-2 opacity-90"
+                    tickDuration={tickDuration} setPlayback={dispatchPlayback}
                 />
                 <GameSettingsView
-                    className="border rounded-lg drop-shadow-lg bg-white p-2 opacity-95"
+                    className="border rounded-lg drop-shadow-lg bg-white p-2 opacity-90"
                     settings={settings}
                     dispatchSettings={dispatchSettings}
                 />
                 <div className="mt-2 text-center">
                     <button
-                        type="button" 
+                        type="button"
                         className="rounded-full bg-sky-500 p-2 text-slate-100"
-                        onClick={() => router.push({ pathname: "game", query: { 
-                            seed: randomSeed(), ...(toStringObject(settings))
-                        } })}
-                        >
+                        onClick={() => router.push({
+                            pathname: "game", query: {
+                                seed: randomSeed(), ...(toStringObject(settings))
+                            }
+                        })}
+                    >
                         Restart
                     </button>
                 </div>

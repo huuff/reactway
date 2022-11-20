@@ -1,5 +1,5 @@
 import { ChangeEvent, useCallback } from "react";
-import { GameSettings, AnyGameSettingsAction, GameSettingsActionType, NumberGameSettingsActionType } from "../game/settings";
+import { GameSettings, AnyGameSettingsAction, GameSettingsActionType, NumberGameSettingsActionType, GridViewType } from "../game/settings";
 
 type GameSettingsViewProps = {
     settings: GameSettings,
@@ -19,13 +19,10 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
     );
     const handleViewSettingsChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
-
-        if (value === "ascii" || value === "table") {
             dispatchSettings({
                 type: "setView",
-                value,
+                value: value as GridViewType,
             })
-        }
     }, [dispatchSettings]);
 
     const handleTypeSettingsChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
@@ -51,6 +48,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                 >
                     <option value="ascii">ascii</option>
                     <option value="table">table</option>
+                    <option value="canvas">canvas</option>
                 </select>
             </div>
 

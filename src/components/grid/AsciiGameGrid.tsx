@@ -1,11 +1,7 @@
 
-import { Grid } from "../../grid/grid";
+import { Grid, GameGridProps } from "../../grid/grid";
 import { Fragment } from "react";
 import { coordinatesToString } from "../../util/coordinates-to-string";
-
-type GameGridProps = {
-    grid: Grid
-} & { className?: string};
 
 const AsciiGameGrid = ({ grid, className }: GameGridProps) => (
     <div className={`${className || ""} font-mono leading-none text-lg`}>

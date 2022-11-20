@@ -1,12 +1,8 @@
 import { range } from "lodash";
 import { useEffect, useRef } from "react";
-import { Grid } from "../../grid/grid";
+import { GameGridProps } from "../../grid/grid";
 
-// TODO: Merge this with all others
-type GameGridProps = {
-    grid: Grid
-} & { className?: string };
-
+// TODO: Test it? Can I?
 const cellSize = 20;
 const CanvasGameGrid = ({ grid, className }: GameGridProps) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);

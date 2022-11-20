@@ -1,11 +1,8 @@
 
-import { Grid } from "../../grid/grid";
+import { GameGridProps } from "../../grid/grid";
 import classNames from "classnames";
 import { coordinatesToString } from "../../util/coordinates-to-string";
 
-type GameGridProps = {
-    grid: Grid
-} & { className?: string };
 
 const TableGameGrid = ({ grid, className }: GameGridProps) => (
     <table className={`${className || ""} w-72 table-fixed`}>

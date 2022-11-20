@@ -1,5 +1,9 @@
 import { ConwayStrategy } from "../game/conway-strategy";
 
+type GameGridProps = {
+    grid: Grid
+} & { className?: string};
+
 type Coordinates = Readonly<[x: number, y: number]>;
 
 type GridCreationSettings = {
@@ -40,4 +44,4 @@ abstract class Grid {
 }
 
 export { Grid }
-export type { Coordinates, GridCreationSettings, CreateGrid, };
+export type { Coordinates, GridCreationSettings, CreateGrid, GameGridProps, };

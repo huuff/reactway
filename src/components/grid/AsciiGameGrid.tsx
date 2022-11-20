@@ -15,7 +15,7 @@ const AsciiGameGrid = ({ grid, className }: GameGridProps) => (
                     [...Array(grid.width)].map((_, x) => {
                         const coord = coordinatesToString([x, y]);
                         return (
-                            <span key={coord} data-testid={coord}>
+                            <span className="mx-1" key={coord} data-testid={coord}>
                                 {grid.get(x, y) ? "X" : "O"}
                             </span>
                         );

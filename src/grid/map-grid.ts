@@ -57,7 +57,7 @@ class MapGrid extends Grid {
         })
 
         for (const coordinates of this.internalGrid.keys()) {
-            newGrid.set(coordinates, strategy(this, JSON.parse(coordinates)))
+            newGrid.set(coordinates, strategy(this, stringToCoordinates(coordinates)))
         }
 
         return new MapGrid(newGrid);

@@ -1,7 +1,7 @@
 import AsciiGameGrid from "./AsciiGameGrid";
 import { render, screen } from "@testing-library/react";
 import { FakeGrid, liveCellsInFakeGrid } from "../../util/testing";
-import coordinatesToString from "../../util/coordinates-to-string";
+import { coordinatesToString } from "../../util/coordinates-to-string";
 
 describe("AsciiGameGrid", () => {
     test("live cells are X", () => {

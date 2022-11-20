@@ -10,8 +10,9 @@ function stringToCoordinates(string: string): Coordinates {
 
     if (!match)
         throw new Error(`String ${string} is not a coordinate`);
+    
 
-    return [+match[0], +match[1]];
+    return [+match[1], +match[2]];
 }
 
 export { coordinatesToString, stringToCoordinates };

@@ -13,15 +13,15 @@ import { NextPage } from "next";
 import { toStringObject } from "../src/util/to-string-object";
 import { getGridFactory } from "../src/grid/grid-factory";
 import NoSsr from "../src/components/NoSSR";
-import dynamic from "next/dynamic";
 
 type GameProps = {
     readonly seed: string;
 }
 
 const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
-    if (typeof window !== undefined)
+    useEffect(() => {
         import("dragscroll");
+    }, []);
 
     const router = useRouter();
 

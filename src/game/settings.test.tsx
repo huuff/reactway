@@ -12,9 +12,8 @@ afterEach(() => {
     mockRouter.push("/game");
 });
 
-// TODO: Maybe inject default settings instead of hardcoding them?
 const FakeSettingsComponent = () => {
-    const [settings, dispatchSettings] = useSettings()
+    const [settings, dispatchSettings] = useSettings(defaultSettings)
 
     return (
         <div>

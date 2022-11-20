@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import AsciiGameGrid from "../src/components/AsciiGameGrid";
 import TableGameGrid from "../src/components/TableGameGrid";
 import GameSettingsView from "../src/components/GameSettingsView";
-import { useSettings } from "../src/game/settings";
+import { defaultSettings, useSettings } from "../src/game/settings";
 import { defaultConwayStrategy } from "../src/game/conway-strategy";
 import { useInterval } from "usehooks-ts";
 import { useGrid } from "../src/grid/use-grid";
@@ -19,11 +19,10 @@ type GameProps = {
     readonly seed: string;
 }
 
-const gridViewClassNames = "w-1/2 mx-auto text-center";
 const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     const router = useRouter();
 
-    const [settings, dispatchSettings] = useSettings();
+    const [settings, dispatchSettings] = useSettings(defaultSettings);
     const { height, width, birthFactor, tickDuration, view, type } = settings
     const { grid, tick, setGrid } = useGrid(
         getGridFactory(type)({...settings, seed}), defaultConwayStrategy
@@ -31,8 +30,8 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
 
     
     useEffect(() => {
-        setGrid(getGridFactory(type)({ ...settings, seed }))
-    }, [height, width, birthFactor, seed, type]);
+        setGrid(getGridFactory(type)({ height, width, birthFactor, seed }))
+    }, [height, width, birthFactor, seed, type, setGrid]);
     
 
     useInterval(() => {

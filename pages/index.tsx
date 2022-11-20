@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { randomSeed } from "../src/util/birth-function";
 
 
-export default () => {
+const Index = () => {
   const router = useRouter();
 
   useEffect(() => {
@@ -14,5 +14,7 @@ export default () => {
         seed: randomSeed(),
       }
     });
-  }, [])
+  }, [router])
 }
+
+export default Index;

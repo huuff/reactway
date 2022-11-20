@@ -3,6 +3,8 @@ import { useMemo } from "react";
 import { GridType } from "../grid/grid-factory";
 import { StringObject } from "../util/to-string-object";
 import { useLocalStorage } from "usehooks-ts";
+import { ParsedUrl } from "next/dist/shared/lib/router/utils/parse-url";
+import { ParsedUrlQuery } from "querystring";
 
 type GameSettings = {
     readonly height: number;
@@ -46,7 +48,7 @@ type TypeGameSettingsAction = GameSettingsAction<GameSettings["type"]> & {
 type AnyGameSettingsAction = NumberGameSettingsAction | ViewGameSettingsAction | TypeGameSettingsAction;
 
 // Default settings, not stored in localStorage
-const defaultSettings: GameSettings = {
+const globalDefaultSettings: GameSettings = {
     height: 10,
     width: 10,
     birthFactor: 0.2,
@@ -60,39 +62,39 @@ const defaultSettings: GameSettings = {
 // Other than overloads, which aren't much better
 function getQueryParamSettingOrDefault<S extends keyof GameSettings>(
     settingName: S,
-    router: NextRouter,
+    query: ParsedUrlQuery,
     defaultSettings: GameSettings,
 ): GameSettings[S] {
     if (settingName === "view") {
-        const queryView = router.query[settingName];
+        const queryView = query[settingName];
         if (queryView === "table" || queryView === "ascii")
             return queryView as GameSettings[S];
         else
             return defaultSettings["view"] as GameSettings[S];
     } else if (settingName === "type") {
-        const queryType = router.query[settingName];
+        const queryType = query[settingName];
         if (queryType === "array" || queryType === "map")
             return queryType as GameSettings[S];
         else
             return defaultSettings["type"] as GameSettings[S];
     } else {
-        return +(router.query[settingName] ?? defaultSettings[settingName].toString()) as GameSettings[S];
+        return +(query[settingName] ?? defaultSettings[settingName].toString()) as GameSettings[S];
     }
 }
 
 
-function useSettings(): [GameSettings, (action: AnyGameSettingsAction) => void] {
+function useSettings(defaultSettings: GameSettings): [GameSettings, (action: AnyGameSettingsAction) => void] {
     const router = useRouter();
     const [ storedSettings, setStoredSettings ] = useLocalStorage("settings", defaultSettings);
 
     const settings: GameSettings = useMemo(() => ({
-        height: getQueryParamSettingOrDefault("height", router, storedSettings),
-        width: getQueryParamSettingOrDefault("width", router, storedSettings),
-        birthFactor: getQueryParamSettingOrDefault("birthFactor", router, storedSettings),
-        tickDuration: getQueryParamSettingOrDefault("tickDuration", router, storedSettings),
-        view: getQueryParamSettingOrDefault("view", router, storedSettings),
-        type: getQueryParamSettingOrDefault("type", router, storedSettings),
-    }), [router.query]);
+        height: getQueryParamSettingOrDefault("height", router.query, storedSettings),
+        width: getQueryParamSettingOrDefault("width", router.query, storedSettings),
+        birthFactor: getQueryParamSettingOrDefault("birthFactor", router.query, storedSettings),
+        tickDuration: getQueryParamSettingOrDefault("tickDuration", router.query, storedSettings),
+        view: getQueryParamSettingOrDefault("view", router.query, storedSettings),
+        type: getQueryParamSettingOrDefault("type", router.query, storedSettings),
+    }), [router.query, storedSettings]);
 
     const dispatchSettings = (action: AnyGameSettingsAction) => {
         let nextQueryParams: { [key: string]: string };
@@ -136,4 +138,4 @@ export type {
     GameSettingsActionType,
     NumberGameSettingsActionType
 };
-export { useSettings, defaultSettings as defaultSettings }
+export { useSettings, globalDefaultSettings as defaultSettings }

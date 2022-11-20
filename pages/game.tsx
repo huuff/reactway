@@ -13,12 +13,16 @@ import { NextPage } from "next";
 import { toStringObject } from "../src/util/to-string-object";
 import { getGridFactory } from "../src/grid/grid-factory";
 import NoSsr from "../src/components/NoSSR";
+import dynamic from "next/dynamic";
 
 type GameProps = {
     readonly seed: string;
 }
 
 const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
+    if (typeof window !== undefined)
+        import("dragscroll");
+
     const router = useRouter();
 
     const [settings, dispatchSettings] = useSettings(defaultSettings);
@@ -39,7 +43,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
 
     return (
         <div>
-            <div className="max-h-screen overflow-scroll">
+            <div className="max-h-screen overflow-scroll dragscroll">
                 <NoSsr>
                     {
                         view === "table"

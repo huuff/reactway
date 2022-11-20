@@ -14,6 +14,7 @@
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.8",
     "classnames": "^2.3.2",
+    "dragscroll": "^0.0.8",
     "eslint": "8.27.0",
     "eslint-config-next": "13.0.3",
     "lodash": "^4.17.21",
@@ -29,6 +30,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
+    "@types/dragscroll": "^0.0.0",
     "@types/lodash": "^4.14.189",
     "@types/seedrandom": "^3.0.2",
     "@types/uuid": "^8.3.4",

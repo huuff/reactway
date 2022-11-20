@@ -1,22 +1,4 @@
-import { ConwayStrategy } from "../game/conway-strategy";
-import { Grid } from "./grid";
-
-class FakeGrid extends Grid<FakeGrid> {
-  constructor(
-    readonly height: number,
-    readonly width: number,
-  ) {
-    super();
-  }
-
-  get(x: number, y: number): boolean {
-    // Only the cell over (2,2) and the cell under it are alive, to test
-    // liveNeighbours
-    return (x === 2 && y === 3) || (x === 2 && y === 1)
-  }
-
-  tick: (strategy: ConwayStrategy) => FakeGrid = jest.fn();
-}
+import { FakeGrid } from "../testing/fake-grid";
 
 describe("Grid", () => {
   test("neighbours", () => {
@@ -60,8 +42,10 @@ describe("Grid", () => {
     const grid = new FakeGrid(5, 5);
 
     // ACT & ASSERT
-    expect(grid.liveNeighbours(2, 2)).toBe(2);
+    expect(grid.liveNeighbours(2, 2)).toBe(3);
 
   })
 
 });
+
+export {};

@@ -1,3 +1,4 @@
+import { range } from "lodash";
 import { ConwayStrategy } from "../game/conway-strategy";
 
 type GameGridProps = {
@@ -41,6 +42,19 @@ abstract class Grid {
             .map((it) => boolToInt(this.get(...it)))
             .reduce((acc, it) => acc + it, 0)
     }    
+
+    // TODO: Test
+    equals(other: Grid): boolean {
+        for (const y of range(0, this.height)) {
+            for (const x of range(0, this.width)) {
+                if (this.get(x, y) != other.get(x, y)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
 }
 
 export { Grid }

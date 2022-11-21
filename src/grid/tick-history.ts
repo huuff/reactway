@@ -6,6 +6,7 @@ type TickHistory = {
     readonly contents: Grid[];
     readonly length: number;
     readonly position: number;
+    // TODO: Some better name? Like `grid`? All uses of `previous.current` look strange
     readonly current: Grid;
     readonly conwayStrategy: ConwayStrategy;
 }
@@ -23,6 +24,7 @@ type HistoryAction = {
     value: ConwayStrategy,
 };
 
+// TODO: Trimming the history when it gets long
 // TODO: Test
 function historyReducer(previous: TickHistory, action: HistoryAction): TickHistory {
     switch (action.type) {
@@ -34,18 +36,21 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
                 current: action.value,
                 conwayStrategy: previous.conwayStrategy,
             };
-        // TODO: Prevent storing further ticks when they don't change
         case "tick":
             if (previous.position === previous.length - 1) {
                 // It's at the end of the history, and thus the next tick should give
                 // a new history
                 const nextGrid = previous.current.tick(previous.conwayStrategy);
-                return {
-                    contents: [...previous.contents, nextGrid],
-                    length: previous.length + 1,
-                    position: previous.length,
-                    current: nextGrid,
-                    conwayStrategy: previous.conwayStrategy,
+                if (!nextGrid.equals(previous.current)) {
+                    return {
+                        contents: [...previous.contents, nextGrid],
+                        length: previous.length + 1,
+                        position: previous.length,
+                        current: nextGrid,
+                        conwayStrategy: previous.conwayStrategy,
+                    }
+                } else {
+                    return previous;
                 }
             } else {
                 // It's in the middle of the grid so we only have to change the position and
@@ -68,7 +73,7 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
                 };
             } else {
                 return previous;
-            } 
+            }
         case "setConwayStrategy":
             return {
                 ...previous,

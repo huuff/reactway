@@ -50,13 +50,21 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
         value: mode,
     })
 
+    const dispatchToggle = (x: number, y: number) => dispatchTickHistory({type: "toggle", value: [x, y]})
+    // TODO: A component that wraps all types of grids and selects the appropriate one
     return (
         <div>
             <div className="max-h-screen overflow-scroll dragscroll cursor-move">
                 <NoSsr>
-                    { (view === "table") && <TableGameGrid className="mx-auto" grid={grid} /> }
-                    { (view === "ascii") && <AsciiGameGrid className="text-center" grid={grid} /> }
-                    { (view === "canvas") && <CanvasGameGrid className="mx-auto" grid={grid} /> }
+                    { (view === "table") && <TableGameGrid className="mx-auto" 
+                                                           toggle={dispatchToggle}
+                                                           grid={grid} /> }
+                    { (view === "ascii") && <AsciiGameGrid className="text-center"
+                                                           toggle={dispatchToggle}
+                                                           grid={grid} /> }
+                    { (view === "canvas") && <CanvasGameGrid className="mx-auto"
+                                                             toggle={dispatchToggle} 
+                                                             grid={grid} /> }
                 </NoSsr>
             </div>
 

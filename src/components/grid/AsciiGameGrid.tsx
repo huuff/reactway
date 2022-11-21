@@ -3,7 +3,7 @@ import { GameGridProps } from "../../grid/grid";
 import { Fragment } from "react";
 import { coordinatesToString } from "../../util/coordinates-to-string";
 
-const AsciiGameGrid = ({ grid, className }: GameGridProps) => (
+const AsciiGameGrid = ({ grid, className, toggle }: GameGridProps) => (
     <div className={`${className || ""} font-mono leading-none text-lg`}>
         {[...Array(grid.height)].map((_, y) => (
             <Fragment key={`row-${y}`}>
@@ -15,6 +15,7 @@ const AsciiGameGrid = ({ grid, className }: GameGridProps) => (
                                 key={coord} 
                                 data-testid={coord}
                                 className="mx-1 cursor-pointer hover:bg-red-400" 
+                                onClick={() => toggle(x, y)}
                                 >
                                 {grid.get(x, y) ? "X" : "O"}
                             </span>

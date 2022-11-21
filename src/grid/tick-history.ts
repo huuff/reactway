@@ -1,5 +1,5 @@
 import { ConwayStrategy, defaultConwayStrategy } from "../game/conway-strategy";
-import { Grid } from "./grid";
+import { Coordinates, Grid } from "./grid";
 
 // TODO: I think I should give this a better name
 type TickHistory = {
@@ -22,6 +22,9 @@ type HistoryAction = {
 } | {
     type: "setConwayStrategy",
     value: ConwayStrategy,
+} | {
+    type: "toggle",
+    value: Coordinates,
 };
 
 // TODO: Trimming the history when it gets long
@@ -78,6 +81,16 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
             return {
                 ...previous,
                 conwayStrategy: action.value,
+            }
+        case "toggle":
+            const [targetX, targetY] = action.value;
+            const nextGrid = previous.current.toggle(targetX, targetY);
+            return {
+                contents: [...previous.contents, nextGrid],
+                length: previous.length + 1,
+                position: previous.length,
+                current: nextGrid,
+                conwayStrategy: previous.conwayStrategy,
             }
     }
 }

@@ -3,8 +3,7 @@ import { GameGridProps } from "../../grid/grid";
 import classNames from "classnames";
 import { coordinatesToString } from "../../util/coordinates-to-string";
 
-
-const TableGameGrid = ({ grid, className }: GameGridProps) => (
+const TableGameGrid = ({ grid, className, toggle }: GameGridProps) => (
     <table className={`${className || ""} w-72 table-fixed`}>
         <tbody>
             {[...Array(grid.height)].map((_, y) => (
@@ -16,6 +15,7 @@ const TableGameGrid = ({ grid, className }: GameGridProps) => (
                                 <td
                                     key={coord}
                                     data-testid={coord}
+                                    onClick={() => toggle(x, y)}
                                     className={classNames(
                                         "w-6",
                                         "h-6",

@@ -1,5 +1,5 @@
 import { range } from "lodash";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { GameGridProps } from "../../grid/grid";
 import { useMouseState } from "beautiful-react-hooks";
 
@@ -14,7 +14,8 @@ function calculateBoundingCell([x, y]: [number, number]): [number, number] {
 }
 
 // TODO: Test it? Can I?
-const CanvasGameGrid = ({ grid, className }: GameGridProps) => {
+// TODO: Implement toggle
+const CanvasGameGrid = ({ grid, className, toggle }: GameGridProps) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const { clientX, clientY } = useMouseState(canvasRef);
 

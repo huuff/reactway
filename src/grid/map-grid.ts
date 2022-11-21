@@ -49,6 +49,7 @@ class MapGrid extends Grid {
     }
     tick(strategy: ConwayStrategy): MapGrid {
         // New grid with birthFactor 0, so it's empty
+        // TODO: can't I just create a new map?
         const newGrid = createInternalGrid({
             height: this.height,
             width: this.width,
@@ -61,6 +62,22 @@ class MapGrid extends Grid {
         }
 
         return new MapGrid(newGrid);
+    }
+
+    // TODO: Test
+    toggle(x: number, y: number): MapGrid {
+        const targetCoordinatesAsString = coordinatesToString([x, y]);
+        const newInternalGrid = new Map<string, boolean>();
+
+        for (const coordinates of this.internalGrid.keys()) {
+            if (coordinates !== targetCoordinatesAsString) {
+                newInternalGrid.set(coordinates, this.internalGrid.get(coordinates)!)
+            } else {
+                newInternalGrid.set(coordinates, !this.internalGrid.get(coordinates))
+            }
+        }
+
+        return new MapGrid(newInternalGrid);
     }
 
 }

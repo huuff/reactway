@@ -1,12 +1,19 @@
 import { range } from "lodash";
-import { useEffect, useRef } from "react";
+import { RefObject, useEffect, useRef } from "react";
 import { GameGridProps } from "../../grid/grid";
-import { useMouseState } from "beautiful-react-hooks";
+import { useMouseState, useMouseEvents } from "beautiful-react-hooks";
 
 
 const cellSize = 20;
 
-function calculateBoundingCell([x, y]: [number, number]): [number, number] {
+function getMouseCell(
+    canvas: RefObject<HTMLCanvasElement>,
+    clientX: number,
+    clientY: number
+): [number, number] {
+    const boundingRect = canvas.current!.getBoundingClientRect();
+    const [x, y]: [number, number] = [clientX - boundingRect.left, clientY - boundingRect.top]
+
     return [
         (x - (x % cellSize)) / cellSize,
         (y - (y % cellSize)) / cellSize,
@@ -14,11 +21,16 @@ function calculateBoundingCell([x, y]: [number, number]): [number, number] {
 }
 
 // TODO: Test it? Can I?
-// TODO: Implement toggle
 const CanvasGameGrid = ({ grid, className, toggle }: GameGridProps) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const { clientX, clientY } = useMouseState(canvasRef);
+    const { onMouseUp } = useMouseEvents(canvasRef);
 
+    onMouseUp((event) => {
+        const [x, y] = [event.clientX, event.clientY];
+        const [cellX, cellY] = getMouseCell(canvasRef, x, y);
+        toggle(cellX, cellY);
+    })
 
     useEffect(() => {
         const canvas = canvasRef.current!;
@@ -39,9 +51,7 @@ const CanvasGameGrid = ({ grid, className, toggle }: GameGridProps) => {
         }
 
         // Paint the hovered cell
-        const boundingRect = canvas.getBoundingClientRect();
-        const mouseCoords: [number, number] = [clientX - boundingRect.left, clientY - boundingRect.top]
-        const [mouseCellX, mouseCellY] = calculateBoundingCell(mouseCoords);
+        const [mouseCellX, mouseCellY] = getMouseCell(canvasRef, clientX, clientY);
         if (grid.get(mouseCellX, mouseCellY)) {
             ctx.fillStyle = "#800000";
         } else {
@@ -51,20 +61,14 @@ const CanvasGameGrid = ({ grid, className, toggle }: GameGridProps) => {
 
     }, [grid, clientX, clientY])
 
-    useEffect(() => {
-        const canvas = canvasRef.current!;
-        const ctx = canvas.getContext("2d")!;
-
-
-    }, [grid])
 
     return (
         <>
             <canvas ref={canvasRef}
-                    id="canvas" 
-                    height={grid.height * cellSize} 
-                    width={grid.width * cellSize}
-                    className={`${className || ""}`}
+                id="canvas"
+                height={grid.height * cellSize}
+                width={grid.width * cellSize}
+                className={`${className || ""}`}
             ></canvas>
         </>
     )

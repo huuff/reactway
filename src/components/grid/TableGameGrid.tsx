@@ -16,10 +16,17 @@ const TableGameGrid = ({ grid, className }: GameGridProps) => (
                                 <td
                                     key={coord}
                                     data-testid={coord}
-                                    className={classNames("w-6", "h-6", "border", {
-                                        "bg-black": grid.get(x, y),
-                                        "bg-white": !grid.get(x, y),
-                                    })}>
+                                    className={classNames(
+                                        "w-6",
+                                        "h-6",
+                                        "border",
+                                        "cursor-pointer",
+                                        {
+                                            "bg-black": grid.get(x, y),
+                                            "bg-white": !grid.get(x, y),
+                                            "hover:bg-red-800": grid.get(x, y),
+                                            "hover:bg-red-400": !grid.get(x, y),
+                                        })}>
                                 </td>
                             )
                         })

@@ -1,5 +1,5 @@
 
-import { Grid, GameGridProps } from "../../grid/grid";
+import { GameGridProps } from "../../grid/grid";
 import { Fragment } from "react";
 import { coordinatesToString } from "../../util/coordinates-to-string";
 
@@ -11,7 +11,11 @@ const AsciiGameGrid = ({ grid, className }: GameGridProps) => (
                     [...Array(grid.width)].map((_, x) => {
                         const coord = coordinatesToString([x, y]);
                         return (
-                            <span className="mx-1" key={coord} data-testid={coord}>
+                            <span 
+                                key={coord} 
+                                data-testid={coord}
+                                className="mx-1 cursor-pointer hover:bg-red-400" 
+                                >
                                 {grid.get(x, y) ? "X" : "O"}
                             </span>
                         );

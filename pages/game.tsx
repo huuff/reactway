@@ -1,5 +1,5 @@
 import "tailwindcss/tailwind.css";
-import { useEffect } from "react";
+import { useEffect, useReducer } from "react";
 import AsciiGameGrid from "../src/components/grid/AsciiGameGrid";
 import TableGameGrid from "../src/components/grid/TableGameGrid";
 import GameSettingsView from "../src/components/GameSettingsView";
@@ -15,6 +15,7 @@ import { getGridFactory } from "../src/grid/grid-factory";
 import NoSsr from "../src/components/NoSSR";
 import PlayBar from "../src/components/PlayBar";
 import CanvasGameGrid from "../src/components/grid/CanvasGameGrid";
+import { historyReducer, newDefaultTickHistory } from "../src/grid/tick-history";
 
 type GameProps = {
     readonly seed: string;
@@ -29,23 +30,27 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
 
     const [settings, dispatchSettings] = useSettings(defaultSettings);
     const { height, width, birthFactor, tickDuration, view, type } = settings
-    const { grid, tick, setGrid } = useGrid(
-        getGridFactory(type)({ ...settings, seed }), defaultConwayStrategy
+    const [ tickHistory, dispatchTickHistory ] = useReducer(
+        historyReducer, newDefaultTickHistory(getGridFactory(type)({ ...settings, seed }))
     );
 
+    const { current: grid, position: historyPosition, length: historyLength } = tickHistory;
+
     useEffect(() => {
-        setGrid(getGridFactory(type)({ height, width, birthFactor, seed }))
-    }, [height, width, birthFactor, seed, type, setGrid]);
+        dispatchTickHistory({
+            type: "reset",
+            value: getGridFactory(type)({ height, width, birthFactor, seed })
+        })
+    }, [height, width, birthFactor, seed, type, dispatchTickHistory]);
 
     useInterval(() => {
-        tick();
+        dispatchTickHistory({ type: "tick" });
     }, tickDuration);
 
     const dispatchPlayback = (mode: PlaybackMode) => dispatchSettings({
         type: "setPlayback",
         value: mode,
     })
-
 
     return (
         <div>
@@ -68,7 +73,11 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                 ">
                 <PlayBar
                     className="border rounded-lg drop-shadow-lg bg-white p-2 mb-2 opacity-90"
-                    tickDuration={tickDuration} setPlayback={dispatchPlayback}
+                    tickDuration={tickDuration} 
+                    historyPosition={historyPosition}
+                    historyLength={historyLength}
+                    dispatchTickHistory={dispatchTickHistory}
+                    setPlayback={dispatchPlayback}
                 />
                 <GameSettingsView
                     className="border rounded-lg drop-shadow-lg bg-white p-2 opacity-90"

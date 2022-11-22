@@ -24,8 +24,6 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
         import("dragscroll");
     }, []);
 
-    const router = useRouter();
-
     const [settings, dispatchSettings] = useSettings(defaultSettings);
     const { height, width, birthFactor, tickDuration, view, type } = settings
     const [ tickHistory, dispatchTickHistory ] = useReducer(
@@ -49,6 +47,15 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
         type: "setPlayback",
         value: mode,
     })
+
+    const router = useRouter();
+    const newGame = () => {
+        router.push({
+            pathname: "game", query: {
+                seed: randomSeed(), ...(toStringObject(settings))
+            }
+        })
+    }
 
     const dispatchToggle = (x: number, y: number) => dispatchTickHistory({type: "toggle", value: [x, y]})
     // TODO: A component that wraps all types of grids and selects the appropriate one
@@ -84,25 +91,13 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                     historyLength={historyLength}
                     dispatchTickHistory={dispatchTickHistory}
                     setPlayback={dispatchPlayback}
+                    newGame={newGame}
                 />
                 <GameSettingsView
                     className="border rounded-lg drop-shadow-lg bg-white p-2 opacity-90"
                     settings={settings}
                     dispatchSettings={dispatchSettings}
                 />
-                <div className="mt-2 text-center">
-                    <button
-                        type="button"
-                        className="rounded-full bg-sky-500 p-2 text-slate-100"
-                        onClick={() => router.push({
-                            pathname: "game", query: {
-                                seed: randomSeed(), ...(toStringObject(settings))
-                            }
-                        })}
-                    >
-                        Restart
-                    </button>
-                </div>
             </div>
         </div>
     )

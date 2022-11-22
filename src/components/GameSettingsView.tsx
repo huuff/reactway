@@ -6,6 +6,10 @@ type GameSettingsViewProps = {
     dispatchSettings: React.Dispatch<GameSettingsAction>
 } & { className?: string }
 
+// TODO: Try to debounce inputs! (I may have to write my own hook)
+// The fact that the input field updates immediately makes it hard to follow a normal
+// flow for updating it (e.g., deleting it and setting it), since, for example, deleting
+// it means it's set to 0, which will break the game
 const GameSettingsView = ({ settings, dispatchSettings, className }: GameSettingsViewProps) => {
     const createNumberSettingsChangeHandler = useCallback(
         (eventType: GameSettingsNumberAction) => {

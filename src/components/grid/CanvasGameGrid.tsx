@@ -2,6 +2,7 @@ import { range } from "lodash";
 import { RefObject, useEffect, useRef } from "react";
 import { GameGridProps } from "../../grid/grid";
 import { useMouseState, useMouseEvents } from "beautiful-react-hooks";
+import { useDebounce } from "usehooks-ts";
 
 
 const cellSize = 20;
@@ -23,7 +24,7 @@ function getMouseCell(
 // TODO: Test it? Can I?
 const CanvasGameGrid = ({ grid, className, toggle }: GameGridProps) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const { clientX, clientY } = useMouseState(canvasRef);
+    const { clientX, clientY } = useDebounce(useMouseState(canvasRef), 5);
     const { onMouseUp } = useMouseEvents(canvasRef);
 
     onMouseUp((event) => {

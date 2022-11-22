@@ -100,6 +100,17 @@ function getQueryParamSettingOrDefault<S extends keyof GameSettings>(
     }
 }
 
+const minimums = {
+    height: 5,
+    width: 5,
+    birthFactor: 0,
+    tickDuration: 100,
+}
+
+// Returns the given value if it's over the minimum, or the minimum otherwise
+function coerceAtLeastMinimum(setting: keyof typeof minimums, value: number): number {
+    return value < minimums[setting] ? minimums[setting] : value;
+}
 
 function useSettings(
     defaultSettings: NoNullValues<GameSettings>
@@ -118,33 +129,42 @@ function useSettings(
 
     const dispatchSettings = (action: AnyGameSettingsAction) => {
         let nextQueryParams: { [key: string]: string };
-        
 
         switch (action.type) {
-            case "setHeight":
-                nextQueryParams = { ...router.query, height: action.value.toString() };
-                setStoredSettings({ ...settings, ...storedSettings, height: action.value });
+            case "setHeight": {
+                const nextValue = coerceAtLeastMinimum("height", action.value);
+                nextQueryParams = { ...router.query, height: nextValue.toString() };
+                setStoredSettings({ ...settings, ...storedSettings, height: nextValue });
                 break;
-            case "setWidth":
-                nextQueryParams = { ...router.query, width: action.value.toString() };
-                setStoredSettings({ ...settings, ...storedSettings, width: action.value });
+            }
+            case "setWidth": {
+                const nextValue = coerceAtLeastMinimum("width", action.value);
+                nextQueryParams = { ...router.query, width: nextValue.toString() };
+                setStoredSettings({ ...settings, ...storedSettings, width: nextValue });
                 break;
-            case "setBirthFactor":
-                nextQueryParams = { ...router.query, birthFactor: action.value.toString() };
-                setStoredSettings({ ...settings, ...storedSettings, birthFactor: action.value });
+            }
+            case "setBirthFactor": {
+                const nextValue = coerceAtLeastMinimum("birthFactor", action.value);
+                nextQueryParams = { ...router.query, birthFactor: nextValue.toString() };
+                setStoredSettings({ ...settings, ...storedSettings, birthFactor: nextValue });
                 break;
-            case "setTickDuration":
-                nextQueryParams = { ...router.query, tickDuration: action.value.toString() };
-                setStoredSettings({ ...storedSettings, ...settings, tickDuration: action.value });
+            }
+            case "setTickDuration": {
+                const nextValue = coerceAtLeastMinimum("tickDuration", action.value);
+                nextQueryParams = { ...router.query, tickDuration: nextValue.toString() };
+                setStoredSettings({ ...storedSettings, ...settings, tickDuration: nextValue });
                 break;
-            case "setView":
+            }
+            case "setView": {
                 nextQueryParams = { ...router.query, view: action.value };
                 setStoredSettings({ ...settings, ...storedSettings,  view: action.value });
                 break;
-            case "setType":
+            }
+            case "setType": {
                 nextQueryParams = { ...router.query, type: action.value };
                 setStoredSettings({ ...settings, ...storedSettings,  type: action.value });
                 break;
+            }
             case "setPlayback": {
                 switch (action.value) {
                     case "play":

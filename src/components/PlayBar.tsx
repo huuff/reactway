@@ -5,6 +5,7 @@ import { HistoryAction } from "../grid/tick-history";
 import { ChangeEvent, Dispatch } from "react";
 import { randomSeed } from "../util/birth-function";
 import { useRouter } from "next/router";
+import ClassedSlot from "./ClassedSlot";
 
 type PlayBarProps = {
     tickDuration: number | null,
@@ -34,12 +35,12 @@ const PlayBar = ({
 
     return (
         <div className={`${className || ""} px-4 flex h-8`}>
-            <i className="mr-3 text-blue-500 cursor-pointer">
+            <ClassedSlot className="mr-3 h-4 text-blue-500 cursor-pointer hover:scale-125">
                 {tickDuration !== null
-                    ? <FontAwesomeIcon icon={faPause} width="12" onClick={() => setPlayback("pause")} />
-                    : <FontAwesomeIcon icon={faPlay} width="12" onClick={() => setPlayback("play")} />
+                    ? <FontAwesomeIcon icon={faPause} onClick={() => setPlayback("pause")} />
+                    : <FontAwesomeIcon icon={faPlay}  onClick={() => setPlayback("play")} />
                 }
-            </i>
+            </ClassedSlot>
             <input
                 type="range"
                 min="0"
@@ -49,9 +50,7 @@ const PlayBar = ({
                 className="grow" />
 
             <div className="ml-3">
-                <i className="text-green-500 cursor-pointer">
-                    <FontAwesomeIcon icon={faRepeat} width="16" onClick={newGame} />
-                </i>
+                <FontAwesomeIcon className="h-4 hover:scale-125 text-green-500 cursor-pointer" icon={faRepeat} onClick={newGame} />
             </div>
         </div>
     )

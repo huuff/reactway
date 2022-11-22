@@ -1,9 +1,10 @@
 import { range } from "lodash";
 import { ConwayStrategy } from "../game/conway-strategy";
+import { GridStateWrapper } from "./tick-history";
 
 type GameGridProps = {
     grid: Grid,
-    toggle: (x: number, y: number) => void,
+    toggle: GridStateWrapper["toggleCell"], // TODO: Should likely be renamed to toggleCell
 } & { className?: string };
 
 type Coordinates = Readonly<[x: number, y: number]>;
@@ -17,7 +18,10 @@ type GridCreationSettings = {
 
 type CreateGrid = (settings: GridCreationSettings) => Grid;
 
+type GridType = "array" | "map" | "fake";
+
 abstract class Grid {
+    abstract readonly type: GridType;
     abstract readonly height: number;
     abstract readonly width: number;
 
@@ -64,4 +68,4 @@ abstract class Grid {
 }
 
 export { Grid }
-export type { Coordinates, GridCreationSettings, CreateGrid, GameGridProps, };
+export type { Coordinates, GridCreationSettings, CreateGrid, GameGridProps, GridType };

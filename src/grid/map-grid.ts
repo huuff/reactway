@@ -24,6 +24,8 @@ function createInternalGrid(settings: GridCreationSettings): Map<string, boolean
 class MapGrid extends Grid {
     private readonly internalGrid: Readonly<Map<string, boolean>>
 
+    public readonly type = "map";
+
     public readonly height: number;
     public readonly width: number;
 

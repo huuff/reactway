@@ -15,7 +15,7 @@ const TableGameGrid = ({ grid, className, toggle }: GameGridProps) => (
                                 <td
                                     key={coord}
                                     data-testid={coord}
-                                    onClick={() => toggle(x, y)}
+                                    onClick={() => toggle([x, y])}
                                     className={classNames(
                                         "w-6",
                                         "h-6",

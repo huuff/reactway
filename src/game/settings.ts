@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useMemo } from "react";
-import { GridType } from "../grid/grid-factory";
+import { GridType } from "../grid/grid";
 import { StringObject } from "../util/to-string-object";
 import { useLocalStorage } from "usehooks-ts";
 import { ParsedUrlQuery } from "querystring";

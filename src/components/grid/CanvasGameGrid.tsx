@@ -29,7 +29,7 @@ const CanvasGameGrid = ({ grid, className, toggle }: GameGridProps) => {
     onMouseUp((event) => {
         const [x, y] = [event.clientX, event.clientY];
         const [cellX, cellY] = getMouseCell(canvasRef, x, y);
-        toggle(cellX, cellY);
+        toggle([cellX, cellY]);
     })
 
     useEffect(() => {

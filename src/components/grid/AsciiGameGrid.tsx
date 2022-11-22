@@ -15,7 +15,7 @@ const AsciiGameGrid = ({ grid, className, toggle }: GameGridProps) => (
                                 key={coord} 
                                 data-testid={coord}
                                 className="mx-1 cursor-pointer hover:bg-red-400" 
-                                onClick={() => toggle(x, y)}
+                                onClick={() => toggle([x, y])}
                                 >
                                 {grid.get(x, y) ? "X" : "O"}
                             </span>

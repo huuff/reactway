@@ -7,6 +7,8 @@ const liveCells: readonly [x: number, y: number][] = [
 ];
 class FakeGrid extends Grid {
   // TODO: Why not hardcode the parameters? I always use the same
+  public readonly type = "fake";
+
   constructor(
     readonly height: number,
     readonly width: number,

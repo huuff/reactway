@@ -1,5 +1,5 @@
 import "tailwindcss/tailwind.css";
-import { useEffect, useReducer } from "react";
+import { useEffect } from "react";
 import AsciiGameGrid from "../src/components/grid/AsciiGameGrid";
 import TableGameGrid from "../src/components/grid/TableGameGrid";
 import GameSettingsView from "../src/components/GameSettingsView";
@@ -13,7 +13,7 @@ import { getGridFactory } from "../src/grid/grid-factory";
 import NoSsr from "../src/components/NoSSR";
 import PlayBar from "../src/components/PlayBar";
 import CanvasGameGrid from "../src/components/grid/CanvasGameGrid";
-import { historyReducer, newDefaultTickHistory } from "../src/grid/tick-history";
+import { useGrid } from "../src/grid/tick-history";
 
 type GameProps = {
     readonly seed: string;
@@ -26,21 +26,25 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
 
     const [settings, dispatchSettings] = useSettings(defaultSettings);
     const { height, width, birthFactor, tickDuration, view, type } = settings
-    const [ tickHistory, dispatchTickHistory ] = useReducer(
-        historyReducer, newDefaultTickHistory(getGridFactory(type)({ ...settings, seed }))
-    );
 
-    const { current: grid, position: historyPosition, length: historyLength } = tickHistory;
+    const { 
+        grid,
+        historyPosition, 
+        historyLength,
+
+        setHistoryPosition,
+        restart,
+        tick,
+        clear,
+        toggleCell,
+    } = useGrid(getGridFactory(type)({ ...settings, seed }));
 
     useEffect(() => {
-        dispatchTickHistory({
-            type: "reset",
-            value: getGridFactory(type)({ height, width, birthFactor, seed })
-        })
-    }, [height, width, birthFactor, seed, type, dispatchTickHistory]);
+        restart(getGridFactory(type)({ height, width, birthFactor, seed }));
+    }, [height, width, birthFactor, seed, type]);
 
     useInterval(() => {
-        dispatchTickHistory({ type: "tick" });
+        tick();
     }, tickDuration);
 
     const dispatchPlayback = (mode: PlaybackMode) => dispatchSettings({
@@ -49,7 +53,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     })
 
     const router = useRouter();
-    const newGame = () => {
+    const startNewGame = () => {
         router.push({
             pathname: "game", query: {
                 seed: randomSeed(), ...(toStringObject(settings))
@@ -57,20 +61,19 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
         })
     }
 
-    const dispatchToggle = (x: number, y: number) => dispatchTickHistory({type: "toggle", value: [x, y]})
     // TODO: A component that wraps all types of grids and selects the appropriate one
     return (
         <div>
             <div className="max-h-screen overflow-scroll dragscroll cursor-move">
                 <NoSsr>
                     { (view === "table") && <TableGameGrid className="mx-auto" 
-                                                           toggle={dispatchToggle}
+                                                           toggle={toggleCell}
                                                            grid={grid} /> }
                     { (view === "ascii") && <AsciiGameGrid className="text-center"
-                                                           toggle={dispatchToggle}
+                                                           toggle={toggleCell}
                                                            grid={grid} /> }
                     { (view === "canvas") && <CanvasGameGrid className="mx-auto"
-                                                             toggle={dispatchToggle} 
+                                                             toggle={toggleCell} 
                                                              grid={grid} /> }
                 </NoSsr>
             </div>
@@ -88,10 +91,11 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                     className="border rounded-lg drop-shadow-lg bg-white p-2 mb-2 opacity-90"
                     tickDuration={tickDuration} 
                     historyPosition={historyPosition}
+                    setHistoryPosition={setHistoryPosition}
                     historyLength={historyLength}
-                    dispatchTickHistory={dispatchTickHistory}
                     setPlayback={dispatchPlayback}
-                    newGame={newGame}
+                    startNewGame={startNewGame}
+                    clearGrid={clear}
                 />
                 <GameSettingsView
                     className="border rounded-lg drop-shadow-lg bg-white p-2 opacity-90"

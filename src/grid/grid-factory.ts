@@ -1,8 +1,6 @@
 import { ArrayGrid } from "./array-grid";
-import { CreateGrid } from "./grid";
+import { CreateGrid, GridType } from "./grid";
 import { MapGrid } from "./map-grid";
-
-type GridType = "array" | "map";
 
 function getGridFactory(type: GridType): CreateGrid {
     if (type === "array") {
@@ -14,5 +12,4 @@ function getGridFactory(type: GridType): CreateGrid {
     }
 }
 
-export type { GridType };
 export { getGridFactory };

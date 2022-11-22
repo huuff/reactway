@@ -1,5 +1,7 @@
+import { useReducer } from "react";
 import { ConwayStrategy, defaultConwayStrategy } from "../game/conway-strategy";
 import { Coordinates, Grid } from "./grid";
+import { getGridFactory } from "./grid-factory";
 
 // TODO: I think I should give this a better name
 type TickHistory = {
@@ -25,7 +27,11 @@ type HistoryAction = {
 } | {
     type: "toggle",
     value: Coordinates,
+} | {
+    type: "clear",
 };
+
+type Expand<T> = T extends infer O ? { [K in keyof O]: O[K] } : never;
 
 // TODO: Trimming the history when it gets long
 // TODO: Test
@@ -39,6 +45,21 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
                 current: action.value,
                 conwayStrategy: previous.conwayStrategy,
             };
+        case "clear":
+            const createGrid = getGridFactory(previous.current.type)
+            const emptyGrid = createGrid({
+                height: previous.current.height,
+                width: previous.current.width,
+                birthFactor: 0,
+                seed: "any will do since it's empty"
+            });
+            return {
+                contents: [...previous.contents, emptyGrid],
+                length: previous.length + 1,
+                position: previous.length,
+                current: emptyGrid,
+                conwayStrategy: previous.conwayStrategy, 
+            }
         case "tick":
             if (previous.position === previous.length - 1) {
                 // It's at the end of the history, and thus the next tick should give
@@ -105,5 +126,40 @@ function newDefaultTickHistory(initialGrid: Grid): TickHistory {
     }
 }
 
-export type { HistoryAction };
-export { historyReducer, newDefaultTickHistory };
+// TODO: Somewhere else?
+type GridStateWrapper = {
+    grid: Grid;
+    historyPosition: number;
+    historyLength: number;
+    
+    clear: () => void;
+    tick: () => void;
+
+    restart: (newGrid: Grid) => void;
+
+    setHistoryPosition: (newPosition: number) => void;
+    toggleCell: (coordinates: Coordinates) => void;
+}
+function useGrid(initialGrid: Grid): GridStateWrapper {
+    const [ 
+        tickHistory, 
+        dispatchTickHistory
+    ] = useReducer(historyReducer, newDefaultTickHistory(initialGrid));
+
+    return {
+        grid: tickHistory.current,
+        historyPosition: tickHistory.position,
+        historyLength: tickHistory.length,
+
+        tick: () => dispatchTickHistory({ type: "tick" } ),
+        clear: () => dispatchTickHistory({ type: "clear"} ),
+        restart: (newGrid: Grid) => dispatchTickHistory({ type: "reset", value: newGrid}),
+        setHistoryPosition: (newPosition: number) => {
+            dispatchTickHistory({ type: "setPosition", value: newPosition})
+        },
+        toggleCell: (coordinates: Coordinates) => dispatchTickHistory({type: "toggle", value: coordinates})
+    }
+}
+
+export type { HistoryAction, GridStateWrapper };
+export { historyReducer, newDefaultTickHistory, useGrid };

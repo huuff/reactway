@@ -9,6 +9,8 @@ type InternalGrid = boolean[][];
 class ArrayGrid extends Grid {
     private readonly internalGrid: ReadonlyDeep<InternalGrid>;
 
+    public readonly type = "array";
+
     public readonly height: number;
     public readonly width: number;
 

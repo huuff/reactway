@@ -35,6 +35,10 @@ abstract class Grid {
             [x, y + 1] as const,
             [x + 1, y] as const,
             [x, y - 1] as const,
+            [x-1, y+1] as const,
+            [x-1, y-1] as const,
+            [x+1, y+1] as const,
+            [x+1, y-1] as const,
         ].filter((it) => this.contains(...it))
     }
 

@@ -14,6 +14,10 @@ describe("Grid", () => {
       [3, 2],
       [2, 1],
       [2, 3],
+      [1, 3],
+      [1, 1],
+      [3, 3],
+      [3, 1],
     ].sort());
   });
 
@@ -29,7 +33,7 @@ describe("Grid", () => {
   });
 
   test("liveNeighbours", () => {
-    expect(grid.liveNeighbours(2, 2)).toBe(3);
+    expect(grid.liveNeighbours(2, 2)).toBe(4);
 
   })
 

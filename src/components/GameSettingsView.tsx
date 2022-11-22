@@ -1,14 +1,14 @@
 import { ChangeEvent, useCallback } from "react";
-import { GameSettings, AnyGameSettingsAction, GameSettingsActionType, NumberGameSettingsActionType, GridViewType } from "../game/settings";
+import { GameSettings, GameSettingsAction, GameSettingsNumberAction, GridViewType } from "../game/settings";
 
 type GameSettingsViewProps = {
     settings: GameSettings,
-    dispatchSettings: React.Dispatch<AnyGameSettingsAction>
+    dispatchSettings: React.Dispatch<GameSettingsAction>
 } & { className?: string }
 
 const GameSettingsView = ({ settings, dispatchSettings, className }: GameSettingsViewProps) => {
     const createNumberSettingsChangeHandler = useCallback(
-        (eventType: NumberGameSettingsActionType) => {
+        (eventType: GameSettingsNumberAction) => {
             return (e: ChangeEvent<HTMLInputElement>) => {
                 dispatchSettings({
                     type: eventType,

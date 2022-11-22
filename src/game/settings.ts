@@ -6,8 +6,6 @@ import { useLocalStorage } from "usehooks-ts";
 import { ParsedUrlQuery } from "querystring";
 import { NoNullValues } from "../util/no-null-values";
 
-type GridViewType = "table" | "ascii" | "canvas";
-
 type GameSettings = {
     readonly height: number;
     readonly width: number;
@@ -21,54 +19,33 @@ type GameSettings = {
 // missing param is taken to be the default
 type GameSettingsQueryParams = StringObject<GameSettings>
 
-type GameSettingsActionType =
-    "setHeight"
-    | "setWidth"
-    | "setBirthFactor"
-    | "setTickDuration"
-    | "setView"
-    | "setType"
-    | "setPlayback"
-    ;
-
 type PlaybackMode = "play" | "pause";
-type GameSettingsAction<V> = {
-    readonly type: GameSettingsActionType;
-    readonly value: V;
-}
+type GridViewType = "table" | "ascii" | "canvas";
 
-type NumberGameSettingsActionType = Exclude<GameSettingsActionType, "setView" | "setType" | "setPlayback">;
-type NumberGameSettingsAction
-    = GameSettingsAction<GameSettings[Exclude<keyof GameSettings, "view" | "type" | "tickDuration">]> & {
-        type: NumberGameSettingsActionType;
-    };
-type ViewGameSettingsAction = GameSettingsAction<GameSettings["view"]> & {
+type GameSettingsAction = {
+    type: "setHeight" | "setWidth" | "setBirthFactor" | "setTickDuration";
+    value: number,
+} | {
     type: "setView";
-};
-
-type TypeGameSettingsAction = GameSettingsAction<GameSettings["type"]> & {
+    value: GridViewType;
+} | {
     type: "setType";
-}
-
-type PlaybackGameSettingsAction = GameSettingsAction<PlaybackMode> & {
+    value: GridType;
+} | {
     type: "setPlayback";
-}
-
-type AnyGameSettingsAction = NumberGameSettingsAction
-    | ViewGameSettingsAction
-    | TypeGameSettingsAction
-    | PlaybackGameSettingsAction
-    ;
+    value: PlaybackMode;
+};
+type GameSettingsNumberAction = "setHeight" | "setWidth" | "setBirthFactor" | "setTickDuration";
 
 // Default settings, not stored in localStorage
-const globalDefaultSettings: NoNullValues<GameSettings> = {
+const globalDefaultSettings: NoNullValues<GameSettings> = Object.freeze({
     height: 10,
     width: 10,
     birthFactor: 0.2,
     tickDuration: 1000,
     view: "canvas",
     type: "array",
-}
+});
 
 // XXX: Too many type assertions! I don't think there's a way around it
 // (https://stackoverflow.com/a/68898908/15768984)
@@ -114,7 +91,7 @@ function coerceAtLeastMinimum(setting: keyof typeof minimums, value: number): nu
 
 function useSettings(
     defaultSettings: NoNullValues<GameSettings>
-): [GameSettings, (action: AnyGameSettingsAction) => void] {
+): [GameSettings, (action: GameSettingsAction) => void] {
     const router = useRouter();
     const [storedSettings, setStoredSettings] = useLocalStorage("settings", defaultSettings);
 
@@ -127,7 +104,7 @@ function useSettings(
         type: getQueryParamSettingOrDefault("type", router.query, storedSettings),
     }), [router.query, storedSettings]);
 
-    const dispatchSettings = (action: AnyGameSettingsAction) => {
+    const dispatchSettings = (action: GameSettingsAction) => {
         let nextQueryParams: { [key: string]: string };
 
         switch (action.type) {
@@ -157,12 +134,12 @@ function useSettings(
             }
             case "setView": {
                 nextQueryParams = { ...router.query, view: action.value };
-                setStoredSettings({ ...settings, ...storedSettings,  view: action.value });
+                setStoredSettings({ ...settings, ...storedSettings, view: action.value });
                 break;
             }
             case "setType": {
                 nextQueryParams = { ...router.query, type: action.value };
-                setStoredSettings({ ...settings, ...storedSettings,  type: action.value });
+                setStoredSettings({ ...settings, ...storedSettings, type: action.value });
                 break;
             }
             case "setPlayback": {
@@ -190,11 +167,9 @@ function useSettings(
 export type {
     GameSettings,
     GameSettingsQueryParams,
-    AnyGameSettingsAction,
-    GameSettingsActionType,
-    NumberGameSettingsActionType,
-    PlaybackGameSettingsAction,
     PlaybackMode,
     GridViewType,
+    GameSettingsAction,
+    GameSettingsNumberAction,
 };
 export { useSettings, globalDefaultSettings as defaultSettings, }

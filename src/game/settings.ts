@@ -35,7 +35,7 @@ type GameSettingsAction = {
     type: "setPlayback";
     value: PlaybackMode;
 };
-type GameSettingsNumberAction = "setHeight" | "setWidth" | "setBirthFactor" | "setTickDuration";
+type GameSettingsNumberAction = (GameSettingsAction & { value: number })["type"]
 
 // Default settings, not stored in localStorage
 const globalDefaultSettings: NoNullValues<GameSettings> = Object.freeze({

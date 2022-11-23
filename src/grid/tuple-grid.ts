@@ -42,6 +42,7 @@ class TupleGrid extends Grid {
         return new TupleGrid(tuples, height, width );
     }
 
+    // TODO: This is REALLY REALLY slow... maybe use a bloom filter?
     get(x: number, y: number): boolean {
         return this.tuples.some(([x_1, y_1]) => x === x_1 && y === y_1);
     }

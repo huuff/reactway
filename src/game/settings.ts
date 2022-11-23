@@ -64,7 +64,7 @@ function getQueryParamSettingOrDefault<S extends keyof GameSettings>(
                 return defaultSettings["view"] as GameSettings[S];
         case "type":
             const queryType = query[settingName];
-            if (queryType === "array" || queryType === "map")
+            if (queryType === "array" || queryType === "map" || queryType === "tuple")
                 return queryType as GameSettings[S];
             else
                 return defaultSettings["type"] as GameSettings[S];

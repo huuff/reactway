@@ -32,7 +32,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
     const handleTypeSettingsChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
 
-        if (value === "array" || value === "map") {
+        if (value === "array" || value === "map" || value === "tuple") {
             dispatchSettings({
                 type: "setType",
                 value,
@@ -66,6 +66,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                 >
                     <option value="array">array</option>
                     <option value="map">map</option>
+                    <option value="tuple">tuple</option>
                 </select>
             </div>
 

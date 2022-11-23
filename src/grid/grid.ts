@@ -1,5 +1,6 @@
 import { range } from "lodash";
 import { ConwayStrategy } from "../game/conway-strategy";
+import { iterateCoordinates } from "./iterate-coordinates";
 import { GridStateWrapper } from "./tick-history";
 
 type GameGridProps = {
@@ -18,7 +19,7 @@ type GridCreationSettings = {
 
 type CreateGrid = (settings: GridCreationSettings) => Grid;
 
-type GridType = "array" | "map" | "fake";
+type GridType = "array" | "map" | "tuple";
 
 abstract class Grid {
     abstract readonly type: GridType;
@@ -51,6 +52,12 @@ abstract class Grid {
         return this.getNeighbours(x, y)
             .map((it) => boolToInt(this.get(...it)))
             .reduce((acc, it) => acc + it, 0)
+    }
+
+    // TODO: Use it wherever appropriate
+    // TODO: An `iterateCells` that also passes the cell value (alive/dead) to `f`?
+    iterateCoordinates(f: (coordinates: Coordinates) => void): void {
+        iterateCoordinates(this.height, this.width, f);
     }
 
     // TODO: Test

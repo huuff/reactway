@@ -3,3 +3,4 @@
 * Try to make it so dragging does not toggle
 * Choosing size of the cells
 * Hiding settings in a drawer
+* Try to use the React Hooks Testing Library instead of creating a component only to test a Hook (I think I did this for settings?)

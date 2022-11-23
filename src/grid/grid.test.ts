@@ -1,7 +1,8 @@
-import { FakeGrid } from "../util/testing";
+
+import { TupleGrid } from "./tuple-grid";
 
 // Test for the default methods of Grid
-const grid = new FakeGrid(5, 5);
+const grid = new TupleGrid([[2, 3], [2, 1], [3, 2], [3,3], [4, 2]]);
 describe("Grid", () => {
   test("neighbours", () => {
     // ACT

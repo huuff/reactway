@@ -1,7 +1,7 @@
-import { FakeGrid  } from "../util/testing";
+import { TupleGrid } from "../grid/tuple-grid";
 import { defaultConwayStrategy } from "./conway-strategy";
 
-const grid = new FakeGrid(5, 5);
+const grid = new TupleGrid([[2, 3], [2, 1], [3, 2], [3,3], [4, 2]]);
 describe("defaultConwayStrategy", () => {
 
     test("cell is born", () => {

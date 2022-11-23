@@ -17,6 +17,7 @@ describe("ArrayGrid", () => {
 
     test("correctly ticks and gets", () => {
         // ARRANGE
+        const conwayStrategy = fakeConwayStrategy([[2, 3], [2, 1], [3, 2], [3,3], [4, 2]]);
         const grid = ArrayGrid.create({
             height: 5,
             width: 5,
@@ -25,7 +26,7 @@ describe("ArrayGrid", () => {
         })
 
         // ACT
-        const nextStepGrid = grid.tick(fakeConwayStrategy);
+        const nextStepGrid = grid.tick(conwayStrategy);
 
         // ASSERT
         expect(nextStepGrid.get(2, 2)).toBe(false);

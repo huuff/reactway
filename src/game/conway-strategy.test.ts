@@ -1,7 +1,7 @@
-import { TupleGrid } from "../grid/tuple-grid";
+import { SetGrid } from "../grid/set-grid";
 import { defaultConwayStrategy } from "./conway-strategy";
 
-const grid = new TupleGrid([[2, 3], [2, 1], [3, 2], [3,3], [4, 2]]);
+const grid = new SetGrid([[2, 3], [2, 1], [3, 2], [3,3], [4, 2]]);
 describe("defaultConwayStrategy", () => {
 
     test("cell is born", () => {

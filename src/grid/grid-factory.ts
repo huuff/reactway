@@ -1,7 +1,7 @@
 import { ArrayGrid } from "./array-grid";
 import { CreateGrid, GridType } from "./grid";
 import { MapGrid } from "./map-grid";
-import { TupleGrid } from "./tuple-grid";
+import { SetGrid } from "./set-grid";
 
 function getGridFactory(type: GridType): CreateGrid {
     switch (type) {
@@ -9,8 +9,8 @@ function getGridFactory(type: GridType): CreateGrid {
             return ArrayGrid.create;
         case "map":
             return MapGrid.create;
-        case "tuple":
-            return TupleGrid.create;
+        case "set":
+            return SetGrid.create;
     }
 }
 

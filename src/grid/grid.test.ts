@@ -1,8 +1,8 @@
 
-import { TupleGrid } from "./tuple-grid";
+import { SetGrid } from "./set-grid";
 
 // Test for the default methods of Grid
-const grid = new TupleGrid([[2, 3], [2, 1], [3, 2], [3,3], [4, 2]]);
+const grid = new SetGrid([[2, 3], [2, 1], [3, 2], [3,3], [4, 2]]);
 describe("Grid", () => {
   test("neighbours", () => {
     // ACT

@@ -19,7 +19,7 @@ type GridCreationSettings = {
 
 type CreateGrid = (settings: GridCreationSettings) => Grid;
 
-type GridType = "array" | "map" | "tuple";
+type GridType = "array" | "map" | "set";
 
 abstract class Grid {
     abstract readonly type: GridType;

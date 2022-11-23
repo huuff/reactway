@@ -2,7 +2,6 @@ import { range } from "lodash";
 import { Coordinates } from "./grid";
 
 // TODO: Test
-// TODO: Make it an iterator?
 function iterateCoordinates(
     height: number,
     width: number, 

@@ -54,27 +54,36 @@ abstract class Grid {
             .reduce((acc, it) => acc + it, 0)
     }
 
-    // TODO: Use it wherever appropriate
     iterateCoordinates(f: (coordinates: Coordinates) => void): void {
         iterateCoordinates(this.height, this.width, f);
     }
 
-    iterateCells(f: (coordinates: Coordinates, isAlive: boolean) => void): void {
-        return this.iterateCoordinates((coordinates) => f(coordinates, this.get(...coordinates)) )
-    }
-
-    // TODO: use iterate
-    equals(other: Grid): boolean {
+    // TODO: Test
+    *[Symbol.iterator](): IterableIterator<Cell> {
         for (const y of range(0, this.height)) {
             for (const x of range(0, this.width)) {
-                if (this.get(x, y) != other.get(x, y)) {
-                    return false;
+                yield {
+                    coordinates: [x, y ],
+                    isAlive: this.get(x, y),
                 }
             }
+        }
+    }
+
+    equals(other: Grid): boolean {
+        for (const {coordinates: [x, y], isAlive} of this) {
+                if (isAlive != other.get(x, y)) {
+                    return false;
+                }
         }
 
         return true;
     }
+}
+
+type Cell = {
+    readonly coordinates: Coordinates;
+    readonly isAlive: boolean;
 }
 
 export { Grid }

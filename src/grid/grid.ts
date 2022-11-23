@@ -55,12 +55,16 @@ abstract class Grid {
     }
 
     // TODO: Use it wherever appropriate
-    // TODO: An `iterateCells` that also passes the cell value (alive/dead) to `f`?
     iterateCoordinates(f: (coordinates: Coordinates) => void): void {
         iterateCoordinates(this.height, this.width, f);
     }
 
+    iterateCells(f: (coordinates: Coordinates, isAlive: boolean) => void): void {
+        return this.iterateCoordinates((coordinates) => f(coordinates, this.get(...coordinates)) )
+    }
+
     // TODO: Test
+    // TODO: use iterate
     equals(other: Grid): boolean {
         for (const y of range(0, this.height)) {
             for (const x of range(0, this.width)) {

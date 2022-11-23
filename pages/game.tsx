@@ -111,7 +111,7 @@ Game.getInitialProps = async ({ query }) => {
     if (typeof query.seed === "string") {
         return { seed: query.seed };
     } else {
-        return { seed: "asdf" };
+        return { seed: randomSeed() };
     }
 }
 

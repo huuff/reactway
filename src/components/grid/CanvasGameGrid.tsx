@@ -43,15 +43,13 @@ const CanvasGameGrid = ({ grid, className, toggleCell }: GameGridProps) => {
 
         // Paint the whole grid
         ctx.fillStyle = "black";
-        for (const y of range(0, grid.height)) {
-            for (const x of range(0, grid.width)) {
-                if (grid.get(x, y)) {
-                    ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
-                } else {
-                    ctx.strokeRect(x * cellSize, y * cellSize, cellSize, cellSize);
-                }
+        grid.iterateCells(([x, y], isAlive) => {
+            if (isAlive) {
+                ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+            } else {
+                ctx.strokeRect(x * cellSize, y * cellSize, cellSize, cellSize);
             }
-        }
+        });
 
         // Paint the hovered cell
         const [mouseCellX, mouseCellY] = getMouseCell(canvasRef, clientX, clientY);

@@ -63,7 +63,6 @@ abstract class Grid {
         return this.iterateCoordinates((coordinates) => f(coordinates, this.get(...coordinates)) )
     }
 
-    // TODO: Test
     // TODO: use iterate
     equals(other: Grid): boolean {
         for (const y of range(0, this.height)) {

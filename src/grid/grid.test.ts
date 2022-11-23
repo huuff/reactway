@@ -35,8 +35,13 @@ describe("Grid", () => {
 
   test("liveNeighbours", () => {
     expect(grid.liveNeighbours(2, 2)).toBe(4);
-
   })
+
+  test("equals", () => {
+    expect(new SetGrid([[1, 1], [2, 2], [3, 2], [2, 3]])
+      .equals(new SetGrid([[1, 1], [2, 2], [3, 2], [2, 3]])))
+      .toBe(true)
+  });
 
 });
 

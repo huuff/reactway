@@ -22,7 +22,7 @@ function getMouseCell(
 }
 
 // TODO: Test it? Can I?
-const CanvasGameGrid = ({ grid, className, toggle }: GameGridProps) => {
+const CanvasGameGrid = ({ grid, className, toggleCell }: GameGridProps) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const { clientX, clientY } = useDebounce(useMouseState(canvasRef), 5);
     const { onMouseUp } = useMouseEvents(canvasRef);
@@ -30,7 +30,7 @@ const CanvasGameGrid = ({ grid, className, toggle }: GameGridProps) => {
     onMouseUp((event) => {
         const [x, y] = [event.clientX, event.clientY];
         const [cellX, cellY] = getMouseCell(canvasRef, x, y);
-        toggle([cellX, cellY]);
+        toggleCell([cellX, cellY]);
     })
 
     useEffect(() => {

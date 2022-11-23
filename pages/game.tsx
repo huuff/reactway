@@ -67,13 +67,13 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
             <div className="max-h-screen overflow-scroll dragscroll cursor-move">
                 <NoSsr>
                     { (view === "table") && <TableGameGrid className="mx-auto" 
-                                                           toggle={toggleCell}
+                                                           toggleCell={toggleCell}
                                                            grid={grid} /> }
                     { (view === "ascii") && <AsciiGameGrid className="text-center"
-                                                           toggle={toggleCell}
+                                                           toggleCell={toggleCell}
                                                            grid={grid} /> }
                     { (view === "canvas") && <CanvasGameGrid className="mx-auto"
-                                                             toggle={toggleCell} 
+                                                             toggleCell={toggleCell} 
                                                              grid={grid} /> }
                 </NoSsr>
             </div>

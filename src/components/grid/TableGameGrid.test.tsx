@@ -5,7 +5,7 @@ import { coordinatesToString } from "../../util/coordinates-to-string";
 
 describe("TableGameGrid", () => {
     test("live cells are X", () => {
-        render(<TableGameGrid grid={new FakeGrid(5, 5)} toggle={jest.fn()} />);
+        render(<TableGameGrid grid={new FakeGrid(5, 5)} toggleCell={jest.fn()} />);
 
         for (const coord of liveCellsInFakeGrid) {
             expect(screen.getByTestId(coordinatesToString(coord))).toHaveClass("bg-black");
@@ -13,7 +13,7 @@ describe("TableGameGrid", () => {
     });
 
     test("dead cells are O", () => {
-        render(<TableGameGrid grid={new FakeGrid(5, 5)} toggle={jest.fn()}/>);
+        render(<TableGameGrid grid={new FakeGrid(5, 5)} toggleCell={jest.fn()}/>);
 
         expect(screen.getByTestId(coordinatesToString([2, 2]))).toHaveClass("bg-white");
     });

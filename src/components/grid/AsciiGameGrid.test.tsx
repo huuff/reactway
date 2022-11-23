@@ -5,7 +5,7 @@ import { coordinatesToString } from "../../util/coordinates-to-string";
 
 describe("AsciiGameGrid", () => {
     test("live cells are X", () => {
-        render(<AsciiGameGrid grid={new FakeGrid(5, 5)} toggle={jest.fn()} />);
+        render(<AsciiGameGrid grid={new FakeGrid(5, 5)} toggleCell={jest.fn()} />);
 
         for (const coord of liveCellsInFakeGrid) {
             expect(screen.getByTestId(coordinatesToString(coord))).toHaveTextContent("X");
@@ -13,7 +13,7 @@ describe("AsciiGameGrid", () => {
     });
 
     test("dead cells are O", () => {
-        render(<AsciiGameGrid grid={new FakeGrid(5, 5)} toggle={jest.fn()} />);
+        render(<AsciiGameGrid grid={new FakeGrid(5, 5)} toggleCell={jest.fn()} />);
 
         expect(screen.getByTestId(coordinatesToString([2, 2]))).toHaveTextContent("O");
     });

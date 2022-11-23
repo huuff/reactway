@@ -4,7 +4,7 @@ import { GridStateWrapper } from "./tick-history";
 
 type GameGridProps = {
     grid: Grid,
-    toggle: GridStateWrapper["toggleCell"], // TODO: Should likely be renamed to toggleCell
+    toggleCell: GridStateWrapper["toggleCell"],
 } & { className?: string };
 
 type Coordinates = Readonly<[x: number, y: number]>;

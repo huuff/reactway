@@ -5,7 +5,6 @@ import { shouldBeBornAlive } from "../util/birth-function";
 import { Coordinates, CreateGrid, Grid, GridCreationSettings, GridType } from "./grid";
 import { iterateCoordinates } from "./iterate-coordinates";
 
-// TODO: Make it available in settings
 class TupleGrid extends Grid {
     private readonly tuples: Readonly<Coordinates[]>;
 

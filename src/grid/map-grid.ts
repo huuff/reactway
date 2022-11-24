@@ -65,7 +65,6 @@ class MapGrid extends Grid {
         return new MapGrid(newGrid);
     }
 
-    // TODO: Test
     toggle(x: number, y: number): MapGrid {
         const targetCoordinatesAsString = coordinatesToString([x, y]);
         const newInternalGrid = new Map<string, boolean>();

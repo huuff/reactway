@@ -12,15 +12,13 @@ type GameSettings = {
     readonly tickDuration: number;
     readonly view: GridViewType,
     readonly type: GridType,
-    readonly playbackMode: PlaybackMode,
 }
 
 // Game Settings as query parameters are the same as game settings, but any
 // missing param is taken to be the default
 type GameSettingsQueryParams = StringObject<GameSettings>
 
-type PlaybackMode = "play" | "pause";
-type GridViewType = "table" | "ascii" | "canvas";
+type GridViewType = "table" | "ascii" | "canvas"; // TODO: Seems like it should be somewhere else
 
 type GameSettingsAction = {
     type: "setHeight" | "setWidth" | "setBirthFactor" | "setTickDuration";
@@ -31,9 +29,6 @@ type GameSettingsAction = {
 } | {
     type: "setType";
     value: GridType;
-} | {
-    type: "setPlayback";
-    value: PlaybackMode;
 };
 type GameSettingsNumberAction = (GameSettingsAction & { value: number })["type"]
 
@@ -45,7 +40,6 @@ const globalDefaultSettings: GameSettings = {
     tickDuration: 1000,
     view: "canvas",
     type: "array",
-    playbackMode: "play",
 };
 
 // XXX: Too many type assertions! I don't think there's a way around it
@@ -69,12 +63,6 @@ function getQueryParamSettingOrDefault<S extends keyof GameSettings>(
                 return queryType as GameSettings[S];
             else
                 return defaultSettings["type"] as GameSettings[S];
-        case "playbackMode":
-            const queryMode = query[settingName];
-            if (queryMode === "play" || queryMode === "pause")
-                return queryMode as GameSettings[S];
-            else
-                return defaultSettings["playbackMode"] as GameSettings[S];
         default:
             return +(query[settingName] ?? defaultSettings[settingName].toString()) as GameSettings[S];
     }
@@ -105,7 +93,6 @@ function useSettings(
         tickDuration: getQueryParamSettingOrDefault("tickDuration", router.query, storedSettings),
         view: getQueryParamSettingOrDefault("view", router.query, storedSettings),
         type: getQueryParamSettingOrDefault("type", router.query, storedSettings),
-        playbackMode: getQueryParamSettingOrDefault("playbackMode", router.query, storedSettings),
     }), [router.query, storedSettings]);
 
     const dispatchSettings = (action: GameSettingsAction) => {
@@ -146,11 +133,6 @@ function useSettings(
                 setStoredSettings({ ...settings, ...storedSettings, type: action.value });
                 break;
             }
-            case "setPlayback": {
-                nextQueryParams = { ...router.query, playbackMode: action.value };
-                setStoredSettings({ ...settings, ...storedSettings, playbackMode: action.value });
-
-            }
         }
         router.push({ pathname: "/game", query: nextQueryParams });
     }
@@ -162,7 +144,6 @@ function useSettings(
 export type {
     GameSettings,
     GameSettingsQueryParams,
-    PlaybackMode,
     GridViewType,
     GameSettingsAction,
     GameSettingsNumberAction,

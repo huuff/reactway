@@ -1,4 +1,3 @@
-import { range } from "lodash";
 import { RefObject, useEffect, useRef } from "react";
 import { GameGridProps } from "../../grid/grid";
 import { useMouseState, useMouseEvents } from "beautiful-react-hooks";

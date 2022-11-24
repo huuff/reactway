@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import AsciiGameGrid from "../src/components/grid/AsciiGameGrid";
 import TableGameGrid from "../src/components/grid/TableGameGrid";
 import GameSettingsView from "../src/components/GameSettingsView";
-import { defaultSettings, PlaybackMode, useSettings } from "../src/game/settings";
+import { defaultSettings, useSettings } from "../src/game/settings";
 import { useInterval } from "usehooks-ts";
 import { useRouter } from "next/router";
 import { randomSeed } from "../src/util/birth-function";
@@ -14,6 +14,7 @@ import NoSsr from "../src/components/NoSSR";
 import PlayBar from "../src/components/PlayBar";
 import CanvasGameGrid from "../src/components/grid/CanvasGameGrid";
 import { useGrid } from "../src/grid/tick-history";
+import { usePlayback } from "../src/game/use-playback";
 
 type GameProps = {
     readonly seed: string;
@@ -25,7 +26,8 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     }, []);
 
     const [settings, dispatchSettings] = useSettings(defaultSettings);
-    const { height, width, birthFactor, tickDuration, playbackMode, view, type } = settings
+    const { height, width, birthFactor, tickDuration, view, type } = settings
+    const playback = usePlayback();
 
     const { 
         grid,
@@ -44,15 +46,10 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     }, [height, width, birthFactor, seed, type]);
 
     useInterval(() => {
-        if (playbackMode == "play") {
+        if (playback.isPlaying) {
             tick();
         }
     }, tickDuration);
-
-    const dispatchPlayback = (mode: PlaybackMode) => dispatchSettings({
-        type: "setPlayback",
-        value: mode,
-    })
 
     const router = useRouter();
     const startNewGame = () => {
@@ -92,11 +89,10 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                 ">
                 <PlayBar
                     className="border rounded-lg drop-shadow-lg bg-white p-2 mb-2 opacity-90"
-                    playbackMode={playbackMode} 
+                    playback={playback}
                     historyPosition={historyPosition}
                     setHistoryPosition={setHistoryPosition}
                     historyLength={historyLength}
-                    setPlayback={dispatchPlayback}
                     startNewGame={startNewGame}
                     clearGrid={clear}
                 />

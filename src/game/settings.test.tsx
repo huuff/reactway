@@ -4,8 +4,6 @@ import * as usehooks from "usehooks-ts";
 import mockRouter from "next-router-mock";
 import singletonRouter from "next/router";
 
-
-
 jest.mock("next/router", () => require("next-router-mock"));
 
 afterEach(() => {

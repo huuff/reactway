@@ -1,11 +1,10 @@
-import { PlaybackMode } from "../game/settings";
 import { faPlay, faPause, faRepeat, faEraser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Playback } from '../game/use-playback';
 import ClassedSlot from "./ClassedSlot";
 
 type PlayBarProps = {
-    playbackMode: PlaybackMode,
-    setPlayback: (mode: PlaybackMode) => void,
+    playback: Playback,
     historyLength: number,
     historyPosition: number,
     setHistoryPosition: (newPosition: number) => void,
@@ -13,11 +12,9 @@ type PlayBarProps = {
     clearGrid: () => void,
 } & { className?: string }
 
-// TODO: Test
-// TODO: A settings context
+// TODO: A settings context?
 const PlayBar = ({
-    playbackMode,
-    setPlayback, // TODO: Rename to setPlaybackMode
+    playback: { isPlaying, start, pause },
     historyLength,
     historyPosition,
     setHistoryPosition,
@@ -28,9 +25,9 @@ const PlayBar = ({
     return (
         <div className={`${className || ""} h-8 flex items-center`}>
             <ClassedSlot className="mr-3 h-4 text-blue-500 cursor-pointer hover:scale-125">
-                { playbackMode !== "pause"
-                    ? <FontAwesomeIcon icon={faPause} title="pause" onClick={() => setPlayback("pause")} />
-                    : <FontAwesomeIcon icon={faPlay} title="play" onClick={() => setPlayback("play")} />
+                { isPlaying
+                    ? <FontAwesomeIcon icon={faPause} title="pause" onClick={pause} />
+                    : <FontAwesomeIcon icon={faPlay} title="play" onClick={start} />
                 }
             </ClassedSlot>
             <input

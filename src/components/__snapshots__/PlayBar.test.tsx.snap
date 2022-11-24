@@ -5,18 +5,18 @@ exports[`PlayBar matches snapshot 1`] = `
   className=" h-8 flex items-center"
 >
   <svg
-    aria-labelledby="svg-inline--fa-title-0ZdPmyvNgvhv"
+    aria-labelledby="svg-inline--fa-title-000000000000"
     className="svg-inline--fa fa-pause  mr-3 h-4 text-blue-500 cursor-pointer hover:scale-125"
     data-icon="pause"
     data-prefix="fas"
-    onClick={[Function]}
+    onClick={[MockFunction]}
     role="img"
     style={{}}
     viewBox="0 0 320 512"
     xmlns="http://www.w3.org/2000/svg"
   >
     <title
-      id="svg-inline--fa-title-0ZdPmyvNgvhv"
+      id="svg-inline--fa-title-000000000000"
       style={{}}
     >
       pause
@@ -39,7 +39,7 @@ exports[`PlayBar matches snapshot 1`] = `
     className="mr-1 whitespace-nowrap"
   >
     <svg
-      aria-labelledby="svg-inline--fa-title-bg4r33j72KCW"
+      aria-labelledby="svg-inline--fa-title-000000000000"
       className="svg-inline--fa fa-eraser inline-block ml-2 h-4 hover:scale-125 text-red-500 cursor-pointer"
       data-icon="eraser"
       data-prefix="fas"
@@ -50,7 +50,7 @@ exports[`PlayBar matches snapshot 1`] = `
       xmlns="http://www.w3.org/2000/svg"
     >
       <title
-        id="svg-inline--fa-title-bg4r33j72KCW"
+        id="svg-inline--fa-title-000000000000"
         style={{}}
       >
         clear
@@ -62,7 +62,7 @@ exports[`PlayBar matches snapshot 1`] = `
       />
     </svg>
     <svg
-      aria-labelledby="svg-inline--fa-title-Re2kJIy9Uepy"
+      aria-labelledby="svg-inline--fa-title-000000000000"
       className="svg-inline--fa fa-repeat inline-block ml-2 h-4 hover:scale-125 text-green-500 cursor-pointer"
       data-icon="repeat"
       data-prefix="fas"
@@ -73,7 +73,7 @@ exports[`PlayBar matches snapshot 1`] = `
       xmlns="http://www.w3.org/2000/svg"
     >
       <title
-        id="svg-inline--fa-title-Re2kJIy9Uepy"
+        id="svg-inline--fa-title-000000000000"
         style={{}}
       >
         reset

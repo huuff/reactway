@@ -31,8 +31,6 @@ type HistoryAction = {
     type: "clear",
 };
 
-type Expand<T> = T extends infer O ? { [K in keyof O]: O[K] } : never;
-
 // TODO: Trimming the history when it gets long
 // TODO: Test
 function historyReducer(previous: TickHistory, action: HistoryAction): TickHistory {

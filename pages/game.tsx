@@ -25,7 +25,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     }, []);
 
     const [settings, dispatchSettings] = useSettings(defaultSettings);
-    const { height, width, birthFactor, tickDuration, view, type } = settings
+    const { height, width, birthFactor, tickDuration, playbackMode, view, type } = settings
 
     const { 
         grid,
@@ -44,7 +44,9 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     }, [height, width, birthFactor, seed, type]);
 
     useInterval(() => {
-        tick();
+        if (playbackMode == "play") {
+            tick();
+        }
     }, tickDuration);
 
     const dispatchPlayback = (mode: PlaybackMode) => dispatchSettings({
@@ -56,7 +58,8 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     const startNewGame = () => {
         router.push({
             pathname: "game", query: {
-                seed: randomSeed(), ...(toStringObject(settings))
+                seed: randomSeed(), 
+                ...(toStringObject(settings))
             }
         })
     }
@@ -89,7 +92,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                 ">
                 <PlayBar
                     className="border rounded-lg drop-shadow-lg bg-white p-2 mb-2 opacity-90"
-                    tickDuration={tickDuration} 
+                    playbackMode={playbackMode} 
                     historyPosition={historyPosition}
                     setHistoryPosition={setHistoryPosition}
                     historyLength={historyLength}

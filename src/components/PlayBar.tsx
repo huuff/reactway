@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ClassedSlot from "./ClassedSlot";
 
 type PlayBarProps = {
-    tickDuration: number | null,
+    playbackMode: PlaybackMode,
     setPlayback: (mode: PlaybackMode) => void,
     historyLength: number,
     historyPosition: number,
@@ -14,9 +14,10 @@ type PlayBarProps = {
 } & { className?: string }
 
 // TODO: Test
+// TODO: A settings context
 const PlayBar = ({
-    tickDuration,
-    setPlayback,
+    playbackMode,
+    setPlayback, // TODO: Rename to setPlaybackMode
     historyLength,
     historyPosition,
     setHistoryPosition,
@@ -27,9 +28,9 @@ const PlayBar = ({
     return (
         <div className={`${className || ""} h-8 flex items-center`}>
             <ClassedSlot className="mr-3 h-4 text-blue-500 cursor-pointer hover:scale-125">
-                {tickDuration !== null
-                    ? <FontAwesomeIcon icon={faPause} onClick={() => setPlayback("pause")} />
-                    : <FontAwesomeIcon icon={faPlay} onClick={() => setPlayback("play")} />
+                { playbackMode !== "pause"
+                    ? <FontAwesomeIcon icon={faPause} title="pause" onClick={() => setPlayback("pause")} />
+                    : <FontAwesomeIcon icon={faPlay} title="play" onClick={() => setPlayback("play")} />
                 }
             </ClassedSlot>
             <input
@@ -43,10 +44,12 @@ const PlayBar = ({
             <div className="mr-1 whitespace-nowrap">
                 <FontAwesomeIcon
                     icon={faEraser}
+                    title="clear"
                     className="inline-block ml-2 h-4 hover:scale-125 text-red-500 cursor-pointer"
                     onClick={clearGrid} />
                 <FontAwesomeIcon
                     icon={faRepeat}
+                    title="reset"
                     className="inline-block ml-2 h-4 hover:scale-125 text-green-500 cursor-pointer"
                     onClick={startNewGame} />
             </div>
@@ -55,3 +58,4 @@ const PlayBar = ({
 }
 
 export default PlayBar;
+export type { PlayBarProps };

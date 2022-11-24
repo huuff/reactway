@@ -4,15 +4,15 @@ import { GridType } from "../grid/grid";
 import { StringObject } from "../util/to-string-object";
 import { useLocalStorage } from "usehooks-ts";
 import { ParsedUrlQuery } from "querystring";
-import { NoNullValues } from "../util/no-null-values";
 
 type GameSettings = {
     readonly height: number;
     readonly width: number;
     readonly birthFactor: number;
-    readonly tickDuration: number | null;
+    readonly tickDuration: number;
     readonly view: GridViewType,
     readonly type: GridType,
+    readonly playbackMode: PlaybackMode,
 }
 
 // Game Settings as query parameters are the same as game settings, but any
@@ -38,14 +38,15 @@ type GameSettingsAction = {
 type GameSettingsNumberAction = (GameSettingsAction & { value: number })["type"]
 
 // Default settings, not stored in localStorage
-const globalDefaultSettings: NoNullValues<GameSettings> = Object.freeze({
+const globalDefaultSettings: GameSettings = {
     height: 10,
     width: 10,
     birthFactor: 0.2,
     tickDuration: 1000,
     view: "canvas",
     type: "array",
-});
+    playbackMode: "play",
+};
 
 // XXX: Too many type assertions! I don't think there's a way around it
 // (https://stackoverflow.com/a/68898908/15768984)
@@ -53,7 +54,7 @@ const globalDefaultSettings: NoNullValues<GameSettings> = Object.freeze({
 function getQueryParamSettingOrDefault<S extends keyof GameSettings>(
     settingName: S,
     query: ParsedUrlQuery,
-    defaultSettings: NoNullValues<GameSettings>,
+    defaultSettings: GameSettings,
 ): GameSettings[S] {
     switch (settingName) {
         case "view":
@@ -68,10 +69,12 @@ function getQueryParamSettingOrDefault<S extends keyof GameSettings>(
                 return queryType as GameSettings[S];
             else
                 return defaultSettings["type"] as GameSettings[S];
-        case "tickDuration":
-            const queryTickDuration = query["tickDuration"];
-            if (queryTickDuration === "null")
-                return null as GameSettings[S];
+        case "playbackMode":
+            const queryMode = query[settingName];
+            if (queryMode === "play" || queryMode === "pause")
+                return queryMode as GameSettings[S];
+            else
+                return defaultSettings["playbackMode"] as GameSettings[S];
         default:
             return +(query[settingName] ?? defaultSettings[settingName].toString()) as GameSettings[S];
     }
@@ -90,7 +93,7 @@ function coerceAtLeastMinimum(setting: keyof typeof minimums, value: number): nu
 }
 
 function useSettings(
-    defaultSettings: NoNullValues<GameSettings>
+    defaultSettings: GameSettings
 ): [GameSettings, (action: GameSettingsAction) => void] {
     const router = useRouter();
     const [storedSettings, setStoredSettings] = useLocalStorage("settings", defaultSettings);
@@ -102,6 +105,7 @@ function useSettings(
         tickDuration: getQueryParamSettingOrDefault("tickDuration", router.query, storedSettings),
         view: getQueryParamSettingOrDefault("view", router.query, storedSettings),
         type: getQueryParamSettingOrDefault("type", router.query, storedSettings),
+        playbackMode: getQueryParamSettingOrDefault("playbackMode", router.query, storedSettings),
     }), [router.query, storedSettings]);
 
     const dispatchSettings = (action: GameSettingsAction) => {
@@ -143,18 +147,9 @@ function useSettings(
                 break;
             }
             case "setPlayback": {
-                switch (action.value) {
-                    case "play":
-                        nextQueryParams = {
-                            ...router.query,
-                            tickDuration: storedSettings.tickDuration.toString()
-                        };
-                        break;
-                    case "pause":
-                        nextQueryParams = { ...router.query, tickDuration: "null" };
-                        break;
-                }
-                break;
+                nextQueryParams = { ...router.query, playbackMode: action.value };
+                setStoredSettings({ ...settings, ...storedSettings, playbackMode: action.value });
+
             }
         }
         router.push({ pathname: "/game", query: nextQueryParams });

@@ -1,7 +1,6 @@
 import { range } from "lodash";
-import { Coordinates } from "./grid";
+import { Coordinates } from "../grid/grid";
 
-// TODO: Test
 function iterateCoordinates(
     height: number,
     width: number, 

@@ -5,7 +5,7 @@ import { ConwayStrategy } from "../game/conway-strategy";
 import { shouldBeBornAlive } from "../util/birth-function";
 import { coordinatesToString, stringToCoordinates } from "../util/coordinates-to-string";
 import { Coordinates, CreateGrid, Grid, GridCreationSettings, GridType } from "./grid";
-import { iterateCoordinates } from "./iterate-coordinates";
+import { iterateCoordinates } from "../util/iterate-coordinates";
 
 class SetGrid extends Grid {
      // Holds serialized coordinates so as to have decent equality semantics

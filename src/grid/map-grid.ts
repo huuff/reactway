@@ -51,7 +51,6 @@ class MapGrid extends Grid {
     }
     tick(strategy: ConwayStrategy): MapGrid {
         // New grid with birthFactor 0, so it's empty
-        // TODO: can't I just create a new map?
         const newGrid = createInternalGrid({
             height: this.height,
             width: this.width,

@@ -58,7 +58,6 @@ abstract class Grid {
         iterateCoordinates(this.height, this.width, f);
     }
 
-    // TODO: Test
     *[Symbol.iterator](): IterableIterator<Cell> {
         for (const y of range(0, this.height)) {
             for (const x of range(0, this.width)) {

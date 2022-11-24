@@ -1,4 +1,5 @@
 
+import { Coordinates } from "./grid";
 import { SetGrid } from "./set-grid";
 
 // Test for the default methods of Grid
@@ -41,6 +42,27 @@ describe("Grid", () => {
     expect(new SetGrid([[1, 1], [2, 2], [3, 2], [2, 3]])
       .equals(new SetGrid([[1, 1], [2, 2], [3, 2], [2, 3]])))
       .toBe(true)
+  });
+
+  test("iterator", () => {
+    // ARRANGE
+    const grid = new SetGrid(new Set<Readonly<Coordinates>>([[0,0], [1,1]]), 2, 2)
+    const iteratedCells: Coordinates[] = [];
+
+    // ACT
+    for (const { coordinates: [x, y], isAlive } of grid) {
+        iteratedCells.push([x, y]);
+        if ((x == 0 && y == 0) || ( x == 1 && y == 1)) {
+          expect(isAlive).toBe(true);
+        } else {
+          expect(isAlive).toBe(false);
+        }
+    }
+
+    // ASSERT
+    expect(iteratedCells)
+      .toEqual([ [0,0], [1,0], [0,1], [1,1]])
+
   });
 
 });

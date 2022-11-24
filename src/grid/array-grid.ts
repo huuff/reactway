@@ -42,7 +42,6 @@ class ArrayGrid extends Grid {
         return new ArrayGrid(newInternalGrid);
     }
     
-    // TODO: Test
     toggle(x: number, y: number): ArrayGrid {
         const newInternalGrid = this.internalGrid.map((_, y_2) => 
             this.internalGrid[y].map((_, x_2) => !(x === x_2 && y === y_2)

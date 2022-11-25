@@ -81,7 +81,7 @@ function coerceAtLeastMinimum(setting: keyof typeof minimums, value: number): nu
 }
 
 function useSettings(
-    defaultSettings: GameSettings
+    defaultSettings: GameSettings = globalDefaultSettings,
 ): [GameSettings, (action: GameSettingsAction) => void] {
     const router = useRouter();
     const [storedSettings, setStoredSettings] = useLocalStorage("settings", defaultSettings);

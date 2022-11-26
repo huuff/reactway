@@ -34,7 +34,7 @@ type HistoryAction = {
 // TODO: Test
 function historyReducer(previous: TickHistory, action: HistoryAction): TickHistory {
     switch (action.type) {
-        case "reset":
+        case "reset": {
             return {
                 contents: [action.value],
                 length: 1,
@@ -42,7 +42,8 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
                 grid: action.value,
                 conwayStrategy: previous.conwayStrategy,
             };
-        case "clear":
+        }
+        case "clear": {
             const createGrid = getGridFactory(previous.grid.type)
             const emptyGrid = createGrid({
                 height: previous.grid.height,
@@ -50,14 +51,19 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
                 birthFactor: 0,
                 seed: "any will do since it's empty"
             });
-            return { // TODO: Trim here!
-                contents: [...previous.contents, emptyGrid],
-                length: previous.length + 1,
-                position: previous.length,
+            const {
+                array: newContents,
+                newLength,
+            } = trimArray([...previous.contents, emptyGrid], MAX_HISTORY_LENGTH);
+            return { 
+                contents: newContents,
+                length: newLength,
+                position: newLength - 1,
                 grid: emptyGrid,
-                conwayStrategy: previous.conwayStrategy, 
+                conwayStrategy: previous.conwayStrategy,
             }
-        case "tick":
+        }
+        case "tick": {
             if (previous.position === previous.length - 1) {
                 // It's at the end of the history, and thus the next tick should give
                 // a new history
@@ -88,7 +94,8 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
                 }
 
             }
-        case "setPosition":
+        }
+        case "setPosition": {
             const nextPosition = action.value;
             if (nextPosition >= 0 && nextPosition < previous.length) {
                 return {
@@ -99,17 +106,19 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
             } else {
                 return previous;
             }
-        case "setConwayStrategy":
+        }
+        case "setConwayStrategy": {
             return {
                 ...previous,
                 conwayStrategy: action.value,
             }
-        case "toggle":
+        }
+        case "toggle": {
             const [targetX, targetY] = action.value;
             const nextGrid = previous.grid.toggle(targetX, targetY);
-            const { 
-                array: newContents, 
-                newLength 
+            const {
+                array: newContents,
+                newLength
             } = trimArray([...previous.contents, nextGrid], MAX_HISTORY_LENGTH)
             return {
                 contents: newContents,
@@ -118,6 +127,7 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
                 grid: nextGrid,
                 conwayStrategy: previous.conwayStrategy,
             }
+        }
     }
 }
 

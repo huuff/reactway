@@ -1,6 +1,9 @@
 import { ConwayStrategy, defaultConwayStrategy } from "./conway-strategy";
 import { Coordinates, Grid } from "../grid/grid";
 import { getGridFactory } from "../grid/grid-factory";
+import { trimArray } from "../util/trim-array";
+
+const MAX_HISTORY_LENGTH = 15;
 
 type TickHistory = {
     readonly contents: Grid[];
@@ -28,7 +31,6 @@ type HistoryAction = {
     type: "clear",
 };
 
-// TODO: Trimming the history when it gets long
 // TODO: Test
 function historyReducer(previous: TickHistory, action: HistoryAction): TickHistory {
     switch (action.type) {
@@ -60,11 +62,15 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
                 // It's at the end of the history, and thus the next tick should give
                 // a new history
                 const nextGrid = previous.grid.tick(previous.conwayStrategy);
+                const {
+                    array: newContents,
+                    newLength,
+                } = trimArray([...previous.contents, nextGrid], MAX_HISTORY_LENGTH);
                 if (!nextGrid.equals(previous.grid)) {
                     return {
-                        contents: [...previous.contents, nextGrid],
-                        length: previous.length + 1,
-                        position: previous.length,
+                        contents: newContents,
+                        length: newLength,
+                        position: newLength - 1,
                         grid: nextGrid,
                         conwayStrategy: previous.conwayStrategy,
                     }
@@ -101,10 +107,14 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
         case "toggle":
             const [targetX, targetY] = action.value;
             const nextGrid = previous.grid.toggle(targetX, targetY);
+            const { 
+                array: newContents, 
+                newLength 
+            } = trimArray([...previous.contents, nextGrid], MAX_HISTORY_LENGTH)
             return {
-                contents: [...previous.contents, nextGrid],
-                length: previous.length + 1,
-                position: previous.length,
+                contents: newContents,
+                length: newLength,
+                position: newLength - 1,
                 grid: nextGrid,
                 conwayStrategy: previous.conwayStrategy,
             }

@@ -7,3 +7,4 @@
 * A dark mode so it's not so harsh on my eyes?
 * Only showing the move cursor when the grid is larger than the screen?
 * Snapshot test the grids?
+* What about rendering only the part of the grid that's visible? That might be helpful with performance, though hard.

@@ -43,7 +43,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
 
     useEffect(() => {
         restart(getGridFactory(type)({ height, width, birthFactor, seed }));
-    }, [height, width, birthFactor, seed, type]);
+    }, [height, width, birthFactor, seed, type, restart]);
 
     useInterval(() => {
         if (playback.isPlaying) {

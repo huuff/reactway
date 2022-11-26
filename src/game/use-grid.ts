@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useCallback, useReducer } from "react";
 import { Coordinates, Grid } from "../grid/grid";
 import { historyReducer, newDefaultTickHistory } from "./tick-history";
 
@@ -27,13 +27,17 @@ function useGrid(initialGrid: Grid): GridStateWrapper {
         historyPosition: tickHistory.position,
         historyLength: tickHistory.length,
 
-        tick: () => dispatchTickHistory({ type: "tick" } ),
-        clear: () => dispatchTickHistory({ type: "clear"} ),
-        restart: (newGrid: Grid) => dispatchTickHistory({ type: "reset", value: newGrid}),
-        setHistoryPosition: (newPosition: number) => {
+        tick: useCallback(() => dispatchTickHistory({ type: "tick" } ), [dispatchTickHistory]),
+        clear: useCallback(() => dispatchTickHistory({ type: "clear"} ), [dispatchTickHistory]),
+        restart: useCallback((newGrid: Grid) => {
+            dispatchTickHistory({ type: "reset", value: newGrid}), [dispatchTickHistory]
+        }, [dispatchTickHistory]),
+        setHistoryPosition: useCallback((newPosition: number) => {
             dispatchTickHistory({ type: "setPosition", value: newPosition})
-        },
-        toggleCell: (coordinates: Coordinates) => dispatchTickHistory({type: "toggle", value: coordinates})
+        }, [ dispatchTickHistory]),
+        toggleCell: useCallback((coordinates: Coordinates) => {
+            dispatchTickHistory({type: "toggle", value: coordinates})
+        }, [ dispatchTickHistory]),
     }
 }
 

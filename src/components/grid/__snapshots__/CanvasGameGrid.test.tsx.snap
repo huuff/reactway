@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CanvasGameGrid snapshot 1`] = `
+<canvas
+  className=""
+  height={80}
+  id="canvas"
+  width={100}
+/>
+`;

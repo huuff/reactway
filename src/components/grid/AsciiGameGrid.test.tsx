@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { coordinatesToString } from "../../util/coordinates-to-string";
 import { Coordinates } from "../../grid/grid";
 import { SetGrid } from "../../grid/set-grid";
+import renderer from "react-test-renderer";
 
 const liveCells: Coordinates[] = [[2, 3], [2, 1], [3, 2], [3,3], [4, 2]];
 describe("AsciiGameGrid", () => {
@@ -18,5 +19,11 @@ describe("AsciiGameGrid", () => {
         render(<AsciiGameGrid grid={new SetGrid(liveCells)} toggleCell={jest.fn()} />);
 
         expect(screen.getByTestId(coordinatesToString([2, 2]))).toHaveTextContent("O");
+    });
+
+    test("snapshot", () => {
+        expect(renderer.create(
+            <AsciiGameGrid grid={new SetGrid(liveCells)} toggleCell={jest.fn()} />
+        ).toJSON()).toMatchSnapshot();
     });
 })

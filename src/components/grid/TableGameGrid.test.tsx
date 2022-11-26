@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { SetGrid } from "../../grid/set-grid";
 import { coordinatesToString } from "../../util/coordinates-to-string";
 import { Coordinates } from "../../grid/grid";
+import renderer from "react-test-renderer";
 
 const liveCells: Coordinates[] = [[2, 3], [2, 1], [3, 2], [3,3], [4, 2]];
 describe("TableGameGrid", () => {
@@ -18,5 +19,11 @@ describe("TableGameGrid", () => {
         render(<TableGameGrid grid={new SetGrid(liveCells)} toggleCell={jest.fn()}/>);
 
         expect(screen.getByTestId(coordinatesToString([2, 2]))).toHaveClass("bg-white");
+    });
+
+    test("snapshot", () => {
+        expect(renderer.create(
+            <TableGameGrid grid={new SetGrid(liveCells)} toggleCell={jest.fn()} />
+        ).toJSON()).toMatchSnapshot();
     });
 })

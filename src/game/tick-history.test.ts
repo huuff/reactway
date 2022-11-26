@@ -116,5 +116,59 @@ describe("TickHistory", () => {
             expect(history.length).toBe(2);
             expect(history.grid).toStrictEqual(secondGrid);
         });
+
+        test("setPosition", () => {
+            // ARRANGE
+            const firstGrid = new SetGrid([[1, 1]], 2, 2);
+            const secondGrid = new SetGrid([[1, 2]], 2, 2);
+            const { result } = renderHook(() => useReducer(
+                historyReducer,
+                {
+                    contents: [ firstGrid, secondGrid ],
+                    position: 1,
+                    length: 2,
+                    grid: secondGrid,
+                    conwayStrategy: defaultConwayStrategy,
+                }
+            ));
+
+            // ACT
+            act(() => {
+                const [, dispatch] = result.current;
+                dispatch({type: "setPosition", value: 0});
+            })
+
+            // ASSERT
+            const [ history, ] = result.current;
+            expect(history.contents).toStrictEqual([firstGrid, secondGrid]);
+            expect(history.position).toBe(0);
+            expect(history.length).toBe(2);
+            expect(history.grid).toStrictEqual(firstGrid);
+        });
+
+        test("toggle", () => {
+            // ARRANGE
+            const initialGrid = new SetGrid([[1,1]], 2, 2);
+            const { result } = renderHook(() => useReducer(
+                historyReducer,
+                newDefaultTickHistory(initialGrid))
+            );
+    
+    
+            // ACT
+            act(() => {
+                const [, dispatch] = result.current;
+                dispatch({ type: "toggle", value: [1,1] });
+            })
+    
+            // ASSERT
+            const [history,] = result.current;
+            const expectedNextGrid = initialGrid.toggle(1, 1);
+            expect(history.grid).toStrictEqual(expectedNextGrid);
+            expect(history.contents).toStrictEqual([initialGrid, expectedNextGrid]);
+            expect(history.length).toBe(2);
+            expect(history.position).toBe(1);
+        });
+
     });
 });

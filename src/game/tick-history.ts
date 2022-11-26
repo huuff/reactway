@@ -31,7 +31,6 @@ type HistoryAction = {
     type: "clear",
 };
 
-// TODO: Test
 function historyReducer(previous: TickHistory, action: HistoryAction): TickHistory {
     switch (action.type) {
         case "reset": {

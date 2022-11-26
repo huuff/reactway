@@ -18,7 +18,7 @@ type GameSettings = {
 // missing param is taken to be the default
 type GameSettingsQueryParams = StringObject<GameSettings>
 
-type GridViewType = "table" | "ascii" | "canvas"; // TODO: Seems like it should be somewhere else
+type GridViewType = "table" | "ascii" | "canvas";
 
 type GameSettingsAction = {
     type: "setHeight" | "setWidth" | "setBirthFactor" | "setTickDuration";

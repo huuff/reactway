@@ -7,4 +7,3 @@
 * Only showing the move cursor when the grid is larger than the screen?
 * Snapshot test the grids?
 * What about rendering only the part of the grid that's visible? That might be helpful with performance, though hard.
-* There's some hydration error with fontawesome because titles are generated randomly and thus they differ from the server and the client.

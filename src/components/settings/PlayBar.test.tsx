@@ -1,10 +1,7 @@
 import renderer from "react-test-renderer";
 import PlayBar from "./PlayBar";
 
-jest.spyOn(global.Math, 'random').mockImplementation(() => 0);
-
 describe("PlayBar", () => {
- 
     test("matches snapshot", () => {
         expect(renderer
             .create(<PlayBar 

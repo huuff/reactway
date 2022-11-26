@@ -26,8 +26,8 @@ const PlayBar = ({
         <div className={`${className || ""} h-8 flex items-center`}>
             <ClassedSlot className="mr-3 h-4 text-blue-500 cursor-pointer hover:scale-125">
                 { isPlaying
-                    ? <FontAwesomeIcon icon={faPause} title="pause" onClick={pause} />
-                    : <FontAwesomeIcon icon={faPlay} title="play" onClick={start} />
+                    ? <FontAwesomeIcon icon={faPause} data-fa-title-id="pause" onClick={pause} />
+                    : <FontAwesomeIcon icon={faPlay} data-fa-title-id="play" onClick={start} />
                 }
             </ClassedSlot>
             <input
@@ -41,12 +41,12 @@ const PlayBar = ({
             <div className="mr-1 whitespace-nowrap">
                 <FontAwesomeIcon
                     icon={faEraser}
-                    title="clear"
+                    data-fa-title-id="clear"
                     className="inline-block ml-2 h-4 hover:scale-125 text-red-500 cursor-pointer"
                     onClick={clearGrid} />
                 <FontAwesomeIcon
                     icon={faRepeat}
-                    title="reset"
+                    data-fa-title-id="reset"
                     className="inline-block ml-2 h-4 hover:scale-125 text-green-500 cursor-pointer"
                     onClick={startNewGame} />
             </div>

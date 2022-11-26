@@ -1,4 +1,5 @@
 import { ChangeEvent, useCallback } from "react";
+import { GridType } from "../../grid/grid";
 import { GameSettings, GameSettingsAction, GameSettingsNumberAction, GridViewType } from "../../settings/settings";
 
 type GameSettingsViewProps = {
@@ -14,30 +15,16 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
     const createNumberSettingsChangeHandler = useCallback(
         (eventType: GameSettingsNumberAction) => {
             return (e: ChangeEvent<HTMLInputElement>) => {
-                dispatchSettings({
-                    type: eventType,
-                    value: +e.target.value,
-                })
+                dispatchSettings({type: eventType, value: +e.target.value })
             }
         }, [dispatchSettings]
     );
     const handleViewSettingsChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
-        const value = e.target.value;
-            dispatchSettings({
-                type: "setView",
-                value: value as GridViewType,
-            })
+            dispatchSettings({type: "setView", value: e.target.value as GridViewType});
     }, [dispatchSettings]);
 
     const handleTypeSettingsChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
-        const value = e.target.value;
-
-        if (value === "array" || value === "map" || value === "set") {
-            dispatchSettings({
-                type: "setType",
-                value,
-            })
-        }
+            dispatchSettings({type: "setType", value: e.target.value as GridType});
     }, [dispatchSettings]);
 
     return (

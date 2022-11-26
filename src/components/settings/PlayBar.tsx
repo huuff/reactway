@@ -1,7 +1,7 @@
 import { faPlay, faPause, faRepeat, faEraser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Playback } from '../game/use-playback';
-import ClassedSlot from "./ClassedSlot";
+import { Playback } from '../../settings/use-playback';
+import ClassedSlot from "../util/ClassedSlot";
 
 type PlayBarProps = {
     playback: Playback,

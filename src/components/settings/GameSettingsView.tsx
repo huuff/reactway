@@ -1,5 +1,5 @@
 import { ChangeEvent, useCallback } from "react";
-import { GameSettings, GameSettingsAction, GameSettingsNumberAction, GridViewType } from "../game/settings";
+import { GameSettings, GameSettingsAction, GameSettingsNumberAction, GridViewType } from "../../settings/settings";
 
 type GameSettingsViewProps = {
     settings: GameSettings,

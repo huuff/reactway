@@ -1,7 +1,7 @@
 import { useReducer } from "react";
-import { ConwayStrategy, defaultConwayStrategy } from "../game/conway-strategy";
-import { Coordinates, Grid } from "./grid";
-import { getGridFactory } from "./grid-factory";
+import { ConwayStrategy, defaultConwayStrategy } from "./conway-strategy";
+import { Coordinates, Grid } from "../grid/grid";
+import { getGridFactory } from "../grid/grid-factory";
 
 // TODO: I think I should give this a better name
 type TickHistory = {

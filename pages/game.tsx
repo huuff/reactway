@@ -13,7 +13,7 @@ import { getGridFactory } from "../src/grid/grid-factory";
 import NoSsr from "../src/components/util/NoSSR";
 import PlayBar from "../src/components/settings/PlayBar";
 import CanvasGameGrid from "../src/components/grid/CanvasGameGrid";
-import { useGrid } from "../src/game/tick-history";
+import { useGrid } from "../src/game/use-grid";
 import { usePlayback } from "../src/settings/use-playback";
 
 type GameProps = {

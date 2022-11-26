@@ -1,7 +1,7 @@
 import { range } from "lodash";
 import { ConwayStrategy } from "../game/conway-strategy";
 import { iterateCoordinates } from "../util/iterate-coordinates";
-import { GridStateWrapper } from "../game/tick-history";
+import { GridStateWrapper } from "../game/use-grid";
 
 type GameGridProps = {
     grid: Grid,

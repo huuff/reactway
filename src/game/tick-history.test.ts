@@ -37,4 +37,30 @@ describe("TickHistory", () => {
         expect(history.length).toBe(1);
         expect(history.position).toBe(0);
     });
+
+    test("clear", () => {
+        // ARRANGE
+        const { result } = renderHook(() => useReducer(
+            historyReducer,
+            newDefaultTickHistory(initialGrid))
+        );
+
+        // ACT
+        act(() => {
+            const [ , dispatch ] = result.current;
+            dispatch({type: "clear"});
+        });
+
+        // ASSERT
+        const [ history, ] = result.current;
+        expect(history.grid.height).toBe(initialGrid.height);
+        expect(history.grid.width).toBe(initialGrid.width);
+        for (const { isAlive } of history.grid) {
+            expect(isAlive).toBe(false);
+        }
+        expect(history.length).toBe(2);
+        expect(history.position).toBe(1);
+        expect(history.contents)
+            .toStrictEqual([initialGrid, new SetGrid([], initialGrid.height, initialGrid.width)]);
+    });
 });

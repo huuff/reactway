@@ -50,7 +50,7 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
                 birthFactor: 0,
                 seed: "any will do since it's empty"
             });
-            return {
+            return { // TODO: Trim here!
                 contents: [...previous.contents, emptyGrid],
                 length: previous.length + 1,
                 position: previous.length,

@@ -1,6 +1,7 @@
 import { renderHook, act } from "@testing-library/react";
 import { useReducer } from "react";
 import { SetGrid } from "../grid/set-grid";
+import { defaultConwayStrategy } from "./conway-strategy";
 import { historyReducer, newDefaultTickHistory } from "./tick-history";
 
 const initialGrid = new SetGrid([[1, 1], [2, 2]], 2, 2);
@@ -21,17 +22,17 @@ describe("TickHistory", () => {
             historyReducer,
             newDefaultTickHistory(initialGrid))
         );
-        const nextGrid = new SetGrid([[1,0], [1,1]], 2, 2);
-        
+        const nextGrid = new SetGrid([[1, 0], [1, 1]], 2, 2);
+
 
         // ACT
         act(() => {
-            const [ , dispatch ] = result.current;
-            dispatch({type: "reset", value: nextGrid});
+            const [, dispatch] = result.current;
+            dispatch({ type: "reset", value: nextGrid });
         })
 
         // ASSERT
-        const [ history, ] = result.current;
+        const [history,] = result.current;
         expect(history.grid).toStrictEqual(nextGrid);
         expect(history.contents).toStrictEqual([nextGrid]);
         expect(history.length).toBe(1);
@@ -42,17 +43,17 @@ describe("TickHistory", () => {
         // ARRANGE
         const { result } = renderHook(() => useReducer(
             historyReducer,
-            newDefaultTickHistory(initialGrid))
-        );
+            newDefaultTickHistory(initialGrid)
+        ));
 
         // ACT
         act(() => {
-            const [ , dispatch ] = result.current;
-            dispatch({type: "clear"});
+            const [, dispatch] = result.current;
+            dispatch({ type: "clear" });
         });
 
         // ASSERT
-        const [ history, ] = result.current;
+        const [history,] = result.current;
         expect(history.grid.height).toBe(initialGrid.height);
         expect(history.grid.width).toBe(initialGrid.width);
         for (const { isAlive } of history.grid) {
@@ -62,5 +63,58 @@ describe("TickHistory", () => {
         expect(history.position).toBe(1);
         expect(history.contents)
             .toStrictEqual([initialGrid, new SetGrid([], initialGrid.height, initialGrid.width)]);
+    });
+
+    describe("tick", () => {
+        test("at the end of history", () => {
+            // ARRANGE
+            const { result } = renderHook(() => useReducer(
+                historyReducer,
+                newDefaultTickHistory(initialGrid)
+            ));
+    
+            // ACT
+            act(() => {
+                const [ , dispatch ] = result.current;
+                dispatch({ type: "tick" });
+            });
+    
+            // ASSERT
+            const nextGrid = initialGrid.tick(defaultConwayStrategy);
+            const [ history, ] = result.current;
+            expect(history.contents).toStrictEqual([initialGrid, nextGrid]);
+            expect(history.grid).toStrictEqual(nextGrid);
+            expect(history.length).toBe(2);
+            expect(history.position).toBe(1);
+        });
+
+        test("in the middle of history", () => {
+            // ARRANGE
+            const firstGrid = new SetGrid([[1, 1]], 2, 2);
+            const secondGrid = new SetGrid([[1, 2]], 2, 2);
+            const { result } = renderHook(() => useReducer(
+                historyReducer,
+                {
+                    contents: [ firstGrid, secondGrid ],
+                    position: 0,
+                    length: 2,
+                    grid: firstGrid,
+                    conwayStrategy: defaultConwayStrategy,
+                }
+            ));
+
+            // ACT
+            act(() => {
+                const [, dispatch] = result.current;
+                dispatch({type: "tick"});
+            })
+
+            // ASSERT
+            const [ history, ] = result.current;
+            expect(history.contents).toStrictEqual([firstGrid, secondGrid]);
+            expect(history.position).toBe(1);
+            expect(history.length).toBe(2);
+            expect(history.grid).toStrictEqual(secondGrid);
+        });
     });
 });

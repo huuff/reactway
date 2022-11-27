@@ -13,7 +13,6 @@ type GameSettingsViewProps = {
 
 const DEBOUNCE_DELAY = 500;
 
-// TODO: Only dispatch if they meet the minimums and maximums
 function useNumberSetting<T extends NumberGameSetting>(
     setting: T,
     settings: GameSettings,
@@ -26,6 +25,10 @@ function useNumberSetting<T extends NumberGameSetting>(
         debouncedValue
             && dispatch({ type: `set${typedCapitalize(setting)}`, value: debouncedValue } );
     }, [debouncedValue, dispatch]);
+
+    useEffect(() => {
+        input.setValue(settings[setting]);
+    }, [settings[setting], input.setValue]);
 
     return input;
 }

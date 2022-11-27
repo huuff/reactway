@@ -25,7 +25,7 @@ function useNumberSetting<T extends Exclude<NumberGameSetting, "cellSize">>(
 
     useEffect(() => {
         debouncedValue
-            && dispatch({ type: `set${typedCapitalize(setting)}`, value: debouncedValue } );
+            && dispatch({ type: `set${typedCapitalize(setting)}`, value: debouncedValue });
     }, [debouncedValue, dispatch]);
 
     useEffect(() => {
@@ -51,11 +51,11 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
     }, [dispatchSettings]);
 
     const dispatchIncreaseCellSize = useCallback(() => {
-        dispatchSettings({type: "changeCellSize", value: "increment"});
+        dispatchSettings({ type: "changeCellSize", value: "increment" });
     }, [dispatchSettings]);
 
     const dispatchDecreaseCellSize = useCallback(() => {
-        dispatchSettings({ type: "changeCellSize", value: "decrement"});
+        dispatchSettings({ type: "changeCellSize", value: "decrement" });
     }, [dispatchSettings]);
 
     return (
@@ -139,18 +139,22 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                 />
             </div>
 
-            <div className="flex justify-around items-center">
-                <FontAwesomeIcon 
-                    icon={faMinus} 
-                    onClick={dispatchDecreaseCellSize} 
-                    className="h-4 hover:bg-slate-200"
-                />
-                <span>Cell size: { settings.cellSize }</span>
-                <FontAwesomeIcon 
-                    icon={faPlus}
-                    onClick={dispatchIncreaseCellSize} 
-                    className="h-4 hover:bg-slate-200"
-                />
+            <div className="flex justify-around">
+                <div className="w-1/4 hover:bg-slate-300 pt-1 rounded-md">
+                    <FontAwesomeIcon
+                        icon={faMinus}
+                        onClick={dispatchDecreaseCellSize}
+                        className="h-4 mx-auto"
+                    />
+                </div>
+                <p className="w-1/2 text-center">Cell size: {settings.cellSize}</p>
+                <div className="w-1/4 hover:bg-slate-300 pt-1 rounded-md">
+                    <FontAwesomeIcon
+                        icon={faPlus}
+                        onClick={dispatchIncreaseCellSize}
+                        className="h-4 mx-auto"
+                    />
+                </div>
             </div>
 
         </div>

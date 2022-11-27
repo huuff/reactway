@@ -1,6 +1,5 @@
 # Tasks
 * Finish the choosing of cell size:
-  * The darker background on hover should be bigger (take the whole height)
   * Make it change when moving the scroll wheel
   * I'm sure I broke some test, or at least, that I should test the cellSize setting
 * Hiding settings in a drawer

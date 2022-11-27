@@ -58,4 +58,32 @@ describe("settings", () => {
         // ASSERT
         expect(singletonRouter.query.width).toBe("7");
     });
+
+    describe("cellSize", () => {
+        test("increment", () => {
+            // ARRANGE
+            const { result } = renderHook(() => useSettings());
+            const [, dispatchSettings] = result.current;
+
+            // ACT
+            act(() => dispatchSettings({ type: "changeCellSize", value: "increment" }))
+
+            // ASSERT
+            const [settings, _] = result.current;
+            expect(settings.cellSize).toBe(defaultSettings.cellSize + 1);
+        });
+
+        test("decrement", () => {
+            // ARRANGE
+            const { result } = renderHook(() => useSettings());
+            const [, dispatchSettings] = result.current;
+
+            // ACT
+            act(() => dispatchSettings({ type: "changeCellSize", value: "decrement" }))
+
+            // ASSERT
+            const [settings, _] = result.current;
+            expect(settings.cellSize).toBe(defaultSettings.cellSize - 1);
+        });
+    });
 })

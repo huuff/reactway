@@ -1,9 +1,9 @@
-import { capitalize } from "lodash";
-import { interpolateAs } from "next/dist/shared/lib/router/router";
+
 import { ChangeEvent, useCallback, useEffect } from "react";
 import { useDebounce } from "usehooks-ts";
 import { GridType } from "../../grid/grid";
 import { GameSettings, GameSettingsAction, GridViewType, NumberGameSetting } from "../../settings/settings";
+import { typedCapitalize } from "../../util/typed-capitalize";
 import { useNumberInput } from "../../util/use-number-input";
 
 type GameSettingsViewProps = {
@@ -12,11 +12,6 @@ type GameSettingsViewProps = {
 } & { className?: string }
 
 const DEBOUNCE_DELAY = 500;
-
-// TODO: Somewhere else
-function typedCapitalize<T extends string>(input: T): Capitalize<T> {
-    return capitalize(input) as Capitalize<T>;
-}
 
 // TODO: Only dispatch if they meet the minimums and maximums
 function useNumberSetting<T extends NumberGameSetting>(

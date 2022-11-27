@@ -47,7 +47,7 @@ const CanvasGameGrid = ({ grid, className, toggleCell }: GameGridProps) => {
         }
         ctx.fillRect(mouseCellX * cellSize, mouseCellY * cellSize, cellSize, cellSize);
 
-    }, [clientX, clientY]);
+    }, [grid, clientX, clientY]);
 
     useEffect(() => {
         const canvas = gridCanvasRef.current!;

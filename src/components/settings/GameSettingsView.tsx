@@ -36,7 +36,6 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
     const birthFactorInput = useNumberSetting("birthFactor", settings, dispatchSettings);
     const tickDurationInput = useNumberSetting("tickDuration", settings, dispatchSettings);
 
-
     const handleViewSettingsChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
         dispatchSettings({ type: "setView", value: e.target.value as GridViewType });
     }, [dispatchSettings]);

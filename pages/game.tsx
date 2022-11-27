@@ -43,6 +43,8 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
         restart(getGridFactory(type)({ height, width, birthFactor, seed }));
     }, [height, width, birthFactor, seed, type, restart]);
 
+    // TODO: Adjusting the interval: Measure how long the previous tick took and remove that
+    // from the time it takes for the next tick (likely with setTimeout or useTimeout)
     useInterval(() => {
         if (playback.isPlaying) {
             tick();

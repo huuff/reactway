@@ -1,5 +1,5 @@
 import "tailwindcss/tailwind.css";
-import { useEffect } from "react";
+import { useEffect, WheelEvent } from "react";
 import GameSettingsView from "../src/components/settings/GameSettingsView";
 import { defaultSettings, useSettings } from "../src/settings/settings";
 import { useInterval } from "usehooks-ts";
@@ -14,6 +14,7 @@ import { useGrid } from "../src/game/use-grid";
 import { usePlayback } from "../src/settings/use-playback";
 import GameGridView from "../src/components/grid/GameGridView";
 import ScrollContainer from "react-indiana-drag-scroll";
+import { useThrottledCallback } from "beautiful-react-hooks";
 
 type GameProps = {
     readonly seed: string;
@@ -23,6 +24,14 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     const [settings, dispatchSettings] = useSettings(defaultSettings);
     const { height, width, birthFactor, tickDuration, view, type, cellSize } = settings
     const playback = usePlayback();
+
+    const wheelHandler = useThrottledCallback((e: WheelEvent<HTMLDivElement>) => {
+        if (e.deltaY < 0) {
+            dispatchSettings({ type: "changeCellSize", value: "decrement"});
+        } else {
+            dispatchSettings({ type: "changeCellSize", value: "increment"});
+        }
+    }, [dispatchSettings], 20);
 
     const { 
         grid,
@@ -60,7 +69,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     }
 
     return (
-        <div>
+        <div onWheel={wheelHandler}>
             <ScrollContainer className="max-h-screen overflow-scroll cursor-move scroll-smooth">
                 <NoSsr>
                     <GameGridView grid={grid}

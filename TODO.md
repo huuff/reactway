@@ -1,6 +1,5 @@
 # Tasks
 * Finish the choosing of cell size:
-  * Make it change when moving the scroll wheel
   * I'm sure I broke some test, or at least, that I should test the cellSize setting
 * Hiding settings in a drawer
 * `MapGrid` and `ArrayGrid` tests are pretty much the same... can't I do some sort of property testing so I can pass the same parameters and just change the implementation?

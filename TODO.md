@@ -1,5 +1,4 @@
 # Tasks
-* Try to make it so dragging does not toggle
 * Choosing size of the cells
 * Hiding settings in a drawer
 * `MapGrid` and `ArrayGrid` tests are pretty much the same... can't I do some sort of property testing so I can pass the same parameters and just change the implementation?

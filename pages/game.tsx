@@ -13,16 +13,13 @@ import PlayBar from "../src/components/settings/PlayBar";
 import { useGrid } from "../src/game/use-grid";
 import { usePlayback } from "../src/settings/use-playback";
 import GameGridView from "../src/components/grid/GameGridView";
+import ScrollContainer from "react-indiana-drag-scroll";
 
 type GameProps = {
     readonly seed: string;
 }
 
 const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
-    useEffect(() => {
-        import("dragscroll");
-    }, []);
-
     const [settings, dispatchSettings] = useSettings(defaultSettings);
     const { height, width, birthFactor, tickDuration, view, type } = settings
     const playback = usePlayback();
@@ -63,11 +60,11 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
 
     return (
         <div>
-            <div className="max-h-screen overflow-scroll dragscroll cursor-move">
+            <ScrollContainer className="max-h-screen overflow-scroll cursor-move">
                 <NoSsr>
                     <GameGridView toggleCell={toggleCell} grid={grid} view={view}/>
                 </NoSsr>
-            </div>
+            </ScrollContainer>
 
             <div className="
                 absolute

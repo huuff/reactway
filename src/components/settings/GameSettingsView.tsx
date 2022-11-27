@@ -1,24 +1,48 @@
-import { ChangeEvent, useCallback } from "react";
+import { ChangeEvent, useCallback, useEffect } from "react";
+import { useDebounce } from "usehooks-ts";
 import { GridType } from "../../grid/grid";
-import { GameSettings, GameSettingsAction, GameSettingsNumberAction, GridViewType } from "../../settings/settings";
+import { GameSettings, GameSettingsAction, GridViewType } from "../../settings/settings";
+import { useNumberInput } from "../../util/use-number-input";
 
 type GameSettingsViewProps = {
     settings: GameSettings,
     dispatchSettings: React.Dispatch<GameSettingsAction>
 } & { className?: string }
 
-// TODO: Try to debounce inputs! (I may have to write my own hook)
-// The fact that the input field updates immediately makes it hard to follow a normal
-// flow for updating it (e.g., deleting it and setting it), since, for example, deleting
-// it means it's set to 0, which will break the game
+const DEBOUNCE_DELAY = 500;
+
 const GameSettingsView = ({ settings, dispatchSettings, className }: GameSettingsViewProps) => {
-    const createNumberSettingsChangeHandler = useCallback(
-        (eventType: GameSettingsNumberAction) => {
-            return (e: ChangeEvent<HTMLInputElement>) => {
-                dispatchSettings({type: eventType, value: +e.target.value })
-            }
-        }, [dispatchSettings]
-    );
+    const heightInput = useNumberInput(settings.height);
+    const debouncedHeight = useDebounce(heightInput.value, DEBOUNCE_DELAY);
+
+    // TODO: Only dispatch if they meet the minimums and maximums
+    // TODO: DRY this
+    useEffect(() => {
+        debouncedHeight && dispatchSettings({type: "setHeight", value: debouncedHeight});
+    }, [debouncedHeight]);
+
+    const widthInput = useNumberInput(settings.width);
+    const debouncedWidth = useDebounce(widthInput.value, DEBOUNCE_DELAY);
+
+    useEffect(() => {
+        debouncedWidth && dispatchSettings({type: "setWidth", value: debouncedWidth});
+    }, [debouncedWidth]);
+
+    const birthFactorInput = useNumberInput(settings.birthFactor);
+    const debouncedBirthFactor = useDebounce(birthFactorInput.value, DEBOUNCE_DELAY);
+
+    useEffect(() => {
+        debouncedBirthFactor && dispatchSettings({type: "setBirthFactor", value: debouncedBirthFactor});
+    }, [debouncedBirthFactor]);
+
+    const tickDurationInput = useNumberInput(settings.tickDuration);
+    const debouncedTickDuration = useDebounce(tickDurationInput.value, DEBOUNCE_DELAY);
+
+    useEffect(() => {
+        debouncedTickDuration && dispatchSettings({type: "setTickDuration", value: debouncedTickDuration})
+    }, [debouncedTickDuration]);
+
+
     const handleViewSettingsChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
             dispatchSettings({type: "setView", value: e.target.value as GridViewType});
     }, [dispatchSettings]);
@@ -65,8 +89,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                     name="height"
                     min="5"
                     max="100"
-                    value={settings.height}
-                    onChange={createNumberSettingsChangeHandler("setHeight")}
+                    {...heightInput}
                 />
             </div>
 
@@ -78,8 +101,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                     name="width"
                     min="5"
                     max="100"
-                    value={settings.width}
-                    onChange={createNumberSettingsChangeHandler("setWidth")}
+                    {...widthInput}
                 />
             </div>
 
@@ -93,8 +115,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                     step="0.05"
                     min="0"
                     max="1"
-                    value={settings.birthFactor}
-                    onChange={createNumberSettingsChangeHandler("setBirthFactor")}
+                    {...birthFactorInput}
                 />
             </div>
 
@@ -107,9 +128,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                     step="100"
                     min="100"
                     max="10000"
-                    disabled={settings.tickDuration === null}
-                    value={settings.tickDuration || "paused"}
-                    onChange={createNumberSettingsChangeHandler("setTickDuration")}
+                    {...tickDurationInput}
                 />
             </div>
 

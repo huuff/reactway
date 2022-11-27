@@ -2,7 +2,7 @@
 
 exports[`AsciiGameGrid snapshot 1`] = `
 <div
-  className=" font-mono leading-none text-lg"
+  className=" font-mono leading-none text-xl"
 >
   <span
     className="mx-1 hover:bg-red-400"

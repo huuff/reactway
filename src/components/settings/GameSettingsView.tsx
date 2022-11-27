@@ -25,7 +25,7 @@ function useNumberSetting<T extends NumberGameSetting>(
     useEffect(() => {
         debouncedValue
             && dispatch({ type: `set${typedCapitalize(setting)}`, value: debouncedValue } );
-    }, [debouncedValue]); // TODO: dependency on dispatch too?
+    }, [debouncedValue, dispatch]);
 
     return input;
 }

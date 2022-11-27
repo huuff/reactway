@@ -4,6 +4,7 @@ import { GridType } from "../grid/grid";
 import { StringObject } from "../util/to-string-object";
 import { useLocalStorage } from "usehooks-ts";
 import { ParsedUrlQuery } from "querystring";
+import { useEvent } from "react-use-event-hook"; // XXX: Maybe use the real thing once it's released
 
 type GameSettings = {
     readonly height: number;
@@ -99,7 +100,7 @@ function useSettings(
         type: getQueryParamSettingOrDefault("type", router.query, storedSettings),
     }), [router.query, storedSettings]);
 
-    const dispatchSettings = (action: GameSettingsAction) => {
+    const dispatchSettings = useEvent((action: GameSettingsAction) => {
         let nextQueryParams: { [key: string]: string };
 
         switch (action.type) {
@@ -139,7 +140,7 @@ function useSettings(
             }
         }
         router.push({ pathname: "/game", query: nextQueryParams });
-    }
+    });
 
     return [settings, dispatchSettings];
 }

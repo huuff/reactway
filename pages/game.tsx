@@ -75,6 +75,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                 w-fit
                 v-1/4
                 mb-5
+                z-20
                 ">
                 <PlayBar
                     className="border rounded-lg drop-shadow-lg bg-white p-2 mb-2 opacity-90"

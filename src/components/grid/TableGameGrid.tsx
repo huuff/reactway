@@ -20,7 +20,6 @@ const TableGameGrid = ({ grid, className, toggleCell }: GameGridProps) => (
                                         "w-6",
                                         "h-6",
                                         "border",
-                                        "cursor-pointer",
                                         {
                                             "bg-black": grid.get(x, y),
                                             "bg-white": !grid.get(x, y),

@@ -1,5 +1,6 @@
 import { Coordinates } from "../grid/grid";
 
+// TODO: Set size dynamically?
 // Cache to prevent creating too many strings
 const COORDINATES_TO_STRING_CACHE_SIZE = 200;
 const COORDINATES_TO_STRING_CACHE =

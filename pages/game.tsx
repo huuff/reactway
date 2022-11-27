@@ -61,7 +61,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
 
     return (
         <div>
-            <ScrollContainer className="max-h-screen overflow-scroll cursor-move">
+            <ScrollContainer className="max-h-screen overflow-scroll cursor-move scroll-smooth">
                 <NoSsr>
                     <GameGridView grid={grid}
                                   view={view} 

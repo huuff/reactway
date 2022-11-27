@@ -19,8 +19,6 @@ function getMouseCell(
 }
 
 // TODO: Test it? Can I?
-// TODO: Try to render a transparent grid on top of the real one to show the hovered cell
-// without rerendering the whole grid on each cursor movement?
 const CanvasGameGrid = ({ grid, className, toggleCell }: GameGridProps) => {
     const gridCanvasRef = useRef<HTMLCanvasElement>(null);
 

@@ -30,7 +30,11 @@ type GameSettingsAction = {
     type: "setType";
     value: GridType;
 };
+
 type GameSettingsNumberAction = (GameSettingsAction & { value: number })["type"]
+type NumberGameSetting = keyof {
+    [k in keyof GameSettings as GameSettings[k] extends number ? k : never]: any
+};
 
 // Default settings, not stored in localStorage
 const globalDefaultSettings: GameSettings = {
@@ -147,5 +151,6 @@ export type {
     GridViewType,
     GameSettingsAction,
     GameSettingsNumberAction,
+    NumberGameSetting,
 };
 export { useSettings, globalDefaultSettings as defaultSettings, }

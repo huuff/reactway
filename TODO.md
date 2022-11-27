@@ -7,3 +7,4 @@
 * Only showing the move cursor when the grid is larger than the screen?
 * What about rendering only the part of the grid that's visible? That might be helpful with performance, though hard.
 * Optimize `MapGrid` as I did for `SetGrid`
+* ` A component is changing a controlled input to be uncontrolled.` warning. Likely because of my `useNumberInput` hook... why not use null instead of undefined?

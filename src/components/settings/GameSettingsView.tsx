@@ -1,7 +1,9 @@
+import { capitalize } from "lodash";
+import { interpolateAs } from "next/dist/shared/lib/router/router";
 import { ChangeEvent, useCallback, useEffect } from "react";
 import { useDebounce } from "usehooks-ts";
 import { GridType } from "../../grid/grid";
-import { GameSettings, GameSettingsAction, GridViewType } from "../../settings/settings";
+import { GameSettings, GameSettingsAction, GridViewType, NumberGameSetting } from "../../settings/settings";
 import { useNumberInput } from "../../util/use-number-input";
 
 type GameSettingsViewProps = {
@@ -11,44 +13,41 @@ type GameSettingsViewProps = {
 
 const DEBOUNCE_DELAY = 500;
 
+// TODO: Somewhere else
+function typedCapitalize<T extends string>(input: T): Capitalize<T> {
+    return capitalize(input) as Capitalize<T>;
+}
+
+// TODO: Only dispatch if they meet the minimums and maximums
+function useNumberSetting<T extends NumberGameSetting>(
+    setting: T,
+    settings: GameSettings,
+    dispatch: React.Dispatch<GameSettingsAction>,
+): ReturnType<typeof useNumberInput> {
+    const input = useNumberInput(settings[setting]);
+    const debouncedValue = useDebounce(input.value, DEBOUNCE_DELAY);
+
+    useEffect(() => {
+        debouncedValue
+            && dispatch({ type: `set${typedCapitalize(setting)}`, value: debouncedValue } );
+    }, [debouncedValue]); // TODO: dependency on dispatch too?
+
+    return input;
+}
+
 const GameSettingsView = ({ settings, dispatchSettings, className }: GameSettingsViewProps) => {
-    const heightInput = useNumberInput(settings.height);
-    const debouncedHeight = useDebounce(heightInput.value, DEBOUNCE_DELAY);
-
-    // TODO: Only dispatch if they meet the minimums and maximums
-    // TODO: DRY this
-    useEffect(() => {
-        debouncedHeight && dispatchSettings({type: "setHeight", value: debouncedHeight});
-    }, [debouncedHeight]);
-
-    const widthInput = useNumberInput(settings.width);
-    const debouncedWidth = useDebounce(widthInput.value, DEBOUNCE_DELAY);
-
-    useEffect(() => {
-        debouncedWidth && dispatchSettings({type: "setWidth", value: debouncedWidth});
-    }, [debouncedWidth]);
-
-    const birthFactorInput = useNumberInput(settings.birthFactor);
-    const debouncedBirthFactor = useDebounce(birthFactorInput.value, DEBOUNCE_DELAY);
-
-    useEffect(() => {
-        debouncedBirthFactor && dispatchSettings({type: "setBirthFactor", value: debouncedBirthFactor});
-    }, [debouncedBirthFactor]);
-
-    const tickDurationInput = useNumberInput(settings.tickDuration);
-    const debouncedTickDuration = useDebounce(tickDurationInput.value, DEBOUNCE_DELAY);
-
-    useEffect(() => {
-        debouncedTickDuration && dispatchSettings({type: "setTickDuration", value: debouncedTickDuration})
-    }, [debouncedTickDuration]);
+    const heightInput = useNumberSetting("height", settings, dispatchSettings);
+    const widthInput = useNumberSetting("width", settings, dispatchSettings);
+    const birthFactorInput = useNumberSetting("birthFactor", settings, dispatchSettings);
+    const tickDurationInput = useNumberSetting("tickDuration", settings, dispatchSettings);
 
 
     const handleViewSettingsChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
-            dispatchSettings({type: "setView", value: e.target.value as GridViewType});
+        dispatchSettings({ type: "setView", value: e.target.value as GridViewType });
     }, [dispatchSettings]);
 
     const handleTypeSettingsChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
-            dispatchSettings({type: "setType", value: e.target.value as GridType});
+        dispatchSettings({ type: "setType", value: e.target.value as GridType });
     }, [dispatchSettings]);
 
     return (

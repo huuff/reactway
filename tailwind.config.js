@@ -4,6 +4,13 @@ module.exports = {
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./src/**/*.{js,ts,jsx,tsx}"
   ],
+  safelist: [
+    "h-2", "w-2",
+    "h-4", "w-4",
+    "h-6", "w-6",
+    "h-8", "w-8",
+    "h-10", "w-10",
+  ],
   theme: {
     extend: {},
   },

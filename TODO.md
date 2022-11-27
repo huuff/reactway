@@ -1,8 +1,9 @@
 # Tasks
 * Finish the choosing of cell size:
-  * It's not working for ascii and table grids
+  * It's not working for ascii grid
   * The darker background on hover should be bigger (take the whole height)
   * Make it change when moving the scroll wheel
+  * I'm sure I broke some test, or at least, that I should test the cellSize setting
 * Hiding settings in a drawer
 * `MapGrid` and `ArrayGrid` tests are pretty much the same... can't I do some sort of property testing so I can pass the same parameters and just change the implementation?
 * A dark mode so it's not so harsh on my eyes?

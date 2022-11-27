@@ -21,7 +21,7 @@ type GameProps = {
 
 const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     const [settings, dispatchSettings] = useSettings(defaultSettings);
-    const { height, width, birthFactor, tickDuration, view, type } = settings
+    const { height, width, birthFactor, tickDuration, view, type, cellSize } = settings
     const playback = usePlayback();
 
     const { 
@@ -36,9 +36,10 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
         toggleCell,
     } = useGrid(getGridFactory(type)({ ...settings, seed }));
 
+    const restartDeps = [height, width, birthFactor, seed, type, restart];
     useEffect(() => {
         restart(getGridFactory(type)({ height, width, birthFactor, seed }));
-    }, [height, width, birthFactor, seed, type, restart]);
+    }, restartDeps);
 
     // TODO: Adjusting the interval: Measure how long the previous tick took and remove that
     // from the time it takes for the next tick (likely with setTimeout or useTimeout)
@@ -62,7 +63,11 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
         <div>
             <ScrollContainer className="max-h-screen overflow-scroll cursor-move">
                 <NoSsr>
-                    <GameGridView toggleCell={toggleCell} grid={grid} view={view}/>
+                    <GameGridView grid={grid}
+                                  view={view} 
+                                  cellSize={cellSize}
+                                  toggleCell={toggleCell}
+                                  />
                 </NoSsr>
             </ScrollContainer>
 
@@ -99,7 +104,7 @@ Game.getInitialProps = async ({ query }) => {
     if (typeof query.seed === "string") {
         return { seed: query.seed };
     } else {
-        return { seed: randomSeed() };
+        return { seed: "fixed seed" };
     }
 }
 

@@ -11,6 +11,7 @@ type GameSettings = {
     readonly width: number;
     readonly birthFactor: number;
     readonly tickDuration: number;
+    readonly cellSize: number;
     readonly view: GridViewType,
     readonly type: GridType,
 }
@@ -30,6 +31,9 @@ type GameSettingsAction = {
 } | {
     type: "setType";
     value: GridType;
+} | {
+    type: "changeCellSize";
+    value: "increment" | "decrement";
 };
 
 type GameSettingsNumberAction = (GameSettingsAction & { value: number })["type"]
@@ -43,6 +47,7 @@ const globalDefaultSettings: GameSettings = {
     width: 10,
     birthFactor: 0.2,
     tickDuration: 1000,
+    cellSize: 3,
     view: "canvas",
     type: "array",
 };
@@ -73,15 +78,19 @@ function getQueryParamSettingOrDefault<S extends keyof GameSettings>(
     }
 }
 
-const minimums = {
+type SettingsLimits = { [setting in NumberGameSetting]: number};
+
+const minimums: SettingsLimits = {
     height: 5,
     width: 5,
     birthFactor: 0,
     tickDuration: 100,
+    cellSize: 1,
 }
 
+// TODO: Maximums and coerceAtMost
 // Returns the given value if it's over the minimum, or the minimum otherwise
-function coerceAtLeastMinimum(setting: keyof typeof minimums, value: number): number {
+function coerceAtLeast(setting: keyof typeof minimums, value: number): number {
     return value < minimums[setting] ? minimums[setting] : value;
 }
 
@@ -98,6 +107,7 @@ function useSettings(
         tickDuration: getQueryParamSettingOrDefault("tickDuration", router.query, storedSettings),
         view: getQueryParamSettingOrDefault("view", router.query, storedSettings),
         type: getQueryParamSettingOrDefault("type", router.query, storedSettings),
+        cellSize: getQueryParamSettingOrDefault("cellSize", router.query, storedSettings),
     }), [router.query, storedSettings]);
 
     const dispatchSettings = useEvent((action: GameSettingsAction) => {
@@ -105,25 +115,25 @@ function useSettings(
 
         switch (action.type) {
             case "setHeight": {
-                const nextValue = coerceAtLeastMinimum("height", action.value);
+                const nextValue = coerceAtLeast("height", action.value);
                 nextQueryParams = { ...router.query, height: nextValue.toString() };
                 setStoredSettings({ ...settings, ...storedSettings, height: nextValue });
                 break;
             }
             case "setWidth": {
-                const nextValue = coerceAtLeastMinimum("width", action.value);
+                const nextValue = coerceAtLeast("width", action.value);
                 nextQueryParams = { ...router.query, width: nextValue.toString() };
                 setStoredSettings({ ...settings, ...storedSettings, width: nextValue });
                 break;
             }
             case "setBirthFactor": {
-                const nextValue = coerceAtLeastMinimum("birthFactor", action.value);
+                const nextValue = coerceAtLeast("birthFactor", action.value);
                 nextQueryParams = { ...router.query, birthFactor: nextValue.toString() };
                 setStoredSettings({ ...settings, ...storedSettings, birthFactor: nextValue });
                 break;
             }
             case "setTickDuration": {
-                const nextValue = coerceAtLeastMinimum("tickDuration", action.value);
+                const nextValue = coerceAtLeast("tickDuration", action.value);
                 nextQueryParams = { ...router.query, tickDuration: nextValue.toString() };
                 setStoredSettings({ ...storedSettings, ...settings, tickDuration: nextValue });
                 break;
@@ -137,6 +147,22 @@ function useSettings(
                 nextQueryParams = { ...router.query, type: action.value };
                 setStoredSettings({ ...settings, ...storedSettings, type: action.value });
                 break;
+            }
+            case "changeCellSize": {
+                switch (action.value) {
+                    case "increment": {
+                        const nextValue = coerceAtLeast("cellSize", settings.cellSize + 1);
+                        nextQueryParams = { ...router.query, cellSize: nextValue.toString()};
+                        setStoredSettings({ ...settings, ...storedSettings, cellSize: nextValue})
+                        break;
+                    }
+                    case "decrement": {
+                        const nextValue = coerceAtLeast("cellSize", settings.cellSize - 1);
+                        nextQueryParams = { ...router.query, cellSize: nextValue.toString()};
+                        setStoredSettings({ ...settings, ...storedSettings, cellSize: nextValue})
+                        break;
+                    }
+                }
             }
         }
         router.push({ pathname: "/game", query: nextQueryParams });

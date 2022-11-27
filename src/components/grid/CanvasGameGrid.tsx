@@ -1,13 +1,14 @@
-import { RefObject, useEffect, useRef } from "react";
+import { RefObject, useEffect, useMemo, useRef } from "react";
 import { GameGridProps } from "../../grid/grid";
 import { useMouseState, useMouseEvents } from "beautiful-react-hooks";
 
-const cellSize = 20;
+const CELL_SIZE_MULTIPLIER = 10;
 
 function getMouseCell(
     canvas: RefObject<HTMLCanvasElement>,
     clientX: number,
-    clientY: number
+    clientY: number,
+    cellSize: number,
 ): [number, number] {
     const boundingRect = canvas.current!.getBoundingClientRect();
     const [x, y]: [number, number] = [clientX - boundingRect.left, clientY - boundingRect.top]
@@ -19,7 +20,9 @@ function getMouseCell(
 }
 
 // TODO: Test it? Can I?
-const CanvasGameGrid = ({ grid, className, toggleCell }: GameGridProps) => {
+const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps) => {
+    const cellSizePixels = useMemo(() => CELL_SIZE_MULTIPLIER * cellSize, [cellSize]);
+
     const gridCanvasRef = useRef<HTMLCanvasElement>(null);
 
     const mouseCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -28,7 +31,7 @@ const CanvasGameGrid = ({ grid, className, toggleCell }: GameGridProps) => {
 
     onMouseUp((event) => {
         const [x, y] = [event.clientX, event.clientY];
-        const [cellX, cellY] = getMouseCell(mouseCanvasRef, x, y);
+        const [cellX, cellY] = getMouseCell(mouseCanvasRef, x, y, cellSizePixels);
         toggleCell([cellX, cellY]);
     });
 
@@ -39,15 +42,24 @@ const CanvasGameGrid = ({ grid, className, toggleCell }: GameGridProps) => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         // Paint the hovered cell
-        const [mouseCellX, mouseCellY] = getMouseCell(gridCanvasRef, clientX, clientY);
+        const [mouseCellX, mouseCellY] = getMouseCell(gridCanvasRef, clientX, clientY, cellSizePixels);
+        if (!grid.contains(mouseCellX, mouseCellY)) {
+            return;
+        }
+
         if (grid.get(mouseCellX, mouseCellY)) {
             ctx.fillStyle = "#800000";
         } else {
             ctx.fillStyle = "#ff4d4d";
         }
-        ctx.fillRect(mouseCellX * cellSize, mouseCellY * cellSize, cellSize, cellSize);
+        ctx.fillRect(
+            mouseCellX * cellSizePixels,
+            mouseCellY * cellSizePixels,
+            cellSizePixels,
+            cellSizePixels
+        );
 
-    }, [grid, clientX, clientY]);
+    }, [grid, clientX, clientY, cellSizePixels]);
 
     useEffect(() => {
         const canvas = gridCanvasRef.current!;
@@ -59,27 +71,27 @@ const CanvasGameGrid = ({ grid, className, toggleCell }: GameGridProps) => {
         ctx.fillStyle = "black";
         for (const { coordinates: [x, y], isAlive } of grid) {
             if (isAlive) {
-                ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+                ctx.fillRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
             } else {
-                ctx.strokeRect(x * cellSize, y * cellSize, cellSize, cellSize);
+                ctx.strokeRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
             }
         };
-    }, [grid])
+    }, [grid, cellSizePixels])
 
 
     return (
             <div style={{ position: "relative", height: "100vh" }}>
                 <canvas ref={mouseCanvasRef}
                     id="mouse-canvas"
-                    height={grid.height * cellSize}
-                    width={grid.width * cellSize}
+                    height={grid.height * cellSizePixels}
+                    width={grid.width * cellSizePixels}
                     className={`${className || ""}`}
                     style={{ position: "absolute", zIndex: 10, left: "50%", transform: "translate(-50%)"}}
                 ></canvas>
                 <canvas ref={gridCanvasRef}
                     id="grid-canvas"
-                    height={grid.height * cellSize}
-                    width={grid.width * cellSize}
+                    height={grid.height * cellSizePixels}
+                    width={grid.width * cellSizePixels}
                     className={`${className || ""}`}
                     style={{ position: "absolute", left: "50%", transform: "translate(-50%)" }}
                 ></canvas>

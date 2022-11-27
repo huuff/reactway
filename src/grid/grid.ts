@@ -6,6 +6,7 @@ import { GridStateWrapper } from "../game/use-grid";
 type GameGridProps = {
     grid: Grid,
     toggleCell: GridStateWrapper["toggleCell"],
+    cellSize: number,
 } & { className?: string };
 
 type Coordinates = Readonly<[x: number, y: number]>;

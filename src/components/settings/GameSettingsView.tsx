@@ -5,6 +5,8 @@ import { GridType } from "../../grid/grid";
 import { GameSettings, GameSettingsAction, GridViewType, NumberGameSetting } from "../../settings/settings";
 import { typedCapitalize } from "../../util/typed-capitalize";
 import { useNumberInput } from "../../util/use-number-input";
+import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 type GameSettingsViewProps = {
     settings: GameSettings,
@@ -13,7 +15,7 @@ type GameSettingsViewProps = {
 
 const DEBOUNCE_DELAY = 500;
 
-function useNumberSetting<T extends NumberGameSetting>(
+function useNumberSetting<T extends Exclude<NumberGameSetting, "cellSize">>(
     setting: T,
     settings: GameSettings,
     dispatch: React.Dispatch<GameSettingsAction>,
@@ -33,6 +35,7 @@ function useNumberSetting<T extends NumberGameSetting>(
     return input;
 }
 
+// TODO: Test it?
 const GameSettingsView = ({ settings, dispatchSettings, className }: GameSettingsViewProps) => {
     const heightInput = useNumberSetting("height", settings, dispatchSettings);
     const widthInput = useNumberSetting("width", settings, dispatchSettings);
@@ -45,6 +48,14 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
 
     const handleTypeSettingsChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
         dispatchSettings({ type: "setType", value: e.target.value as GridType });
+    }, [dispatchSettings]);
+
+    const dispatchIncreaseCellSize = useCallback(() => {
+        dispatchSettings({type: "changeCellSize", value: "increment"});
+    }, [dispatchSettings]);
+
+    const dispatchDecreaseCellSize = useCallback(() => {
+        dispatchSettings({ type: "changeCellSize", value: "decrement"});
     }, [dispatchSettings]);
 
     return (
@@ -128,6 +139,19 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                 />
             </div>
 
+            <div className="flex justify-around items-center">
+                <FontAwesomeIcon 
+                    icon={faMinus} 
+                    onClick={dispatchDecreaseCellSize} 
+                    className="h-4 hover:bg-slate-200"
+                />
+                <span>Cell size: { settings.cellSize }</span>
+                <FontAwesomeIcon 
+                    icon={faPlus}
+                    onClick={dispatchIncreaseCellSize} 
+                    className="h-4 hover:bg-slate-200"
+                />
+            </div>
 
         </div>
     )

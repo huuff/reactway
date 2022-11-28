@@ -2,7 +2,7 @@ import { RefObject, useEffect, useMemo, useRef } from "react";
 import { GameGridProps } from "../../grid/grid";
 import { useMouseState, useMouseEvents } from "beautiful-react-hooks";
 
-const CELL_SIZE_MULTIPLIER = 10;
+const CELL_SIZE_MULTIPLIER = 8;
 
 function getMouseCell(
     canvas: RefObject<HTMLCanvasElement>,

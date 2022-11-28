@@ -140,18 +140,21 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
             </div>
 
             <div className="flex justify-around">
-                <div className="w-1/4 hover:bg-slate-300 pt-1 rounded-md">
+                <div
+                    onClick={dispatchDecreaseCellSize}
+                    className="w-1/4 hover:bg-slate-300 pt-1 rounded-md">
                     <FontAwesomeIcon
                         icon={faMinus}
-                        onClick={dispatchDecreaseCellSize}
+                        
                         className="h-4 mx-auto"
                     />
                 </div>
                 <p className="w-1/2 text-center">Cell size: {settings.cellSize}</p>
-                <div className="w-1/4 hover:bg-slate-300 pt-1 rounded-md">
+                <div
+                    onClick={dispatchIncreaseCellSize}
+                    className="w-1/4 hover:bg-slate-300 pt-1 rounded-md">
                     <FontAwesomeIcon
                         icon={faPlus}
-                        onClick={dispatchIncreaseCellSize}
                         className="h-4 mx-auto"
                     />
                 </div>

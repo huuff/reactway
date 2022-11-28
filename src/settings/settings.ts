@@ -80,7 +80,7 @@ function getQueryParamSettingOrDefault<S extends keyof GameSettings>(
 
 type SettingsLimits = { [setting in NumberGameSetting]: number};
 
-const minimums: SettingsLimits = {
+const MINIMUMS: SettingsLimits = {
     height: 5,
     width: 5,
     birthFactor: 0,
@@ -88,11 +88,25 @@ const minimums: SettingsLimits = {
     cellSize: 1,
 }
 
-// TODO: Maximums and coerceAtMost
-// Returns the given value if it's over the minimum, or the minimum otherwise
-function coerceAtLeast(setting: keyof typeof minimums, value: number): number {
-    return value < minimums[setting] ? minimums[setting] : value;
+const MAXIMUMS: SettingsLimits = {
+    height: 500,
+    width: 500,
+    birthFactor: 1,
+    tickDuration: 10000,
+    cellSize: 10,
 }
+
+// Returns the value if it fits the bounds, or the bound (minimum or maximum) otherwise
+function coerceWithinBounds(setting: keyof SettingsLimits, value: number): number {
+    if (value < MINIMUMS[setting]) {
+        return MINIMUMS[setting];
+    } else if (value > MAXIMUMS[setting]) {
+        return MAXIMUMS[setting];
+    } else {
+        return value;
+    }
+}
+
 
 function useSettings(
     defaultSettings: GameSettings = globalDefaultSettings,
@@ -115,25 +129,25 @@ function useSettings(
 
         switch (action.type) {
             case "setHeight": {
-                const nextValue = coerceAtLeast("height", action.value);
+                const nextValue = coerceWithinBounds("height", action.value);
                 nextQueryParams = { ...router.query, height: nextValue.toString() };
                 setStoredSettings({ ...settings, ...storedSettings, height: nextValue });
                 break;
             }
             case "setWidth": {
-                const nextValue = coerceAtLeast("width", action.value);
+                const nextValue = coerceWithinBounds("width", action.value);
                 nextQueryParams = { ...router.query, width: nextValue.toString() };
                 setStoredSettings({ ...settings, ...storedSettings, width: nextValue });
                 break;
             }
             case "setBirthFactor": {
-                const nextValue = coerceAtLeast("birthFactor", action.value);
+                const nextValue = coerceWithinBounds("birthFactor", action.value);
                 nextQueryParams = { ...router.query, birthFactor: nextValue.toString() };
                 setStoredSettings({ ...settings, ...storedSettings, birthFactor: nextValue });
                 break;
             }
             case "setTickDuration": {
-                const nextValue = coerceAtLeast("tickDuration", action.value);
+                const nextValue = coerceWithinBounds("tickDuration", action.value);
                 nextQueryParams = { ...router.query, tickDuration: nextValue.toString() };
                 setStoredSettings({ ...storedSettings, ...settings, tickDuration: nextValue });
                 break;
@@ -151,13 +165,13 @@ function useSettings(
             case "changeCellSize": {
                 switch (action.value) {
                     case "increment": {
-                        const nextValue = coerceAtLeast("cellSize", settings.cellSize + 1);
+                        const nextValue = coerceWithinBounds("cellSize", settings.cellSize + 1);
                         nextQueryParams = { ...router.query, cellSize: nextValue.toString()};
                         setStoredSettings({ ...settings, ...storedSettings, cellSize: nextValue})
                         break;
                     }
                     case "decrement": {
-                        const nextValue = coerceAtLeast("cellSize", settings.cellSize - 1);
+                        const nextValue = coerceWithinBounds("cellSize", settings.cellSize - 1);
                         nextQueryParams = { ...router.query, cellSize: nextValue.toString()};
                         setStoredSettings({ ...settings, ...storedSettings, cellSize: nextValue})
                         break;

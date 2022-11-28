@@ -1,29 +1,27 @@
 import { Coordinates } from "../grid/grid";
 
-// TODO: Set size dynamically?
 // Cache to prevent creating too many strings
-const COORDINATES_TO_STRING_CACHE_SIZE = 200;
-const COORDINATES_TO_STRING_CACHE =
-    [... new Array(COORDINATES_TO_STRING_CACHE_SIZE)]
-        .map(() => new Array(COORDINATES_TO_STRING_CACHE_SIZE))
+const INITIAL_COORDINATES_TO_STRING_CACHE_SIZE = 100;
+let coordinatesToStringCache = createCoordinatesToStringCache(INITIAL_COORDINATES_TO_STRING_CACHE_SIZE);
+
+function createCoordinatesToStringCache(size: number): string[][] {
+    return [... new Array(size)].map(() => new Array(size));
+}
 
 const coordinatesToString = ([x, y]: Coordinates): string => {
-    if (
-        x < 0
-        || y < 0
-        || x > (COORDINATES_TO_STRING_CACHE_SIZE - 1)
-        || y > (COORDINATES_TO_STRING_CACHE_SIZE - 1)
-    ) {
+    if (x < 0 || y < 0) {
         return `(${x},${y})`;
+    } else if (x > coordinatesToStringCache.length - 1 || y > coordinatesToStringCache.length - 1) {
+        coordinatesToStringCache = createCoordinatesToStringCache(Math.max(x, y) + 1);
+    }
+
+    const cached = coordinatesToStringCache[y][x];
+    if (cached) {
+        return cached;
     } else {
-        const cached = COORDINATES_TO_STRING_CACHE[y][x];
-        if (cached) {
-            return cached;
-        } else {
-            const value = `(${x},${y})`;
-            COORDINATES_TO_STRING_CACHE[y][x] = value;
-            return value;
-        }
+        const value = `(${x},${y})`;
+        coordinatesToStringCache[y][x] = value;
+        return value;
     }
 };
 

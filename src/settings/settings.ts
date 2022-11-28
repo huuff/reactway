@@ -49,7 +49,7 @@ const globalDefaultSettings: GameSettings = {
     tickDuration: 1000,
     cellSize: 3,
     view: "canvas",
-    type: "array",
+    type: "set",
 };
 
 // XXX: Too many type assertions! I don't think there's a way around it

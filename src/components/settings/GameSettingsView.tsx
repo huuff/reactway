@@ -82,9 +82,9 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                     onChange={handleTypeSettingsChange}
                     value={settings.type}
                 >
+                    <option value="set">set</option>
                     <option value="array">array</option>
                     <option value="map">map</option>
-                    <option value="set">set</option>
                 </select>
             </div>
 
@@ -145,7 +145,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                     className="w-1/4 hover:bg-slate-300 pt-1 rounded-md">
                     <FontAwesomeIcon
                         icon={faMinus}
-                        
+
                         className="h-4 mx-auto"
                     />
                 </div>

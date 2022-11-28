@@ -11,7 +11,7 @@ exports[`CanvasGameGrid snapshot 1`] = `
 >
   <canvas
     className=""
-    height={NaN}
+    height={120}
     id="mouse-canvas"
     style={
       {
@@ -21,11 +21,11 @@ exports[`CanvasGameGrid snapshot 1`] = `
         "zIndex": 10,
       }
     }
-    width={NaN}
+    width={150}
   />
   <canvas
     className=""
-    height={NaN}
+    height={120}
     id="grid-canvas"
     style={
       {
@@ -34,7 +34,7 @@ exports[`CanvasGameGrid snapshot 1`] = `
         "transform": "translate(-50%)",
       }
     }
-    width={NaN}
+    width={150}
   />
 </div>
 `;

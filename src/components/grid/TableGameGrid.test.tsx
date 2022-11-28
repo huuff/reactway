@@ -8,7 +8,7 @@ import renderer from "react-test-renderer";
 const liveCells: Coordinates[] = [[2, 3], [2, 1], [3, 2], [3,3], [4, 2]];
 describe("TableGameGrid", () => {
     test("live cells are X", () => {
-        render(<TableGameGrid grid={new SetGrid(liveCells)} toggleCell={jest.fn()} />);
+        render(<TableGameGrid grid={new SetGrid(liveCells)} toggleCell={jest.fn()} cellSize={3}/>);
 
         for (const coord of liveCells) {
             expect(screen.getByTestId(coordinatesToString(coord))).toHaveClass("bg-black");
@@ -16,14 +16,14 @@ describe("TableGameGrid", () => {
     });
 
     test("dead cells are O", () => {
-        render(<TableGameGrid grid={new SetGrid(liveCells)} toggleCell={jest.fn()}/>);
+        render(<TableGameGrid grid={new SetGrid(liveCells)} toggleCell={jest.fn()} cellSize={3}/>);
 
         expect(screen.getByTestId(coordinatesToString([2, 2]))).toHaveClass("bg-white");
     });
 
     test("snapshot", () => {
         expect(renderer.create(
-            <TableGameGrid grid={new SetGrid(liveCells)} toggleCell={jest.fn()} />
+            <TableGameGrid grid={new SetGrid(liveCells)} toggleCell={jest.fn()} cellSize={3}/>
         ).toJSON()).toMatchSnapshot();
     });
 })

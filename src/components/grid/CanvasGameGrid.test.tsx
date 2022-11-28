@@ -7,7 +7,7 @@ const liveCells: Coordinates[] = [[2, 3], [2, 1], [3, 2], [3,3], [4, 2]];
 describe("CanvasGameGrid", () => {
     test("snapshot", () => {
         expect(renderer.create(
-            <CanvasGameGrid grid={new SetGrid(liveCells)} toggleCell={jest.fn()} />
+            <CanvasGameGrid grid={new SetGrid(liveCells)} toggleCell={jest.fn()} cellSize={3} />
         ).toJSON()).toMatchSnapshot();
     });
 });

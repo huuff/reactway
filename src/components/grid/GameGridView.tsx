@@ -1,10 +1,16 @@
 import { GameGridProps } from "../../grid/grid";
 import { GridViewType } from "../../settings/settings";
+import { Scroll } from "../../types/scroll";
 import AsciiGameGrid from "./AsciiGameGrid";
 import CanvasGameGrid from "./CanvasGameGrid";
 import TableGameGrid from "./TableGameGrid";
 
-const GameGridView = (props: (GameGridProps & { view: GridViewType})) => {
+type GameGridViewProps = GameGridProps & {
+    view: GridViewType;
+    scroll: Scroll;
+}
+
+const GameGridView = (props: GameGridViewProps) => {
     switch (props.view) {
         case "table":
             return <TableGameGrid {...props} className="mx-auto" />

@@ -1,8 +1,13 @@
 import { RefObject, useEffect, useMemo, useRef } from "react";
 import { GameGridProps } from "../../grid/grid";
 import { useMouseState, useMouseEvents } from "beautiful-react-hooks";
+import { Scroll } from "../../types/scroll";
 
 const CELL_SIZE_MULTIPLIER = 8;
+
+type CanvasGameGridProps = GameGridProps & {
+    scroll: Scroll;
+}
 
 function getMouseCell(
     canvas: RefObject<HTMLCanvasElement>,
@@ -20,7 +25,7 @@ function getMouseCell(
 }
 
 // TODO: Test it? Can I?
-const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps) => {
+const CanvasGameGrid = ({ grid, className, toggleCell, cellSize, scroll }: CanvasGameGridProps) => {
     const cellSizePixels = useMemo(() => CELL_SIZE_MULTIPLIER * cellSize, [cellSize]);
 
     const gridCanvasRef = useRef<HTMLCanvasElement>(null);

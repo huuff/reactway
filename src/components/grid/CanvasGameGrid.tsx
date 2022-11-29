@@ -4,6 +4,7 @@ import { useMouseState, useMouseEvents } from "beautiful-react-hooks";
 import { Scroll } from "../../types/scroll";
 import { useDebounce, useWindowSize } from "usehooks-ts";
 import { Box2D } from "../../util/box-2d";
+import { benchmark } from "../../util/benchmark-function";
 
 const CELL_SIZE_MULTIPLIER = 8;
 
@@ -66,6 +67,7 @@ const CanvasGameGrid = ({ grid, className, toggleCell, cellSize, scroll }: Canva
     );
 
     onMouseUp((event) => {
+        // TODO: I broke this! It's not working
         const [x, y] = [event.clientX, event.clientY];
         const [cellX, cellY] = getMouseCell(gridCanvasRef, x, y, cellSizePixels);
         toggleCell([cellX, cellY]);
@@ -75,25 +77,20 @@ const CanvasGameGrid = ({ grid, className, toggleCell, cellSize, scroll }: Canva
         const canvas = gridCanvasRef.current!;
 
         const ctx = canvas.getContext("2d")!;
-        ctx.clearRect(
-            visibleBounds.topLeft[0],
-            visibleBounds.topLeft[1],
-            visibleBounds.bottomRight[0],
-            visibleBounds.bottomRight[1]
-        );
-
-        // Paint the whole grid
-        ctx.fillStyle = "black";
-        for (const { coordinates: [x, y], isAlive } of grid) {
-            if (!visibleCellBounds.contains([x, y]))
-                continue;
-
-            if (isAlive) {
-                ctx.fillRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
-            } else {
-                ctx.strokeRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
-            }
-        };
+        benchmark("render", () => {
+            for (const { coordinates: [x, y], isAlive } of grid) {
+                if (!visibleCellBounds.contains([x, y]))
+                    continue;
+    
+                if (isAlive) {
+                    ctx.fillStyle = "black";
+                } else {
+                    ctx.fillStyle = "white";
+                    ctx.strokeRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
+                }
+                    ctx.fillRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
+            };
+        })
     }, [grid, cellSizePixels, visibleCellBounds])
 
 

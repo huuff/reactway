@@ -83,7 +83,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
             <ScrollContainer 
                 ref={scrollContainerRef as any /* I don't know why this is necessary */}
                 onScroll={onScroll}
-                className="max-h-screen overflow-scroll cursor-move scroll-smooth">
+                className="max-h-screen overflow-scroll cursor-move">
                 <NoSsr>
                     <GameGridView grid={grid}
                                   view={view} 

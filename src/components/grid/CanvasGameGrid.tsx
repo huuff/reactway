@@ -78,10 +78,7 @@ const CanvasGameGrid = ({ grid, className, toggleCell, cellSize, scroll }: Canva
 
         const ctx = canvas.getContext("2d")!;
         benchmark("render", () => {
-            for (const { coordinates: [x, y], isAlive } of grid) {
-                if (!visibleCellBounds.contains([x, y]))
-                    continue;
-    
+            for (const { coordinates: [x, y], isAlive } of grid.boundedIterator(visibleCellBounds)) {    
                 if (isAlive) {
                     ctx.fillStyle = "black";
                 } else {

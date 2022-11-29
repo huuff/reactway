@@ -1,6 +1,5 @@
 # Tasks
 * Rendering only the visible parts:
-  * Try to get a way to iterate only through the visible part of the grid
   * Do it for `TableGrid` too
   * Do it for `AsciiGrid` too
 * Hiding settings in a drawer

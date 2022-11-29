@@ -33,9 +33,16 @@ const CanvasGameGrid = ({ grid, className, toggleCell, cellSize, scroll }: Canva
 
     const gridCanvasRef = useRef<HTMLCanvasElement>(null);
 
-    const mouseCanvasRef = useRef<HTMLCanvasElement>(null);
-    const { clientX, clientY } = useMouseState(mouseCanvasRef);
-    const { onMouseUp } = useMouseEvents(mouseCanvasRef);
+    const { clientX, clientY } = useMouseState(gridCanvasRef);
+    const [clientCellX, clientCellY] = useMemo(() => {
+        if (gridCanvasRef.current) {
+            const [cellX, cellY] = getMouseCell(gridCanvasRef, clientX, clientY, cellSizePixels);
+            return [cellX * cellSizePixels, cellY * cellSizePixels];
+        } else {
+            return [0, 0];
+        }
+    }, [gridCanvasRef, clientX, clientY, cellSize] );
+
 
     const windowSize = useWindowSize();
     const gridSizePixels = useMemo(() => ({
@@ -43,65 +50,35 @@ const CanvasGameGrid = ({ grid, className, toggleCell, cellSize, scroll }: Canva
         height: grid.height * cellSizePixels,
     }), [grid.height, grid.width, cellSizePixels]);
     const gridCanvasStyle = useMemo(() => ({
-        position: "absolute" as const, 
+        position: "absolute" as const,
         left: gridSizePixels.width < windowSize.width ? "50%" : undefined,
         transform: gridSizePixels.width < windowSize.width ? "translate(-50%)" : undefined,
     }), [gridSizePixels, windowSize]);
 
+    const { onMouseUp } = useMouseEvents(gridCanvasRef);
     const visibleBounds = useDebounce(useMemo<Box2D>(() => new Box2D(
-        [scroll.left - windowSize.width, scroll.top - windowSize.height ],
+        [scroll.left - windowSize.width, scroll.top - windowSize.height],
         [scroll.left + windowSize.width * 2, scroll.top + windowSize.height * 2],
     ), [windowSize, scroll, cellSizePixels]), 250);
     const visibleCellBounds = useMemo<Box2D>(
-        () =>  visibleBounds.divide(cellSizePixels), 
+        () => visibleBounds.divide(cellSizePixels),
         [visibleBounds, cellSizePixels]
     );
 
     onMouseUp((event) => {
         const [x, y] = [event.clientX, event.clientY];
-        const [cellX, cellY] = getMouseCell(mouseCanvasRef, x, y, cellSizePixels);
+        const [cellX, cellY] = getMouseCell(gridCanvasRef, x, y, cellSizePixels);
         toggleCell([cellX, cellY]);
     });
-
-    useEffect(() => {
-        const canvas = mouseCanvasRef.current!;
-
-        const ctx = canvas.getContext("2d")!;
-        ctx.clearRect(
-            visibleBounds.topLeft[0], 
-            visibleBounds.topLeft[1], 
-            visibleBounds.bottomRight[0], 
-            visibleBounds.bottomRight[1]
-        );
-
-        // Paint the hovered cell
-        const [mouseCellX, mouseCellY] = getMouseCell(gridCanvasRef, clientX, clientY, cellSizePixels);
-        if (!grid.contains(mouseCellX, mouseCellY)) {
-            return;
-        }
-
-        if (grid.get(mouseCellX, mouseCellY)) {
-            ctx.fillStyle = "#800000";
-        } else {
-            ctx.fillStyle = "#ff4d4d";
-        }
-        ctx.fillRect(
-            mouseCellX * cellSizePixels,
-            mouseCellY * cellSizePixels,
-            cellSizePixels,
-            cellSizePixels
-        );
-
-    }, [grid, clientX, clientY, visibleCellBounds]);
 
     useEffect(() => {
         const canvas = gridCanvasRef.current!;
 
         const ctx = canvas.getContext("2d")!;
         ctx.clearRect(
-            visibleBounds.topLeft[0], 
-            visibleBounds.topLeft[1], 
-            visibleBounds.bottomRight[0], 
+            visibleBounds.topLeft[0],
+            visibleBounds.topLeft[1],
+            visibleBounds.bottomRight[0],
             visibleBounds.bottomRight[1]
         );
 
@@ -122,13 +99,16 @@ const CanvasGameGrid = ({ grid, className, toggleCell, cellSize, scroll }: Canva
 
     return (
         <div style={{ position: "relative", height: "100vh" }}>
-            <canvas ref={mouseCanvasRef}
-                id="mouse-canvas"
-                height={gridSizePixels.height}
-                width={gridSizePixels.width}
-                className={`${className || ""}`}
-                style={{ ...gridCanvasStyle, zIndex: 10 }}
-            ></canvas>
+            <div style={{
+                position: "absolute",
+                height: `${cellSizePixels}px`,
+                width: `${cellSizePixels}px`,
+                backgroundColor: "red",
+                top: clientCellY,
+                left: clientCellX,
+                zIndex: 10,
+                opacity: 0.5
+            }} />
             <canvas ref={gridCanvasRef}
                 id="grid-canvas"
                 height={gridSizePixels.height}

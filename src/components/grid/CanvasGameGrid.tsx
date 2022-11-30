@@ -16,7 +16,7 @@ function getMouseCell(
     cellSize: number,
 ): [number, number] {
     const boundingRect = canvas.current!.getBoundingClientRect();
-    const [x, y]: [number, number] = [clientX - boundingRect.left, clientY - boundingRect.top]
+    const [x, y]: [number, number] = [clientX - (boundingRect.left < 0 ? boundingRect.left : 0), clientY - boundingRect.top]
 
     return [
         (x - (x % cellSize)) / cellSize,
@@ -43,10 +43,6 @@ const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: CanvasGameGri
 
     const { width: windowWidth, height: windowHeight, scrollX, scrollY } = useViewportState();
 
-    useEffect(() => {
-        console.log(`width: ${windowWidth}, height: ${windowHeight}, scrollX: ${scrollX}, scrollY: ${scrollY}`);
-    }, [windowWidth, windowHeight, scrollX, scrollY]);
-
     const gridSizePixels = useMemo(() => ({
         width: grid.width * cellSizePixels,
         height: grid.height * cellSizePixels,
@@ -59,12 +55,12 @@ const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: CanvasGameGri
 
     const visibleBounds = useDebounce(useMemo<Box2D>(() => new Box2D(
         [
-            Math.max(scrollX - (windowWidth/2), 0), 
-            Math.max(scrollY - (windowHeight/2), 0)
+            Math.max(scrollX - (windowWidth), 0), 
+            Math.max(scrollY - (windowHeight), 0)
         ],
         [
-            Math.min(scrollX + (windowWidth * 1.5), gridSizePixels.width),
-            Math.min(scrollY + (windowHeight * 1.5), gridSizePixels.height),
+            Math.min(scrollX + (windowWidth * 2), gridSizePixels.width),
+            Math.min(scrollY + (windowHeight * 2), gridSizePixels.height),
         ],
     ), [windowHeight, windowWidth, scrollX, scrollY, cellSizePixels, gridSizePixels]), 250);
     const visibleCellBounds = useMemo<Box2D>(
@@ -75,7 +71,9 @@ const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: CanvasGameGri
     const onMouseUp: MouseEventHandler<HTMLDivElement> = (event) => {
         const [x, y] = [event.clientX, event.clientY];
         const [cellX, cellY] = getMouseCell(gridCanvasRef, x, y, cellSizePixels);
-        toggleCell([cellX, cellY]);
+        if (grid.contains(cellX, cellY)) {
+            toggleCell([cellX, cellY]);
+        }
     };
 
     useEffect(() => {
@@ -83,7 +81,6 @@ const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: CanvasGameGri
 
         const ctx = canvas.getContext("2d")!;
         benchmark("render", () => {
-           // console.log(`Visible cell bounds: ${JSON.stringify(visibleCellBounds)}`)
             for (const { coordinates: [x, y], isAlive } of grid.boundedIterator(visibleCellBounds)) {
                 if (isAlive) {
                     ctx.fillStyle = "black";
@@ -107,7 +104,8 @@ const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: CanvasGameGri
                 top: clientCellY,
                 left: clientCellX,
                 zIndex: 10,
-                opacity: 0.5
+                opacity: 0.5,
+                
             }} />
             <canvas ref={gridCanvasRef}
                 id="grid-canvas"

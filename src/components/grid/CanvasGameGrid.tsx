@@ -1,6 +1,6 @@
-import { RefObject, useEffect, useMemo, useRef } from "react";
+import { MouseEventHandler, RefObject, useEffect, useMemo, useRef } from "react";
 import { GameGridProps } from "../../grid/grid";
-import { useMouseState, useMouseEvents } from "beautiful-react-hooks";
+import { useMouseState } from "beautiful-react-hooks";
 import { Scroll } from "../../types/scroll";
 import { useDebounce, useWindowSize } from "usehooks-ts";
 import { Box2D } from "../../util/box-2d";
@@ -42,7 +42,7 @@ const CanvasGameGrid = ({ grid, className, toggleCell, cellSize, scroll }: Canva
         } else {
             return [0, 0];
         }
-    }, [gridCanvasRef, clientX, clientY, cellSize] );
+    }, [gridCanvasRef, clientX, clientY, cellSize, cellSizePixels]);
 
 
     const windowSize = useWindowSize();
@@ -56,43 +56,48 @@ const CanvasGameGrid = ({ grid, className, toggleCell, cellSize, scroll }: Canva
         transform: gridSizePixels.width < windowSize.width ? "translate(-50%)" : undefined,
     }), [gridSizePixels, windowSize]);
 
-    const { onMouseUp } = useMouseEvents(gridCanvasRef);
     const visibleBounds = useDebounce(useMemo<Box2D>(() => new Box2D(
-        [scroll.left - windowSize.width, scroll.top - windowSize.height],
-        [scroll.left + windowSize.width * 2, scroll.top + windowSize.height * 2],
-    ), [windowSize, scroll, cellSizePixels]), 250);
+        [
+            Math.max(scroll.left - (windowSize.width/2), 0), 
+            Math.max(scroll.top - (windowSize.height/2), 0)
+        ],
+        [
+            Math.min(scroll.left + (windowSize.width * 1.5), gridSizePixels.width),
+            Math.min(scroll.top + (windowSize.height * 1.5), gridSizePixels.height),
+        ],
+    ), [windowSize, scroll, cellSizePixels, gridSizePixels]), 250);
     const visibleCellBounds = useMemo<Box2D>(
         () => visibleBounds.divide(cellSizePixels),
         [visibleBounds, cellSizePixels]
     );
 
-    onMouseUp((event) => {
-        // TODO: I broke this! It's not working
+    const onMouseUp: MouseEventHandler<HTMLDivElement> = (event) => {
         const [x, y] = [event.clientX, event.clientY];
         const [cellX, cellY] = getMouseCell(gridCanvasRef, x, y, cellSizePixels);
         toggleCell([cellX, cellY]);
-    });
+    };
 
     useEffect(() => {
         const canvas = gridCanvasRef.current!;
 
         const ctx = canvas.getContext("2d")!;
         benchmark("render", () => {
-            for (const { coordinates: [x, y], isAlive } of grid.boundedIterator(visibleCellBounds)) {    
+           // console.log(`Visible cell bounds: ${JSON.stringify(visibleCellBounds)}`)
+            for (const { coordinates: [x, y], isAlive } of grid.boundedIterator(visibleCellBounds)) {
                 if (isAlive) {
                     ctx.fillStyle = "black";
                 } else {
                     ctx.fillStyle = "white";
                     ctx.strokeRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
                 }
-                    ctx.fillRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
+                ctx.fillRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
             };
         })
     }, [grid, cellSizePixels, visibleCellBounds])
 
 
     return (
-        <div style={{ position: "relative", height: "100vh" }}>
+        <div style={{ position: "relative", height: "100vh" }} onMouseUp={onMouseUp} >
             <div style={{
                 position: "absolute",
                 height: `${cellSizePixels}px`,

@@ -69,7 +69,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
         })
     }
 
-    const [ scroll, setScroll] = useState<Scroll>({left: 0, top: 0})
+    const [ scroll, setScroll ] = useState<Scroll>({left: 0, top: 0})
     const scrollContainerRef = useRef<HTMLElement>(null);
     const onScroll = useThrottledCallback(() => {
         setScroll({

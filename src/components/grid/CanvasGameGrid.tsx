@@ -1,16 +1,13 @@
 import { MouseEventHandler, RefObject, useEffect, useMemo, useRef } from "react";
 import { GameGridProps } from "../../grid/grid";
-import { useMouseState } from "beautiful-react-hooks";
-import { Scroll } from "../../types/scroll";
-import { useDebounce, useWindowSize } from "usehooks-ts";
+import { useMouseState, useViewportState } from "beautiful-react-hooks";
+import { useDebounce } from "usehooks-ts";
 import { Box2D } from "../../util/box-2d";
 import { benchmark } from "../../util/benchmark-function";
 
 const CELL_SIZE_MULTIPLIER = 8;
 
-type CanvasGameGridProps = GameGridProps & {
-    scroll: Scroll;
-}
+type CanvasGameGridProps = GameGridProps;
 
 function getMouseCell(
     canvas: RefObject<HTMLCanvasElement>,
@@ -29,7 +26,7 @@ function getMouseCell(
 
 // TODO: Test it? Can I?
 // TODO: Split this in some separate hooks
-const CanvasGameGrid = ({ grid, className, toggleCell, cellSize, scroll }: CanvasGameGridProps) => {
+const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: CanvasGameGridProps) => {
     const cellSizePixels = useMemo(() => CELL_SIZE_MULTIPLIER * cellSize, [cellSize]);
 
     const gridCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -44,28 +41,32 @@ const CanvasGameGrid = ({ grid, className, toggleCell, cellSize, scroll }: Canva
         }
     }, [gridCanvasRef, clientX, clientY, cellSize, cellSizePixels]);
 
+    const { width: windowWidth, height: windowHeight, scrollX, scrollY } = useViewportState();
 
-    const windowSize = useWindowSize();
+    useEffect(() => {
+        console.log(`width: ${windowWidth}, height: ${windowHeight}, scrollX: ${scrollX}, scrollY: ${scrollY}`);
+    }, [windowWidth, windowHeight, scrollX, scrollY]);
+
     const gridSizePixels = useMemo(() => ({
         width: grid.width * cellSizePixels,
         height: grid.height * cellSizePixels,
     }), [grid.height, grid.width, cellSizePixels]);
     const gridCanvasStyle = useMemo(() => ({
         position: "absolute" as const,
-        left: gridSizePixels.width < windowSize.width ? "50%" : undefined,
-        transform: gridSizePixels.width < windowSize.width ? "translate(-50%)" : undefined,
-    }), [gridSizePixels, windowSize]);
+        left: gridSizePixels.width < windowWidth ? "50%" : undefined,
+        transform: gridSizePixels.width < windowWidth ? "translate(-50%)" : undefined,
+    }), [gridSizePixels, windowWidth]);
 
     const visibleBounds = useDebounce(useMemo<Box2D>(() => new Box2D(
         [
-            Math.max(scroll.left - (windowSize.width/2), 0), 
-            Math.max(scroll.top - (windowSize.height/2), 0)
+            Math.max(scrollX - (windowWidth/2), 0), 
+            Math.max(scrollY - (windowHeight/2), 0)
         ],
         [
-            Math.min(scroll.left + (windowSize.width * 1.5), gridSizePixels.width),
-            Math.min(scroll.top + (windowSize.height * 1.5), gridSizePixels.height),
+            Math.min(scrollX + (windowWidth * 1.5), gridSizePixels.width),
+            Math.min(scrollY + (windowHeight * 1.5), gridSizePixels.height),
         ],
-    ), [windowSize, scroll, cellSizePixels, gridSizePixels]), 250);
+    ), [windowHeight, windowWidth, scrollX, scrollY, cellSizePixels, gridSizePixels]), 250);
     const visibleCellBounds = useMemo<Box2D>(
         () => visibleBounds.divide(cellSizePixels),
         [visibleBounds, cellSizePixels]

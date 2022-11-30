@@ -1,5 +1,5 @@
 import "tailwindcss/tailwind.css";
-import { useEffect, useRef, useState, WheelEvent } from "react";
+import { useEffect, WheelEvent } from "react";
 import GameSettingsView from "../src/components/settings/GameSettingsView";
 import { defaultSettings, useSettings } from "../src/settings/settings";
 import { useInterval } from "usehooks-ts";
@@ -13,9 +13,7 @@ import PlayBar from "../src/components/settings/PlayBar";
 import { useGrid } from "../src/game/use-grid";
 import { usePlayback } from "../src/settings/use-playback";
 import GameGridView from "../src/components/grid/GameGridView";
-import ScrollContainer from "react-indiana-drag-scroll";
 import { useThrottledCallback } from "beautiful-react-hooks";
-import { Scroll } from "../src/types/scroll";
 
 type GameProps = {
     readonly seed: string;
@@ -69,33 +67,20 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
         })
     }
 
-    const [ scroll, setScroll ] = useState<Scroll>({left: 0, top: 0})
-    const scrollContainerRef = useRef<HTMLElement>(null);
-    const onScroll = useThrottledCallback(() => {
-        setScroll({
-            left: scrollContainerRef.current?.scrollLeft || 0,
-            top: scrollContainerRef.current?.scrollTop || 0,
-        });
-    }, [setScroll]);
-
     return (
         <div onWheel={wheelHandler}>
-            <ScrollContainer 
-                ref={scrollContainerRef as any /* I don't know why this is necessary */}
-                onScroll={onScroll}
-                className="max-h-screen overflow-scroll cursor-move">
+            <div className="cursor-move">
                 <NoSsr>
                     <GameGridView grid={grid}
                                   view={view} 
-                                  scroll={scroll}
                                   cellSize={cellSize}
                                   toggleCell={toggleCell}
                                   />
                 </NoSsr>
-            </ScrollContainer>
+            </div>
 
             <div className="
-                absolute
+                fixed
                 bottom-0 
                 inset-x-0 
                 mx-auto 

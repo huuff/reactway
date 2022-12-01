@@ -3,6 +3,7 @@ import { GameGridProps } from "../../grid/grid";
 import classNames from "classnames";
 import { coordinatesToString } from "../../util/coordinates-to-string";
 import { useMemo } from "react";
+import tuple from "immutable-tuple";
 
 const CELL_SIZE_MULTIPLIER = 2;
 
@@ -19,12 +20,12 @@ const TableGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps)
                     <tr key={`row-${y}`}>
                         {
                             [...Array(grid.width)].map((_, x) => {
-                                const coord = coordinatesToString([x, y]);
+                                const coord = coordinatesToString(tuple(x, y));
                                 return (
                                     <td
                                         key={coord}
                                         data-testid={coord}
-                                        onClick={() => toggleCell([x, y])}
+                                        onClick={() => toggleCell(tuple(x, y))}
                                         className={classNames(
                                             sizeClasses,
                                             "border",

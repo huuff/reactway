@@ -1,5 +1,7 @@
 declare module "immutable-tuple" {
-  function tuple(t1: number, t2: number): [number, number];
+  export type Tuple = import("type-fest").Opaque<[number, number]>;
 
-  export default tuple;
+  export default function tuple(t1: number, t2: number): Tuple;
+
+
 }

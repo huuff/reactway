@@ -4,6 +4,7 @@ import { useMouseState, useViewportState } from "beautiful-react-hooks";
 import { useDebounce } from "usehooks-ts";
 import { Box2D } from "../../util/box-2d";
 import { benchmark } from "../../util/benchmark-function";
+import tuple from "immutable-tuple";
 
 const CELL_SIZE_MULTIPLIER = 8;
 
@@ -54,14 +55,14 @@ const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: CanvasGameGri
     }), [gridSizePixels, windowWidth]);
 
     const visibleBounds = useDebounce(useMemo<Box2D>(() => new Box2D(
-        [
+        tuple(
             Math.max(scrollX - (windowWidth), 0), 
             Math.max(scrollY - (windowHeight), 0)
-        ],
-        [
+        ),
+        tuple(
             Math.min(scrollX + (windowWidth * 2), gridSizePixels.width),
             Math.min(scrollY + (windowHeight * 2), gridSizePixels.height),
-        ],
+        ),
     ), [windowHeight, windowWidth, scrollX, scrollY, cellSizePixels, gridSizePixels]), 250);
     const visibleCellBounds = useMemo<Box2D>(
         () => visibleBounds.divide(cellSizePixels),
@@ -72,7 +73,7 @@ const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: CanvasGameGri
         const [x, y] = [event.clientX, event.clientY];
         const [cellX, cellY] = getMouseCell(gridCanvasRef, x, y, cellSizePixels);
         if (grid.contains(cellX, cellY)) {
-            toggleCell([cellX, cellY]);
+            toggleCell(tuple(cellX, cellY));
         }
     };
 

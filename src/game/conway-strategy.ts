@@ -3,8 +3,8 @@ import { Grid, Coordinates } from "../grid/grid";
 type ConwayStrategy = (grid: Grid, coordinates: Coordinates) => boolean;
 
 const defaultConwayStrategy: ConwayStrategy = (grid: Grid, coordinates: Coordinates): boolean => {
-    const currentState = grid.get(...coordinates);
-    const liveNeighbours = grid.liveNeighbours(...coordinates);
+    const currentState = grid.get(coordinates[0], coordinates[1]);
+    const liveNeighbours = grid.liveNeighbours(coordinates[0], coordinates[1]);
 
     if (currentState) { // Cell is alive
         return liveNeighbours === 2 || liveNeighbours === 3;

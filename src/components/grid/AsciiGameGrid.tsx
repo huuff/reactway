@@ -2,6 +2,7 @@
 import { GameGridProps } from "../../grid/grid";
 import { Fragment, useMemo } from "react";
 import { coordinatesToString } from "../../util/coordinates-to-string";
+import tuple from "immutable-tuple";
 
 const AsciiGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps) => {
     const sizeClass = useMemo(() => {
@@ -25,13 +26,13 @@ const AsciiGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps)
                 <Fragment key={`row-${y}`}>
                     {
                         [...Array(grid.width)].map((_, x) => {
-                            const coord = coordinatesToString([x, y]);
+                            const coord = coordinatesToString(tuple(x, y));
                             return (
                                 <span
                                     key={coord}
                                     data-testid={coord}
                                     className="mx-1 hover:bg-red-400"
-                                    onClick={() => toggleCell([x, y])}
+                                    onClick={() => toggleCell(tuple(x, y))}
                                 >
                                     {grid.get(x, y) ? "X" : "O"}
                                 </span>

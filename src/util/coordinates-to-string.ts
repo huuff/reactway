@@ -1,3 +1,4 @@
+import tuple from "immutable-tuple";
 import { Coordinates } from "../grid/grid";
 
 const coordinatesToString = ([x, y]: Coordinates): string => {
@@ -12,7 +13,7 @@ function stringToCoordinates(string: string): Coordinates {
         throw new Error(`String ${string} is not a coordinate`);
 
 
-    return [+match[1], +match[2]];
+    return tuple(+match[1], +match[2]);
 }
 
 export { coordinatesToString, stringToCoordinates };

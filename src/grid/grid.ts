@@ -3,7 +3,7 @@ import { ConwayStrategy } from "../game/conway-strategy";
 import { iterateCoordinates } from "../util/iterate-coordinates";
 import { GridStateWrapper } from "../game/use-grid";
 import { Box2D } from "../util/box-2d";
-import tuple from "immutable-tuple";
+import tuple, {Tuple} from "immutable-tuple";
 
 type GameGridProps = {
     grid: Grid,
@@ -11,7 +11,7 @@ type GameGridProps = {
     cellSize: number,
 } & { className?: string };
 
-type Coordinates = Readonly<[x: number, y: number]>;
+type Coordinates = Tuple;
 
 type GridCreationSettings = {
     readonly height: number;

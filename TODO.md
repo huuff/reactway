@@ -1,6 +1,8 @@
 # Tasks
+* Try to make it so I don't need that `NoSsr` stuff... I think it comes from using `LocalStorage`?
+* Fix warnings
+* Now that I have a tuple nominal type, maybe I should change all the grid methods that take separate x and y to take just `Coordinates`
 * Add back drag scroll
-* Can I somehow make `tuple` return a nominal type instead of a tuple type? This way I can prevent anyone from using non-internalized tuples anywhere
 * Rendering only the visible parts:
   * Do it for `TableGrid` too
   * Do it for `AsciiGrid` too

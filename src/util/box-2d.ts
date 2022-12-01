@@ -1,3 +1,4 @@
+import tuple from "immutable-tuple";
 import { Coordinates } from "../grid/grid";
 
 class Box2D {
@@ -18,8 +19,8 @@ class Box2D {
 
     // TODO: Test
     divide = (divisor: number) => new Box2D(
-        [Math.floor(this.topLeft[0] / divisor), Math.floor(this.topLeft[1] / divisor) ],
-        [Math.ceil(this.bottomRight[0] / divisor), Math.ceil(this.bottomRight[1] / divisor) ],
+        tuple(Math.floor(this.topLeft[0] / divisor), Math.floor(this.topLeft[1] / divisor)),
+        tuple(Math.ceil(this.bottomRight[0] / divisor), Math.ceil(this.bottomRight[1] / divisor)),
     )
 
 }

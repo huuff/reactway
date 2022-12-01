@@ -1,9 +1,10 @@
 
+import tuple from "immutable-tuple";
 import { Coordinates } from "./grid";
 import { SetGrid } from "./set-grid";
 
 // Test for the default methods of Grid
-const grid = new SetGrid([[2, 3], [2, 1], [3, 2], [3,3], [4, 2]]);
+const grid = new SetGrid([tuple(2, 3), tuple(2, 1), tuple(3, 2), tuple(3,3), tuple(4, 2)]);
 describe("Grid", () => {
   test("neighbours", () => {
     // ACT
@@ -12,14 +13,14 @@ describe("Grid", () => {
     // ASSERT
     // sorting to ignore order
     expect(neighbours.sort()).toEqual([
-      [1, 2],
-      [3, 2],
-      [2, 1],
-      [2, 3],
-      [1, 3],
-      [1, 1],
-      [3, 3],
-      [3, 1],
+      tuple(1, 2),
+      tuple(3, 2),
+      tuple(2, 1),
+      tuple(2, 3),
+      tuple(1, 3),
+      tuple(1, 1),
+      tuple(3, 3),
+      tuple(3, 1),
     ].sort());
   });
 
@@ -39,19 +40,19 @@ describe("Grid", () => {
   })
 
   test("equals", () => {
-    expect(new SetGrid([[1, 1], [2, 2], [3, 2], [2, 3]])
-      .equals(new SetGrid([[1, 1], [2, 2], [3, 2], [2, 3]])))
+    expect(new SetGrid([tuple(1, 1), tuple(2, 2), tuple(3, 2), tuple(2, 3)])
+      .equals(new SetGrid([tuple(1, 1), tuple(2, 2), tuple(3, 2), tuple(2, 3)])))
       .toBe(true)
   });
 
   test("iterator", () => {
     // ARRANGE
-    const grid = new SetGrid(new Set<Readonly<Coordinates>>([[0,0], [1,1]]), 2, 2)
+    const grid = new SetGrid(new Set<Readonly<Coordinates>>([tuple(0,0), tuple(1,1)]), 2, 2)
     const iteratedCells: Coordinates[] = [];
 
     // ACT
     for (const { coordinates: [x, y], isAlive } of grid) {
-        iteratedCells.push([x, y]);
+        iteratedCells.push(tuple(x, y));
         if ((x == 0 && y == 0) || ( x == 1 && y == 1)) {
           expect(isAlive).toBe(true);
         } else {
@@ -61,7 +62,7 @@ describe("Grid", () => {
 
     // ASSERT
     expect(iteratedCells)
-      .toEqual([ [0,0], [1,0], [0,1], [1,1]])
+      .toEqual([tuple(0,0), tuple(1,0), tuple(0,1), tuple(1,1)])
 
   });
 

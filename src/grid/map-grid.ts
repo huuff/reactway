@@ -1,20 +1,20 @@
 import seedrandom from "seedrandom";
 import { ConwayStrategy } from "../game/conway-strategy";
-import { Grid, GridCreationSettings, CreateGrid } from "./grid";
+import { Grid, GridCreationSettings, CreateGrid, Coordinates } from "./grid";
 import { range } from "lodash";
 import { shouldBeBornAlive } from "../util/birth-function";
 import wu from "wu";
-import { coordinatesToString, stringToCoordinates } from "../util/coordinates-to-string";
+import tuple from "immutable-tuple";
 
 
-function createInternalGrid(settings: GridCreationSettings): Map<string, boolean> {
+function createInternalGrid(settings: GridCreationSettings): Map<Coordinates, boolean> {
     const random = seedrandom(settings.seed);
-    const internalGrid = new Map<string, boolean>();
+    const internalGrid = new Map<Coordinates, boolean>();
 
     for (const y of range(0, settings.height)) {
         for (const x of range(0, settings.width)) {
             const alive = shouldBeBornAlive(random, settings.birthFactor);
-            internalGrid.set(coordinatesToString([x, y]), alive);
+            internalGrid.set(tuple(x, y), alive);
         }
     }
 
@@ -22,22 +22,20 @@ function createInternalGrid(settings: GridCreationSettings): Map<string, boolean
 }
 
 class MapGrid extends Grid {
-    private readonly internalGrid: Readonly<Map<string, boolean>>
+    private readonly internalGrid: Readonly<Map<Coordinates, boolean>>
 
     public readonly type = "map";
 
     public readonly height: number;
     public readonly width: number;
 
-    private constructor(internalGrid: Map<string, boolean>) {
+    private constructor(internalGrid: Map<Coordinates, boolean>) {
         super();
         this.internalGrid = internalGrid;
         this.height = wu(internalGrid.keys())
-            .map(key => stringToCoordinates(key))
             .map(([_, y]) => y)
             .reduce(Math.max, 0) + 1;
         this.width = wu(internalGrid.keys())
-            .map(key => stringToCoordinates(key))
             .map(([x, _]) => x)
             .reduce(Math.max, 0) + 1;
     }
@@ -47,7 +45,7 @@ class MapGrid extends Grid {
     }
 
     get(x: number, y: number): boolean {
-        return this.internalGrid.get(coordinatesToString([x, y]))!;
+        return this.internalGrid.get(tuple(x, y))!;
     }
     tick(strategy: ConwayStrategy): MapGrid {
         // New grid with birthFactor 0, so it's empty
@@ -59,18 +57,18 @@ class MapGrid extends Grid {
         })
 
         for (const coordinates of this.internalGrid.keys()) {
-            newGrid.set(coordinates, strategy(this, stringToCoordinates(coordinates)))
+            newGrid.set(coordinates, strategy(this, coordinates))
         }
 
         return new MapGrid(newGrid);
     }
 
     toggle(x: number, y: number): MapGrid {
-        const targetCoordinatesAsString = coordinatesToString([x, y]);
-        const newInternalGrid = new Map<string, boolean>();
+        const targetCoordinates = tuple(x, y);
+        const newInternalGrid = new Map<Coordinates, boolean>();
 
         for (const coordinates of this.internalGrid.keys()) {
-            if (coordinates !== targetCoordinatesAsString) {
+            if (coordinates !== targetCoordinates) {
                 newInternalGrid.set(coordinates, this.internalGrid.get(coordinates)!)
             } else {
                 newInternalGrid.set(coordinates, !this.internalGrid.get(coordinates))

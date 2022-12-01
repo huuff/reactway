@@ -1,3 +1,4 @@
+import tuple from "immutable-tuple";
 import { range } from "lodash";
 import { Coordinates } from "../grid/grid";
 
@@ -8,7 +9,7 @@ function iterateCoordinates(
 ) {
     for (const y of range(0, height)) {
         for (const x of range(0, width)) {
-            f([x, y]);
+            f(tuple(x, y));
         }
     }
 }

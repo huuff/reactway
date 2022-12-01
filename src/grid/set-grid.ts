@@ -3,13 +3,13 @@ import seedrandom from "seedrandom";
 import wu from "wu";
 import { ConwayStrategy } from "../game/conway-strategy";
 import { shouldBeBornAlive } from "../util/birth-function";
-import { coordinatesToString, stringToCoordinates } from "../util/coordinates-to-string";
 import { Coordinates, CreateGrid, Grid, GridCreationSettings, GridType } from "./grid";
 import { iterateCoordinates } from "../util/iterate-coordinates";
+import tuple from "immutable-tuple";
 
 class SetGrid extends Grid {
      // Holds serialized coordinates so as to have decent equality semantics
-    private readonly set: Readonly<Set<string>>;
+    private readonly set: Readonly<Set<Coordinates>>;
 
     public readonly type: GridType = "set";
     public readonly height: number;
@@ -31,7 +31,7 @@ class SetGrid extends Grid {
         }
         this.height = height ?? (_(actualTuples).map(([_, y]) => y).max() ?? 0) + 1;
         this.width = width ?? (_(actualTuples).map(([x, _]) => x).max() ?? 0) + 1;
-        this.set = new Set(actualTuples.map(coordinatesToString));
+        this.set = new Set(actualTuples);
     }
 
     static create: CreateGrid = ({
@@ -45,7 +45,7 @@ class SetGrid extends Grid {
 
         iterateCoordinates(height, width, ([x, y]) => {
             if (shouldBeBornAlive(random, birthFactor)) {
-                tuples.push([x, y]);
+                tuples.push(tuple(x, y));
             }
         })
 
@@ -53,7 +53,8 @@ class SetGrid extends Grid {
     }
 
     get(x: number, y: number): boolean {
-        return this.set.has(coordinatesToString([x, y]));
+        const result = this.set.has(tuple(x, y));
+        return result;
     }
 
     tick(strategy: ConwayStrategy): SetGrid {
@@ -70,13 +71,13 @@ class SetGrid extends Grid {
     toggle(x: number, y: number): SetGrid {
         const newSet = new Set(this.set);
         if (this.get(x, y)) {
-            newSet.delete(coordinatesToString([x, y]));
+            newSet.delete(tuple(x, y));
         } else {
-            newSet.add(coordinatesToString([x ,y]));
+            newSet.add(tuple(x, y));
         }
 
         return new SetGrid(
-            wu(newSet.values()).map(stringToCoordinates).toArray(),
+            newSet,
             this.height,
             this.width,
         )

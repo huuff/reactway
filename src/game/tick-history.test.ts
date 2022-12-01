@@ -1,10 +1,11 @@
 import { renderHook, act } from "@testing-library/react";
+import tuple from "immutable-tuple";
 import { useReducer } from "react";
 import { SetGrid } from "../grid/set-grid";
 import { defaultConwayStrategy } from "./conway-strategy";
 import { historyReducer, newDefaultTickHistory } from "./tick-history";
 
-const initialGrid = new SetGrid([[1, 1], [2, 2]], 2, 2);
+const initialGrid = new SetGrid([tuple(1, 1), tuple(2, 2)], 2, 2);
 describe("TickHistory", () => {
 
     test("newDefaultTickHistory", () => {
@@ -22,7 +23,7 @@ describe("TickHistory", () => {
             historyReducer,
             newDefaultTickHistory(initialGrid))
         );
-        const nextGrid = new SetGrid([[1, 0], [1, 1]], 2, 2);
+        const nextGrid = new SetGrid([tuple(1, 0), tuple(1, 1)], 2, 2);
 
 
         // ACT
@@ -90,8 +91,8 @@ describe("TickHistory", () => {
 
         test("in the middle of history", () => {
             // ARRANGE
-            const firstGrid = new SetGrid([[1, 1]], 2, 2);
-            const secondGrid = new SetGrid([[1, 2]], 2, 2);
+            const firstGrid = new SetGrid([tuple(1, 1)], 2, 2);
+            const secondGrid = new SetGrid([tuple(1, 2)], 2, 2);
             const { result } = renderHook(() => useReducer(
                 historyReducer,
                 {
@@ -119,8 +120,8 @@ describe("TickHistory", () => {
 
         test("setPosition", () => {
             // ARRANGE
-            const firstGrid = new SetGrid([[1, 1]], 2, 2);
-            const secondGrid = new SetGrid([[1, 2]], 2, 2);
+            const firstGrid = new SetGrid([tuple(1, 1)], 2, 2);
+            const secondGrid = new SetGrid([tuple(1, 2)], 2, 2);
             const { result } = renderHook(() => useReducer(
                 historyReducer,
                 {
@@ -148,7 +149,7 @@ describe("TickHistory", () => {
 
         test("toggle", () => {
             // ARRANGE
-            const initialGrid = new SetGrid([[1,1]], 2, 2);
+            const initialGrid = new SetGrid([tuple(1,1)], 2, 2);
             const { result } = renderHook(() => useReducer(
                 historyReducer,
                 newDefaultTickHistory(initialGrid))

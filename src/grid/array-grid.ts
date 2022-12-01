@@ -3,6 +3,7 @@ import { Grid, GridCreationSettings, CreateGrid } from "./grid";
 import seedrandom from "seedrandom";
 import { shouldBeBornAlive } from "../util/birth-function";
 import { ReadonlyDeep } from "type-fest";
+import tuple from "immutable-tuple";
 
 type InternalGrid = boolean[][];
 
@@ -31,12 +32,12 @@ class ArrayGrid extends Grid {
 
 
     get(x: number, y: number): boolean {
-        return this.internalGrid[y][x];
+        return this.contains(x, y) && this.internalGrid[y][x];
     }
 
     tick(strategy: ConwayStrategy): ArrayGrid {
         const newInternalGrid = this.internalGrid.map((_, y) => 
-            this.internalGrid[y].map((_, x) => strategy(this, [x, y]))
+            this.internalGrid[y].map((_, x) => strategy(this, tuple(x, y)))
         )
 
         return new ArrayGrid(newInternalGrid);

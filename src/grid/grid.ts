@@ -3,6 +3,7 @@ import { ConwayStrategy } from "../game/conway-strategy";
 import { iterateCoordinates } from "../util/iterate-coordinates";
 import { GridStateWrapper } from "../game/use-grid";
 import { Box2D } from "../util/box-2d";
+import tuple from "immutable-tuple";
 
 type GameGridProps = {
     grid: Grid,
@@ -37,16 +38,18 @@ abstract class Grid {
         return x >= 0 && y >= 0 && x <= (this.width - 1) && y <= (this.height - 1);
     }
 
+    // TODO: I can get rid of getNeighbours and make the optimized liveNeighbours of SetGrid the default
+    // (Now that ArrayGrid checks its bounds on `get`)
     getNeighbours(x: number, y: number): Coordinates[] {
         return [
-            [x - 1, y] as const,
-            [x, y + 1] as const,
-            [x + 1, y] as const,
-            [x, y - 1] as const,
-            [x-1, y+1] as const,
-            [x-1, y-1] as const,
-            [x+1, y+1] as const,
-            [x+1, y-1] as const,
+            tuple(x - 1, y),
+            tuple(x, y + 1),
+            tuple(x + 1, y),
+            tuple(x, y - 1),
+            tuple(x-1, y+1),
+            tuple(x-1, y-1),
+            tuple(x+1, y+1),
+            tuple(x+1, y-1),
         ].filter((it) => this.contains(...it))
     }
 
@@ -66,7 +69,7 @@ abstract class Grid {
         for (const y of range(0, this.height)) {
             for (const x of range(0, this.width)) {
                 yield {
-                    coordinates: [x, y],
+                    coordinates: tuple(x, y),
                     isAlive: this.get(x, y),
                 }
             }
@@ -80,7 +83,7 @@ abstract class Grid {
         for (const y of range(minY, maxY+1)) {
             for (const x of range(minX, maxX+1)) {
                 yield {
-                    coordinates: [x, y],
+                    coordinates: tuple(x, y),
                     isAlive: this.get(x, y),
                 }
             }

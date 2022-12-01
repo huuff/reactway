@@ -1,3 +1,4 @@
+import tuple from "immutable-tuple";
 import { Coordinates } from "../grid/grid";
 import { iterateCoordinates } from "./iterate-coordinates";
 
@@ -14,6 +15,6 @@ test("iterateCoordinates", () => {
     // ASSERT
     expect(iteratedCoordinates)
         .toEqual([
-            [0, 0], [1, 0], [0, 1], [1, 1],
+            tuple(0, 0), tuple(1, 0), tuple(0, 1), tuple(1, 1),
         ])
 });

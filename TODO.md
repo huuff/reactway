@@ -1,5 +1,4 @@
 # Tasks
-* Can I use `requestAnimationFrame` for the `CanvasGrid` rendering?
 * Can I somehow make `tuple` return a nominal type instead of a tuple type? This way I can prevent anyone from using non-internalized tuples anywhere
 * Rendering only the visible parts:
   * Do it for `TableGrid` too

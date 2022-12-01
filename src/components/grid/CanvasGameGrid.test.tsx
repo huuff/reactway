@@ -12,7 +12,6 @@ describe("CanvasGameGrid", () => {
                 grid={new SetGrid(liveCells)}
                 toggleCell={jest.fn()}
                 cellSize={3} 
-                scroll={{top: 0, left: 0}}    
             />
         ).toJSON()).toMatchSnapshot();
     });

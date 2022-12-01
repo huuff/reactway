@@ -6,24 +6,6 @@ import { SetGrid } from "./set-grid";
 // Test for the default methods of Grid
 const grid = new SetGrid([tuple(2, 3), tuple(2, 1), tuple(3, 2), tuple(3,3), tuple(4, 2)]);
 describe("Grid", () => {
-  test("neighbours", () => {
-    // ACT
-    const neighbours = grid.getNeighbours(2, 2);
-
-    // ASSERT
-    // sorting to ignore order
-    expect(neighbours.sort()).toEqual([
-      tuple(1, 2),
-      tuple(3, 2),
-      tuple(2, 1),
-      tuple(2, 3),
-      tuple(1, 3),
-      tuple(1, 1),
-      tuple(3, 3),
-      tuple(3, 1),
-    ].sort());
-  });
-
   describe("contains", () => {
     test("true", () => {
       expect(grid.contains(2, 2)).toBe(true);

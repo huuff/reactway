@@ -38,26 +38,18 @@ abstract class Grid {
         return x >= 0 && y >= 0 && x <= (this.width - 1) && y <= (this.height - 1);
     }
 
-    // TODO: I can get rid of getNeighbours and make the optimized liveNeighbours of SetGrid the default
-    // (Now that ArrayGrid checks its bounds on `get`)
-    getNeighbours(x: number, y: number): Coordinates[] {
-        return [
-            tuple(x - 1, y),
-            tuple(x, y + 1),
-            tuple(x + 1, y),
-            tuple(x, y - 1),
-            tuple(x-1, y+1),
-            tuple(x-1, y-1),
-            tuple(x+1, y+1),
-            tuple(x+1, y-1),
-        ].filter((it) => this.contains(...it))
-    }
-
     liveNeighbours(x: number, y: number): number {
-        const boolToInt = (b: boolean): number => b ? 1 : 0;
-        return this.getNeighbours(x, y)
-            .map((it) => boolToInt(this.get(...it)))
-            .reduce((acc, it) => acc + it, 0)
+        let result = 0;
+        if (this.get(x-1, y-1)) result++;
+        if (this.get(x-1, y)) result++;
+        if (this.get(x-1, y+1)) result++;
+        if (this.get(x, y-1)) result++;
+        if (this.get(x, y+1)) result ++;
+        if (this.get(x+1, y-1)) result++;
+        if (this.get(x+1, y)) result++;
+        if (this.get(x+1, y+1)) result++;
+
+        return result;
     }
 
     iterateCoordinates(f: (coordinates: Coordinates) => void): void {

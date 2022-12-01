@@ -82,21 +82,6 @@ class SetGrid extends Grid {
             this.width,
         )
     }
-
-    // Overriding grid's default with a more efficient one
-    liveNeighbours(x: number, y: number): number {
-        let result = 0;
-        if (this.get(x-1, y-1)) result++;
-        if (this.get(x-1, y)) result++;
-        if (this.get(x-1, y+1)) result++;
-        if (this.get(x, y-1)) result++;
-        if (this.get(x, y+1)) result ++;
-        if (this.get(x+1, y-1)) result++;
-        if (this.get(x+1, y)) result++;
-        if (this.get(x+1, y+1)) result++;
-
-        return result;
-    }
 }
 
 export { SetGrid };

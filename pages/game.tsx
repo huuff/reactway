@@ -44,10 +44,9 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
         toggleCell,
     } = useGrid(getGridFactory(type)({ ...settings, seed }));
 
-    const restartDeps = [height, width, birthFactor, seed, type, restart];
     useEffect(() => {
         restart(getGridFactory(type)({ height, width, birthFactor, seed }));
-    }, restartDeps);
+    }, [height, width, birthFactor, seed, type, restart]);
 
     // TODO: Adjusting the interval: Measure how long the previous tick took and remove that
     // from the time it takes for the next tick (likely with setTimeout or useTimeout)

@@ -26,11 +26,12 @@ function useNumberSetting<T extends Exclude<NumberGameSetting, "cellSize">>(
     useEffect(() => {
         debouncedValue
             && dispatch({ type: `set${typedCapitalize(setting)}`, value: debouncedValue });
-    }, [debouncedValue, dispatch]);
+    }, [debouncedValue, dispatch, setting]);
 
+    const settingValue = settings[setting];
     useEffect(() => {
         input.setValue(settings[setting]);
-    }, [settings[setting], input.setValue]);
+    }, [settingValue, input, settings]);
 
     return input;
 }

@@ -40,7 +40,7 @@ const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: CanvasGameGri
         } else {
             return [0, 0];
         }
-    }, [gridCanvasRef, clientX, clientY, cellSize, cellSizePixels]);
+    }, [gridCanvasRef, clientX, clientY, cellSizePixels]);
 
     const { width: windowWidth, height: windowHeight, scrollX, scrollY } = useViewportState();
 
@@ -63,7 +63,7 @@ const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: CanvasGameGri
             Math.min(scrollX + (windowWidth * 2), gridSizePixels.width),
             Math.min(scrollY + (windowHeight * 2), gridSizePixels.height),
         ),
-    ), [windowHeight, windowWidth, scrollX, scrollY, cellSizePixels, gridSizePixels]), 250);
+    ), [windowHeight, windowWidth, scrollX, scrollY, gridSizePixels]), 250);
     const visibleCellBounds = useMemo<Box2D>(
         () => visibleBounds.divide(cellSizePixels),
         [visibleBounds, cellSizePixels]

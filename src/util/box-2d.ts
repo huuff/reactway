@@ -8,7 +8,6 @@ class Box2D {
         public readonly bottomRight: Coordinates,
     ) {}
 
-    // TODO: Test
     contains = (coordinates: Coordinates) => {
         const [x, y] = coordinates;
         const [topLeftX, topLeftY] = this.topLeft;

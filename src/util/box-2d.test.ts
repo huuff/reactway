@@ -13,4 +13,16 @@ describe("Box2D", () => {
             expect(box.contains(tuple(6, 6))).toBe(false);
         });
     });
-});
+
+    test("divide", () => {
+        // ARRANGE
+        const box = new Box2D(tuple(2, 2), tuple(4, 4));
+
+        // ACT
+        const divided = box.divide(2);
+
+        // ASSERT
+        expect(divided.topLeft).toBe(tuple(1, 1));
+        expect(divided.bottomRight).toBe(tuple(2, 2));
+    });
+}); 

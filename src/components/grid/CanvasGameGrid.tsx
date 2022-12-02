@@ -9,6 +9,10 @@ import tuple from "immutable-tuple";
 const CELL_SIZE_MULTIPLIER = 8;
 
 type CanvasGameGridProps = GameGridProps;
+type Size = {
+    width: number;
+    height: number;
+}
 
 function getMouseCell(
     canvas: RefObject<HTMLCanvasElement>,
@@ -39,6 +43,32 @@ function useMouseCell(gridCanvasRef: RefObject<HTMLCanvasElement>, cellSizePixel
     return [clientCellX, clientCellY];
 }
 
+function useVisibleBounds(
+    windowWidth: number,
+    windowHeight: number,
+    scrollX: number,
+    scrollY: number,
+    gridSizePixels: Size,
+    cellSizePixels: number
+): Box2D {
+    const visibleBounds = useDebounce(useMemo<Box2D>(() => new Box2D(
+        tuple(
+            Math.max(scrollX - (windowWidth), 0),
+            Math.max(scrollY - (windowHeight), 0)
+        ),
+        tuple(
+            Math.min(scrollX + (windowWidth * 2), gridSizePixels.width),
+            Math.min(scrollY + (windowHeight * 2), gridSizePixels.height),
+        ),
+    ), [windowHeight, windowWidth, scrollX, scrollY, gridSizePixels]), 250);
+    const visibleCellBounds = useMemo<Box2D>(
+        () => visibleBounds.divide(cellSizePixels),
+        [visibleBounds, cellSizePixels]
+    );
+
+    return visibleCellBounds;
+}
+
 // TODO: Test it? Can I?
 // TODO: Split this in some separate hooks
 const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: CanvasGameGridProps) => {
@@ -58,20 +88,8 @@ const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: CanvasGameGri
         transform: gridSizePixels.width < windowWidth ? "translate(-50%)" : undefined,
     }), [gridSizePixels, windowWidth]);
 
-    const visibleBounds = useDebounce(useMemo<Box2D>(() => new Box2D(
-        tuple(
-            Math.max(scrollX - (windowWidth), 0), 
-            Math.max(scrollY - (windowHeight), 0)
-        ),
-        tuple(
-            Math.min(scrollX + (windowWidth * 2), gridSizePixels.width),
-            Math.min(scrollY + (windowHeight * 2), gridSizePixels.height),
-        ),
-    ), [windowHeight, windowWidth, scrollX, scrollY, gridSizePixels]), 250);
-    const visibleCellBounds = useMemo<Box2D>(
-        () => visibleBounds.divide(cellSizePixels),
-        [visibleBounds, cellSizePixels]
-    );
+
+    const visibleCellBounds = useVisibleBounds(windowWidth, windowHeight, scrollX, scrollY, gridSizePixels, cellSizePixels)
 
     const onMouseUp: MouseEventHandler<HTMLDivElement> = (event) => {
         const [x, y] = [event.clientX, event.clientY];
@@ -110,7 +128,7 @@ const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: CanvasGameGri
                 left: clientCellX,
                 zIndex: 10,
                 opacity: 0.5,
-                
+
             }} />
             <canvas ref={gridCanvasRef}
                 id="grid-canvas"

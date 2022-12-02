@@ -20,8 +20,8 @@ function useNumberSetting<T extends Exclude<NumberGameSetting, "cellSize">>(
     settings: GameSettings,
     dispatch: React.Dispatch<GameSettingsAction>,
 ): ReturnType<typeof useNumberInput> {
-    const input = useNumberInput(settings[setting]);
-    const debouncedValue = useDebounce(input.value, DEBOUNCE_DELAY);
+    const { value, onChange, setValue } = useNumberInput(settings[setting]);
+    const debouncedValue = useDebounce(value, DEBOUNCE_DELAY);
 
     useEffect(() => {
         debouncedValue
@@ -30,10 +30,10 @@ function useNumberSetting<T extends Exclude<NumberGameSetting, "cellSize">>(
 
     const settingValue = settings[setting];
     useEffect(() => {
-        input.setValue(settings[setting]);
-    }, [settingValue, input, settings]);
+        setValue(settings[setting]);
+    }, [settingValue, setValue, settings, setting]);
 
-    return input;
+    return {value, onChange, setValue};
 }
 
 // TODO: Test it?

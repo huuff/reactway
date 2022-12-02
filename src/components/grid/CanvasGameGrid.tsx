@@ -25,13 +25,7 @@ function getMouseCell(
     ]
 }
 
-// TODO: Test it? Can I?
-// TODO: Split this in some separate hooks
-const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: CanvasGameGridProps) => {
-    const cellSizePixels = useMemo(() => CELL_SIZE_MULTIPLIER * cellSize, [cellSize]);
-
-    const gridCanvasRef = useRef<HTMLCanvasElement>(null);
-
+function useMouseCell(gridCanvasRef: RefObject<HTMLCanvasElement>, cellSizePixels: number): [number, number] {
     const { clientX, clientY } = useMouseState(gridCanvasRef);
     const [clientCellX, clientCellY] = useMemo(() => {
         if (gridCanvasRef.current) {
@@ -42,6 +36,16 @@ const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: CanvasGameGri
         }
     }, [gridCanvasRef, clientX, clientY, cellSizePixels]);
 
+    return [clientCellX, clientCellY];
+}
+
+// TODO: Test it? Can I?
+// TODO: Split this in some separate hooks
+const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: CanvasGameGridProps) => {
+    const cellSizePixels = useMemo(() => CELL_SIZE_MULTIPLIER * cellSize, [cellSize]);
+    const gridCanvasRef = useRef<HTMLCanvasElement>(null);
+
+    const [clientCellX, clientCellY] = useMouseCell(gridCanvasRef, cellSizePixels);
     const { width: windowWidth, height: windowHeight, scrollX, scrollY } = useViewportState();
 
     const gridSizePixels = useMemo(() => ({

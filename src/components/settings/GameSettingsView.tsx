@@ -96,8 +96,9 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                     type="number"
                     name="height"
                     min="5"
-                    max="100"
-                    {...heightInput}
+                    max="500"
+                    value={heightInput.value}
+                    onChange={heightInput.onChange}
                 />
             </div>
 
@@ -108,8 +109,9 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                     type="number"
                     name="width"
                     min="5"
-                    max="100"
-                    {...widthInput}
+                    max="500"
+                    value={widthInput.value}
+                    onChange={widthInput.onChange}
                 />
             </div>
 
@@ -123,7 +125,8 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                     step="0.05"
                     min="0"
                     max="1"
-                    {...birthFactorInput}
+                    value={birthFactorInput.value}
+                    onChange={birthFactorInput.onChange}
                 />
             </div>
 
@@ -136,7 +139,8 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                     step="100"
                     min="100"
                     max="10000"
-                    {...tickDurationInput}
+                    value={tickDurationInput.value}
+                    onChange={tickDurationInput.onChange}
                 />
             </div>
 

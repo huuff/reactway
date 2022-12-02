@@ -10,4 +10,3 @@
 * A dark mode so it's not so harsh on my eyes?
 * Only showing the move cursor when the grid is larger than the screen?
 * ` A component is changing a controlled input to be uncontrolled.` warning. Likely because of my `useNumberInput` hook... why not use null instead of undefined?
-* React warning because I'm passing the `setValue` property of my `useNumberInput` to the inputs.

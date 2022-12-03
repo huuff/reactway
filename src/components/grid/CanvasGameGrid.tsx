@@ -1,5 +1,5 @@
-import { CSSProperties, MouseEventHandler, RefObject, useEffect, useMemo, useRef } from "react";
-import { GameGridProps, Grid } from "../../grid/grid";
+import { CSSProperties, MouseEventHandler, RefObject, useCallback, useEffect, useMemo, useRef } from "react";
+import { Coordinates, GameGridProps, Grid } from "../../grid/grid";
 import { useMouseState, useViewportState } from "beautiful-react-hooks";
 import { useDebounce } from "usehooks-ts";
 import { Box2D } from "../../util/box-2d";
@@ -12,6 +12,63 @@ type CanvasGameGridProps = GameGridProps;
 type Size = {
     width: number;
     height: number;
+}
+
+// TODO: Test it? Can I?
+// TODO: Split this in some separate hooks
+const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: CanvasGameGridProps) => {
+    const cellSizePixels = useMemo(() => CELL_SIZE_MULTIPLIER * cellSize, [cellSize]);
+    const gridCanvasRef = useRef<HTMLCanvasElement>(null);
+
+    const [clientCellX, clientCellY] = useMouseCell(gridCanvasRef, cellSizePixels);
+    const { width: windowWidth, height: windowHeight, scrollX, scrollY } = useViewportState();
+    const { sizePixels: gridSizePixels, style: gridCanvasStyle } = useGridStyle(grid, cellSizePixels, windowWidth);
+
+
+    const visibleCellBounds = useVisibleBounds(windowWidth, windowHeight, scrollX, scrollY, gridSizePixels, cellSizePixels)
+
+    const onMouseUp = useClickToggleHandler(gridCanvasRef, cellSizePixels, grid, toggleCell);
+
+    useEffect(() => {
+        const canvas = gridCanvasRef.current!;
+
+        const ctx = canvas.getContext("2d")!;
+        benchmark("render", () => {
+            for (const { coordinates: [x, y], isAlive } of grid.boundedIterator(visibleCellBounds)) {
+                if (isAlive) {
+                    ctx.fillStyle = "black";
+                } else {
+                    ctx.fillStyle = "white";
+                    ctx.strokeRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
+                }
+                ctx.fillRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
+            };
+        })
+    }, [grid, cellSizePixels, visibleCellBounds])
+
+
+    return (
+        <div style={{ position: "relative", height: "100vh" }} onMouseUp={onMouseUp} >
+            <div style={{
+                position: "absolute",
+                height: `${cellSizePixels}px`,
+                width: `${cellSizePixels}px`,
+                backgroundColor: "red",
+                top: clientCellY,
+                left: clientCellX,
+                zIndex: 10,
+                opacity: 0.5,
+
+            }} />
+            <canvas ref={gridCanvasRef}
+                id="grid-canvas"
+                height={gridSizePixels.height}
+                width={gridSizePixels.width}
+                className={`${className || ""}`}
+                style={gridCanvasStyle}
+            ></canvas>
+        </div>
+    )
 }
 
 function getMouseCell(
@@ -90,67 +147,19 @@ function useGridStyle(
     };
 }
 
-// TODO: Test it? Can I?
-// TODO: Split this in some separate hooks
-const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: CanvasGameGridProps) => {
-    const cellSizePixels = useMemo(() => CELL_SIZE_MULTIPLIER * cellSize, [cellSize]);
-    const gridCanvasRef = useRef<HTMLCanvasElement>(null);
-
-    const [clientCellX, clientCellY] = useMouseCell(gridCanvasRef, cellSizePixels);
-    const { width: windowWidth, height: windowHeight, scrollX, scrollY } = useViewportState();
-    const { sizePixels: gridSizePixels, style: gridCanvasStyle } = useGridStyle(grid, cellSizePixels, windowWidth);
-
-
-    const visibleCellBounds = useVisibleBounds(windowWidth, windowHeight, scrollX, scrollY, gridSizePixels, cellSizePixels)
-
-    const onMouseUp: MouseEventHandler<HTMLDivElement> = (event) => {
+function useClickToggleHandler(
+    ref: RefObject<HTMLCanvasElement>, 
+    cellSizePixels: number, 
+    grid: Grid,
+    toggleCell: (coordinates: Coordinates) => void,
+    ): MouseEventHandler<HTMLElement> {
+    return useCallback((event) => {
         const [x, y] = [event.clientX, event.clientY];
-        const [cellX, cellY] = getMouseCell(gridCanvasRef, x, y, cellSizePixels);
+        const [cellX, cellY] = getMouseCell(ref, x, y, cellSizePixels);
         if (grid.contains(cellX, cellY)) {
             toggleCell(tuple(cellX, cellY));
         }
-    };
-
-    useEffect(() => {
-        const canvas = gridCanvasRef.current!;
-
-        const ctx = canvas.getContext("2d")!;
-        benchmark("render", () => {
-            for (const { coordinates: [x, y], isAlive } of grid.boundedIterator(visibleCellBounds)) {
-                if (isAlive) {
-                    ctx.fillStyle = "black";
-                } else {
-                    ctx.fillStyle = "white";
-                    ctx.strokeRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
-                }
-                ctx.fillRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
-            };
-        })
-    }, [grid, cellSizePixels, visibleCellBounds])
-
-
-    return (
-        <div style={{ position: "relative", height: "100vh" }} onMouseUp={onMouseUp} >
-            <div style={{
-                position: "absolute",
-                height: `${cellSizePixels}px`,
-                width: `${cellSizePixels}px`,
-                backgroundColor: "red",
-                top: clientCellY,
-                left: clientCellX,
-                zIndex: 10,
-                opacity: 0.5,
-
-            }} />
-            <canvas ref={gridCanvasRef}
-                id="grid-canvas"
-                height={gridSizePixels.height}
-                width={gridSizePixels.width}
-                className={`${className || ""}`}
-                style={gridCanvasStyle}
-            ></canvas>
-        </div>
-    )
+    }, [cellSizePixels, grid, toggleCell] );
 }
 
 export default CanvasGameGrid;

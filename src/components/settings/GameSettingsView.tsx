@@ -83,8 +83,8 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                     onChange={handleTypeSettingsChange}
                     value={settings.type}
                 >
-                    <option value="set">set</option>
                     <option value="array">array</option>
+                    <option value="set">set</option>
                     <option value="map">map</option>
                 </select>
             </div>

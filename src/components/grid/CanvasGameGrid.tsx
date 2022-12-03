@@ -15,7 +15,6 @@ type Size = {
 }
 
 // TODO: Test it? Can I?
-// TODO: Split this in some separate hooks
 const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: CanvasGameGridProps) => {
     const cellSizePixels = useMemo(() => CELL_SIZE_MULTIPLIER * cellSize, [cellSize]);
     const gridCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -24,27 +23,10 @@ const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: CanvasGameGri
     const { width: windowWidth, height: windowHeight, scrollX, scrollY } = useViewportState();
     const { sizePixels: gridSizePixels, style: gridCanvasStyle } = useGridStyle(grid, cellSizePixels, windowWidth);
 
-
     const visibleCellBounds = useVisibleBounds(windowWidth, windowHeight, scrollX, scrollY, gridSizePixels, cellSizePixels)
-
     const onMouseUp = useClickToggleHandler(gridCanvasRef, cellSizePixels, grid, toggleCell);
 
-    useEffect(() => {
-        const canvas = gridCanvasRef.current!;
-
-        const ctx = canvas.getContext("2d")!;
-        benchmark("render", () => {
-            for (const { coordinates: [x, y], isAlive } of grid.boundedIterator(visibleCellBounds)) {
-                if (isAlive) {
-                    ctx.fillStyle = "black";
-                } else {
-                    ctx.fillStyle = "white";
-                    ctx.strokeRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
-                }
-                ctx.fillRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
-            };
-        })
-    }, [grid, cellSizePixels, visibleCellBounds])
+    useDrawCanvasEffect(gridCanvasRef, grid, cellSizePixels, visibleCellBounds);
 
 
     return (
@@ -160,6 +142,25 @@ function useClickToggleHandler(
             toggleCell(tuple(cellX, cellY));
         }
     }, [cellSizePixels, grid, toggleCell] );
+}
+
+function useDrawCanvasEffect(ref: RefObject<HTMLCanvasElement>, grid: Grid, cellSizePixels: number, visibleCellBounds: Box2D) {
+    useEffect(() => {
+        const canvas = ref.current!;
+
+        const ctx = canvas.getContext("2d")!;
+        benchmark("render", () => {
+            for (const { coordinates: [x, y], isAlive } of grid.boundedIterator(visibleCellBounds)) {
+                if (isAlive) {
+                    ctx.fillStyle = "black";
+                } else {
+                    ctx.fillStyle = "white";
+                    ctx.strokeRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
+                }
+                ctx.fillRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
+            };
+        })
+    }, [grid, cellSizePixels, visibleCellBounds])
 }
 
 export default CanvasGameGrid;

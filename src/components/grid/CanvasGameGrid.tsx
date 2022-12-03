@@ -3,24 +3,26 @@ import { Coordinates, GameGridProps, Grid } from "../../grid/grid";
 import { useMouseState, useViewportState } from "beautiful-react-hooks";
 import { useDebounce } from "usehooks-ts";
 import { Box2D } from "../../util/box-2d";
-import { benchmark } from "../../util/benchmark-function";
 import tuple from "immutable-tuple";
 
 const CELL_SIZE_MULTIPLIER = 8;
 
-type CanvasGameGridProps = GameGridProps;
+type CanvasGameGridProps = GameGridProps & {
+    scrollX: number;
+    scrollY: number;
+};
 type Size = {
     width: number;
     height: number;
 }
 
 // TODO: Test it? Can I?
-const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: CanvasGameGridProps) => {
+const CanvasGameGrid = ({ grid, className, toggleCell, cellSize, scrollX, scrollY }: CanvasGameGridProps) => {
     const cellSizePixels = useMemo(() => CELL_SIZE_MULTIPLIER * cellSize, [cellSize]);
     const gridCanvasRef = useRef<HTMLCanvasElement>(null);
 
     const [clientCellX, clientCellY] = useMouseCell(gridCanvasRef, cellSizePixels);
-    const { width: windowWidth, height: windowHeight, scrollX, scrollY } = useViewportState();
+    const { width: windowWidth, height: windowHeight } = useViewportState();
     const { sizePixels: gridSizePixels, style: gridCanvasStyle } = useGridStyle(grid, cellSizePixels, windowWidth);
 
     const visibleCellBounds = useVisibleBounds(windowWidth, windowHeight, scrollX, scrollY, gridSizePixels, cellSizePixels)
@@ -92,12 +94,12 @@ function useVisibleBounds(
 ): Box2D {
     const visibleBounds = useDebounce(useMemo<Box2D>(() => new Box2D(
         tuple(
-            Math.max(scrollX - (windowWidth), 0),
-            Math.max(scrollY - (windowHeight), 0)
+            Math.max(scrollX - (windowWidth/2), 0),
+            Math.max(scrollY - (windowHeight/2), 0)
         ),
         tuple(
-            Math.min(scrollX + (windowWidth * 2), gridSizePixels.width),
-            Math.min(scrollY + (windowHeight * 2), gridSizePixels.height),
+            Math.min(scrollX + (windowWidth * 1.5), gridSizePixels.width),
+            Math.min(scrollY + (windowHeight * 1.5), gridSizePixels.height),
         ),
     ), [windowHeight, windowWidth, scrollX, scrollY, gridSizePixels]), 250);
     const visibleCellBounds = useMemo<Box2D>(

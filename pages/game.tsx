@@ -1,5 +1,5 @@
 import "tailwindcss/tailwind.css";
-import { useEffect, WheelEvent } from "react";
+import { useEffect, useRef, useState, WheelEvent } from "react";
 import GameSettingsView from "../src/components/settings/GameSettingsView";
 import { defaultSettings, useSettings } from "../src/settings/settings";
 import { useInterval } from "usehooks-ts";
@@ -14,6 +14,7 @@ import { useGrid } from "../src/game/use-grid";
 import { usePlayback } from "../src/settings/use-playback";
 import GameGridView from "../src/components/grid/GameGridView";
 import { useThrottledCallback } from "beautiful-react-hooks";
+import ScrollContainer from "react-indiana-drag-scroll";
 
 type GameProps = {
     readonly seed: string;
@@ -66,16 +67,31 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
         })
     }
 
+    const scrollContainerRef = useRef<HTMLElement>();
+    const  [scroll, setScroll] = useState({ scrollX: 0, scrollY: 0})
+    const onScroll  = () => {
+        setScroll({
+            scrollX: scrollContainerRef?.current?.scrollLeft ?? 0,
+            scrollY: scrollContainerRef?.current?.scrollTop ?? 0,
+        })
+    }
     return (
         <div onWheel={wheelHandler}>
             <div className="cursor-move">
-                <NoSsr>
-                    <GameGridView grid={grid}
-                                  view={view} 
-                                  cellSize={cellSize}
-                                  toggleCell={toggleCell}
-                                  />
-                </NoSsr>
+                <ScrollContainer 
+                    ref={scrollContainerRef as any /* I don't know why this is needed */}
+                    onScroll={onScroll}
+                >
+                    <NoSsr>
+                        <GameGridView grid={grid}
+                                    view={view} 
+                                    cellSize={cellSize}
+                                    toggleCell={toggleCell}
+                                    scrollX={scroll.scrollX}
+                                    scrollY={scroll.scrollY}
+                                    />
+                    </NoSsr>
+                </ScrollContainer>
             </div>
 
             <div className="

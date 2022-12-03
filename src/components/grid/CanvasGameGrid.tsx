@@ -1,5 +1,5 @@
-import { MouseEventHandler, RefObject, useEffect, useMemo, useRef } from "react";
-import { GameGridProps } from "../../grid/grid";
+import { CSSProperties, MouseEventHandler, RefObject, useEffect, useMemo, useRef } from "react";
+import { GameGridProps, Grid } from "../../grid/grid";
 import { useMouseState, useViewportState } from "beautiful-react-hooks";
 import { useDebounce } from "usehooks-ts";
 import { Box2D } from "../../util/box-2d";
@@ -69,15 +69,11 @@ function useVisibleBounds(
     return visibleCellBounds;
 }
 
-// TODO: Test it? Can I?
-// TODO: Split this in some separate hooks
-const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: CanvasGameGridProps) => {
-    const cellSizePixels = useMemo(() => CELL_SIZE_MULTIPLIER * cellSize, [cellSize]);
-    const gridCanvasRef = useRef<HTMLCanvasElement>(null);
-
-    const [clientCellX, clientCellY] = useMouseCell(gridCanvasRef, cellSizePixels);
-    const { width: windowWidth, height: windowHeight, scrollX, scrollY } = useViewportState();
-
+function useGridStyle(
+    grid: Grid,
+    cellSizePixels: number,
+    windowWidth: number,
+): { sizePixels: Size, style: CSSProperties } {
     const gridSizePixels = useMemo(() => ({
         width: grid.width * cellSizePixels,
         height: grid.height * cellSizePixels,
@@ -87,6 +83,22 @@ const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: CanvasGameGri
         left: gridSizePixels.width < windowWidth ? "50%" : undefined,
         transform: gridSizePixels.width < windowWidth ? "translate(-50%)" : undefined,
     }), [gridSizePixels, windowWidth]);
+
+    return {
+        sizePixels: gridSizePixels,
+        style: gridCanvasStyle,
+    };
+}
+
+// TODO: Test it? Can I?
+// TODO: Split this in some separate hooks
+const CanvasGameGrid = ({ grid, className, toggleCell, cellSize }: CanvasGameGridProps) => {
+    const cellSizePixels = useMemo(() => CELL_SIZE_MULTIPLIER * cellSize, [cellSize]);
+    const gridCanvasRef = useRef<HTMLCanvasElement>(null);
+
+    const [clientCellX, clientCellY] = useMouseCell(gridCanvasRef, cellSizePixels);
+    const { width: windowWidth, height: windowHeight, scrollX, scrollY } = useViewportState();
+    const { sizePixels: gridSizePixels, style: gridCanvasStyle } = useGridStyle(grid, cellSizePixels, windowWidth);
 
 
     const visibleCellBounds = useVisibleBounds(windowWidth, windowHeight, scrollX, scrollY, gridSizePixels, cellSizePixels)

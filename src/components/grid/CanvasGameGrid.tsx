@@ -130,20 +130,19 @@ function useGridStyle(
 }
 
 function useClickToggleHandler(
-    ref: RefObject<HTMLCanvasElement>, 
-    cellSizePixels: number, 
+    ref: RefObject<HTMLCanvasElement>,
+    cellSizePixels: number,
     grid: Grid,
     toggleCell: (coordinates: Coordinates) => void,
-    ): MouseEventHandler<HTMLElement> {
+): MouseEventHandler<HTMLElement> {
     return useCallback((event) => {
         const [x, y] = [event.clientX, event.clientY];
         const [cellX, cellY] = getMouseCell(ref, x, y, cellSizePixels);
         const transformedCellX = cellX - Math.floor((ref.current?.getBoundingClientRect().left ?? 0) / cellSizePixels);
-        console.log(`Toggling (${transformedCellX}, ${cellY})`)
         if (grid.contains(transformedCellX, cellY)) {
             toggleCell(tuple(transformedCellX, cellY));
         }
-    }, [cellSizePixels, grid, toggleCell] );
+    }, [cellSizePixels, grid, toggleCell]);
 }
 
 function useDrawCanvasEffect(ref: RefObject<HTMLCanvasElement>, grid: Grid, cellSizePixels: number, visibleCellBounds: Box2D) {
@@ -151,17 +150,15 @@ function useDrawCanvasEffect(ref: RefObject<HTMLCanvasElement>, grid: Grid, cell
         const canvas = ref.current!;
 
         const ctx = canvas.getContext("2d")!;
-        benchmark("render", () => {
-            for (const { coordinates: [x, y], isAlive } of grid.boundedIterator(visibleCellBounds)) {
-                if (isAlive) {
-                    ctx.fillStyle = "black";
-                } else {
-                    ctx.fillStyle = "white";
-                    ctx.strokeRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
-                }
-                ctx.fillRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
-            };
-        })
+        for (const { coordinates: [x, y], isAlive } of grid.boundedIterator(visibleCellBounds)) {
+            if (isAlive) {
+                ctx.fillStyle = "black";
+            } else {
+                ctx.fillStyle = "white";
+                ctx.strokeRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
+            }
+            ctx.fillRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
+        };
     }, [grid, cellSizePixels, visibleCellBounds])
 }
 

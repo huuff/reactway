@@ -150,7 +150,6 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                     className="w-1/4 hover:bg-slate-300 pt-1 rounded-md">
                     <FontAwesomeIcon
                         icon={faMinus}
-
                         className="h-4 mx-auto"
                     />
                 </div>

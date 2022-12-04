@@ -1,8 +1,9 @@
+import tuple from "immutable-tuple";
 import { coordinatesToString, stringToCoordinates } from "./coordinates-to-string";
 
 describe("coordinates <-> string conversions", () => {
     test("coordinatesToString", () => {
-        expect(coordinatesToString([2, 2])).toBe("(2,2)");
+        expect(coordinatesToString(tuple(2, 2))).toBe("(2,2)");
     })
 
     test("stringToCoordinates", () => {

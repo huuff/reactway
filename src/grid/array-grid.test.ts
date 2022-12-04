@@ -1,5 +1,6 @@
 import { fakeConwayStrategy } from "../util/testing";
 import { ArrayGrid } from "./array-grid";
+import tuple from "immutable-tuple";
 
 describe("ArrayGrid", () => {
 
@@ -17,7 +18,7 @@ describe("ArrayGrid", () => {
 
     test("correctly ticks and gets", () => {
         // ARRANGE
-        const conwayStrategy = fakeConwayStrategy([[2, 3], [2, 1], [3, 2], [3,3], [4, 2]]);
+        const conwayStrategy = fakeConwayStrategy([tuple(2, 3), tuple(2, 1), tuple(3, 2), tuple(3,3), tuple(4, 2)]);
         const grid = ArrayGrid.create({
             height: 5,
             width: 5,

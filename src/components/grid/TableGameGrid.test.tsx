@@ -19,7 +19,7 @@ describe("TableGameGrid", () => {
     test("dead cells are O", () => {
         render(<TableGameGrid grid={new SetGrid(liveCells)} toggleCell={jest.fn()} cellSize={3}/>);
 
-        expect(screen.getByTestId(coordinatesToString([2, 2]))).toHaveClass("bg-white");
+        expect(screen.getByTestId(coordinatesToString(tuple(2, 2)))).toHaveClass("bg-white");
     });
 
     test("snapshot", () => {

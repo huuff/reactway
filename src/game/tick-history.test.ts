@@ -159,7 +159,7 @@ describe("TickHistory", () => {
             // ACT
             act(() => {
                 const [, dispatch] = result.current;
-                dispatch({ type: "toggle", value: [1,1] });
+                dispatch({ type: "toggle", value: tuple(1,1) });
             })
     
             // ASSERT

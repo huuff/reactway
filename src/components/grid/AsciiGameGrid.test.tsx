@@ -19,7 +19,7 @@ describe("AsciiGameGrid", () => {
     test("dead cells are O", () => {
         render(<AsciiGameGrid grid={new SetGrid(liveCells)} toggleCell={jest.fn()} cellSize={3}/>);
 
-        expect(screen.getByTestId(coordinatesToString([2, 2]))).toHaveTextContent("O");
+        expect(screen.getByTestId(coordinatesToString(tuple(2, 2)))).toHaveTextContent("O");
     });
 
     test("snapshot", () => {

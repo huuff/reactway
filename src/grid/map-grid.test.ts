@@ -1,3 +1,4 @@
+import tuple from "immutable-tuple";
 import { fakeConwayStrategy } from "../util/testing";
 import { MapGrid } from "./map-grid";
 
@@ -25,7 +26,7 @@ describe("MapGrid", () => {
         })
 
         // ACT
-        const nextStepGrid = grid.tick(fakeConwayStrategy([[2, 3], [2, 1], [3, 2], [3,3], [4, 2]]));
+        const nextStepGrid = grid.tick(fakeConwayStrategy([tuple(2, 3), tuple(2, 1), tuple(3, 2), tuple(3,3), tuple(4, 2)]));
 
         // ASSERT
         expect(nextStepGrid.get(2, 2)).toBe(false);

@@ -6,6 +6,13 @@ import { Coordinates } from "../../grid/grid";
 import renderer from "react-test-renderer";
 import tuple from "immutable-tuple";
 
+jest.mock("usehooks-ts", () => ({
+    ...jest.requireActual("usehooks-ts"),
+    useDarkMode: jest.fn(() => ({
+      isDarkMode: false,
+    }))
+  }));
+
 const liveCells: Coordinates[] = [tuple(2, 3), tuple(2, 1), tuple(3, 2), tuple(3,3), tuple(4, 2)];
 describe("TableGameGrid", () => {
     test("live cells are X", () => {

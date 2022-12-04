@@ -5,35 +5,35 @@ exports[`AsciiGameGrid snapshot 1`] = `
   className=" font-mono leading-none text-base"
 >
   <span
-    className="mx-1 hover:bg-red-400"
+    className="mx-1 hover:bg-red-400 "
     data-testid="(0,0)"
     onClick={[Function]}
   >
     O
   </span>
   <span
-    className="mx-1 hover:bg-red-400"
+    className="mx-1 hover:bg-red-400 "
     data-testid="(1,0)"
     onClick={[Function]}
   >
     O
   </span>
   <span
-    className="mx-1 hover:bg-red-400"
+    className="mx-1 hover:bg-red-400 "
     data-testid="(2,0)"
     onClick={[Function]}
   >
     O
   </span>
   <span
-    className="mx-1 hover:bg-red-400"
+    className="mx-1 hover:bg-red-400 "
     data-testid="(3,0)"
     onClick={[Function]}
   >
     O
   </span>
   <span
-    className="mx-1 hover:bg-red-400"
+    className="mx-1 hover:bg-red-400 "
     data-testid="(4,0)"
     onClick={[Function]}
   >
@@ -41,35 +41,35 @@ exports[`AsciiGameGrid snapshot 1`] = `
   </span>
   <br />
   <span
-    className="mx-1 hover:bg-red-400"
+    className="mx-1 hover:bg-red-400 "
     data-testid="(0,1)"
     onClick={[Function]}
   >
     O
   </span>
   <span
-    className="mx-1 hover:bg-red-400"
+    className="mx-1 hover:bg-red-400 "
     data-testid="(1,1)"
     onClick={[Function]}
   >
     O
   </span>
   <span
-    className="mx-1 hover:bg-red-400"
+    className="mx-1 hover:bg-red-400 "
     data-testid="(2,1)"
     onClick={[Function]}
   >
     X
   </span>
   <span
-    className="mx-1 hover:bg-red-400"
+    className="mx-1 hover:bg-red-400 "
     data-testid="(3,1)"
     onClick={[Function]}
   >
     O
   </span>
   <span
-    className="mx-1 hover:bg-red-400"
+    className="mx-1 hover:bg-red-400 "
     data-testid="(4,1)"
     onClick={[Function]}
   >
@@ -77,35 +77,35 @@ exports[`AsciiGameGrid snapshot 1`] = `
   </span>
   <br />
   <span
-    className="mx-1 hover:bg-red-400"
+    className="mx-1 hover:bg-red-400 "
     data-testid="(0,2)"
     onClick={[Function]}
   >
     O
   </span>
   <span
-    className="mx-1 hover:bg-red-400"
+    className="mx-1 hover:bg-red-400 "
     data-testid="(1,2)"
     onClick={[Function]}
   >
     O
   </span>
   <span
-    className="mx-1 hover:bg-red-400"
+    className="mx-1 hover:bg-red-400 "
     data-testid="(2,2)"
     onClick={[Function]}
   >
     O
   </span>
   <span
-    className="mx-1 hover:bg-red-400"
+    className="mx-1 hover:bg-red-400 "
     data-testid="(3,2)"
     onClick={[Function]}
   >
     X
   </span>
   <span
-    className="mx-1 hover:bg-red-400"
+    className="mx-1 hover:bg-red-400 "
     data-testid="(4,2)"
     onClick={[Function]}
   >
@@ -113,35 +113,35 @@ exports[`AsciiGameGrid snapshot 1`] = `
   </span>
   <br />
   <span
-    className="mx-1 hover:bg-red-400"
+    className="mx-1 hover:bg-red-400 "
     data-testid="(0,3)"
     onClick={[Function]}
   >
     O
   </span>
   <span
-    className="mx-1 hover:bg-red-400"
+    className="mx-1 hover:bg-red-400 "
     data-testid="(1,3)"
     onClick={[Function]}
   >
     O
   </span>
   <span
-    className="mx-1 hover:bg-red-400"
+    className="mx-1 hover:bg-red-400 "
     data-testid="(2,3)"
     onClick={[Function]}
   >
     X
   </span>
   <span
-    className="mx-1 hover:bg-red-400"
+    className="mx-1 hover:bg-red-400 "
     data-testid="(3,3)"
     onClick={[Function]}
   >
     X
   </span>
   <span
-    className="mx-1 hover:bg-red-400"
+    className="mx-1 hover:bg-red-400 "
     data-testid="(4,3)"
     onClick={[Function]}
   >

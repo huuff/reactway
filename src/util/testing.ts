@@ -1,6 +1,6 @@
 import { ConwayStrategy } from "../game/conway-strategy";
 import { Coordinates, Grid } from "../grid/grid";
-import { coordinatesToString }from "./coordinates-to-string";
+import { coordinatesToString } from "./coordinates-to-string";
 
 
 function fakeConwayStrategy(nextLiveCells: Coordinates[]): ConwayStrategy {
@@ -8,7 +8,7 @@ function fakeConwayStrategy(nextLiveCells: Coordinates[]): ConwayStrategy {
     const stringCoordinates = coordinatesToString(coordinates);
     return nextLiveCells.some(
       liveCoordinates => stringCoordinates == coordinatesToString(liveCoordinates)
-      );
+    );
   }
 }
 

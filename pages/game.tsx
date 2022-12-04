@@ -15,6 +15,7 @@ import { usePlayback } from "../src/settings/use-playback";
 import GameGridView from "../src/components/grid/GameGridView";
 import { useThrottledCallback } from "beautiful-react-hooks";
 import ScrollContainer from "react-indiana-drag-scroll";
+import DarkModeSelector from "../src/settings/dark-mode-selector";
 
 type GameProps = {
     readonly seed: string;
@@ -27,15 +28,15 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
 
     const wheelHandler = useThrottledCallback((e: WheelEvent<HTMLDivElement>) => {
         if (e.deltaY < 0) {
-            dispatchSettings({ type: "changeCellSize", value: "decrement"});
+            dispatchSettings({ type: "changeCellSize", value: "decrement" });
         } else {
-            dispatchSettings({ type: "changeCellSize", value: "increment"});
+            dispatchSettings({ type: "changeCellSize", value: "increment" });
         }
     }, [dispatchSettings], 20);
 
-    const { 
+    const {
         grid,
-        historyPosition, 
+        historyPosition,
         historyLength,
 
         setHistoryPosition,
@@ -61,15 +62,15 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     const startNewGame = () => {
         router.push({
             pathname: "game", query: {
-                seed: randomSeed(), 
+                seed: randomSeed(),
                 ...(toStringObject(settings))
             }
         })
     }
 
     const scrollContainerRef = useRef<HTMLElement>();
-    const  [scroll, setScroll] = useState({ scrollX: 0, scrollY: 0})
-    const onScroll  = () => {
+    const [scroll, setScroll] = useState({ scrollX: 0, scrollY: 0 })
+    const onScroll = () => {
         setScroll({
             scrollX: scrollContainerRef?.current?.scrollLeft ?? 0,
             scrollY: scrollContainerRef?.current?.scrollTop ?? 0,
@@ -78,22 +79,23 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     return (
         <div onWheel={wheelHandler}>
             <div className="cursor-move">
-                <ScrollContainer 
+                <ScrollContainer
                     ref={scrollContainerRef as any /* I don't know why this is needed */}
                     onScroll={onScroll}
                 >
                     <NoSsr>
                         <GameGridView grid={grid}
-                                    view={view} 
-                                    cellSize={cellSize}
-                                    toggleCell={toggleCell}
-                                    scrollX={scroll.scrollX}
-                                    scrollY={scroll.scrollY}
-                                    />
+                            view={view}
+                            cellSize={cellSize}
+                            toggleCell={toggleCell}
+                            scrollX={scroll.scrollX}
+                            scrollY={scroll.scrollY}
+                        />
                     </NoSsr>
                 </ScrollContainer>
             </div>
 
+            <DarkModeSelector className="fixed top-1 right-5" />
             <div className="
                 fixed
                 bottom-0 

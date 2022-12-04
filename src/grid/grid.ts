@@ -76,6 +76,10 @@ abstract class Grid {
     }
 
     equals = (other: Grid): boolean  => {
+        if (this.height !== other.height || this.width !== other.width) {
+            return false;
+        }
+
         for (const {coordinates: [x, y], isAlive} of this) {
                 if (isAlive != other.get(tuple(x, y))) {
                     return false;

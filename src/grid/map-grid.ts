@@ -44,8 +44,8 @@ class MapGrid extends Grid {
         return new MapGrid(createInternalGrid(settings));
     }
 
-    get(x: number, y: number): boolean {
-        return this.internalGrid.get(tuple(x, y))!;
+    get(coordinates: Coordinates): boolean {
+        return this.internalGrid.get(coordinates)!;
     }
     tick(strategy: ConwayStrategy): MapGrid {
         // New grid with birthFactor 0, so it's empty
@@ -63,12 +63,11 @@ class MapGrid extends Grid {
         return new MapGrid(newGrid);
     }
 
-    toggle(x: number, y: number): MapGrid {
-        const targetCoordinates = tuple(x, y);
+    toggle(coordinates: Coordinates): MapGrid {
         const newInternalGrid = new Map<Coordinates, boolean>();
 
         for (const coordinates of this.internalGrid.keys()) {
-            if (coordinates !== targetCoordinates) {
+            if (coordinates !== coordinates) {
                 newInternalGrid.set(coordinates, this.internalGrid.get(coordinates)!)
             } else {
                 newInternalGrid.set(coordinates, !this.internalGrid.get(coordinates))

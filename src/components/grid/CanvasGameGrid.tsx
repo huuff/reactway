@@ -141,7 +141,7 @@ function useClickToggleHandler(
         const [x, y] = [event.clientX, event.clientY];
         const [cellX, cellY] = getMouseCell(ref, x, y, cellSizePixels);
         const transformedCellX = cellX - Math.floor((ref.current?.getBoundingClientRect().left ?? 0) / cellSizePixels);
-        if (grid.contains(transformedCellX, cellY)) {
+        if (grid.contains(tuple(transformedCellX, cellY))) {
             toggleCell(tuple(transformedCellX, cellY));
         }
     }, [cellSizePixels, grid, toggleCell]);

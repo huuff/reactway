@@ -1,5 +1,5 @@
 import { ConwayStrategy } from "../game/conway-strategy";
-import { Grid, GridCreationSettings, CreateGrid } from "./grid";
+import { Grid, GridCreationSettings, CreateGrid, Coordinates } from "./grid";
 import seedrandom from "seedrandom";
 import { shouldBeBornAlive } from "../util/birth-function";
 import { ReadonlyDeep } from "type-fest";
@@ -31,8 +31,8 @@ class ArrayGrid extends Grid {
     }
 
 
-    get(x: number, y: number): boolean {
-        return this.contains(x, y) && this.internalGrid[y][x];
+    get([x, y]: Coordinates): boolean {
+        return this.contains(tuple(x, y)) && this.internalGrid[y][x];
     }
 
     tick(strategy: ConwayStrategy): ArrayGrid {
@@ -43,7 +43,7 @@ class ArrayGrid extends Grid {
         return new ArrayGrid(newInternalGrid);
     }
     
-    toggle(x: number, y: number): ArrayGrid {
+    toggle([x, y]: Coordinates): ArrayGrid {
         const newInternalGrid = this.internalGrid.map((_, y_2) => 
             this.internalGrid[y].map((_, x_2) => !(x === x_2 && y === y_2)
                                                     ? this.internalGrid[y_2][x_2]

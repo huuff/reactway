@@ -166,7 +166,7 @@ describe("TickHistory", () => {
     
             // ASSERT
             const [history,] = result.current;
-            const expectedNextGrid = initialGrid.toggle(1, 1);
+            const expectedNextGrid = initialGrid.toggle(tuple(1, 1));
             expect(history.grid).toStrictEqual(expectedNextGrid);
             expect(history.contents).toStrictEqual([initialGrid, expectedNextGrid]);
             expect(history.length).toBe(2);

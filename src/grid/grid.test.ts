@@ -8,17 +8,17 @@ const grid = new SetGrid([tuple(2, 3), tuple(2, 1), tuple(3, 2), tuple(3,3), tup
 describe("Grid", () => {
   describe("contains", () => {
     test("true", () => {
-      expect(grid.contains(2, 2)).toBe(true);
+      expect(grid.contains(tuple(2, 2))).toBe(true);
     });
 
     test("false", () => {
-      expect(grid.contains(10, 10)).toBe(false);
+      expect(grid.contains(tuple(10, 10))).toBe(false);
     })
 
   });
 
   test("liveNeighbours", () => {
-    expect(grid.liveNeighbours(2, 2)).toBe(4);
+    expect(grid.liveNeighbours(tuple(2, 2))).toBe(4);
   })
 
   test("equals", () => {

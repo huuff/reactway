@@ -30,10 +30,10 @@ describe("ArrayGrid", () => {
         const nextStepGrid = grid.tick(conwayStrategy);
 
         // ASSERT
-        expect(nextStepGrid.get(2, 2)).toBe(false);
-        expect(nextStepGrid.get(2, 1)).toBe(true);
-        expect(nextStepGrid.get(2, 3)).toBe(true);
-        expect(nextStepGrid.get(3, 2)).toBe(true);
+        expect(nextStepGrid.get(tuple(2, 2))).toBe(false);
+        expect(nextStepGrid.get(tuple(2, 1))).toBe(true);
+        expect(nextStepGrid.get(tuple(2, 3))).toBe(true);
+        expect(nextStepGrid.get(tuple(3, 2))).toBe(true);
     });
 
 
@@ -48,16 +48,16 @@ describe("ArrayGrid", () => {
         });
 
         // SANITY CHECK
-        expect(initialGrid.get(toggledX, toggledY)).toBe(false);
+        expect(initialGrid.get(tuple(toggledX, toggledY))).toBe(false);
 
         // ACT
-        const toggledGrid = initialGrid.toggle(toggledX, toggledY);
+        const toggledGrid = initialGrid.toggle(tuple(toggledX, toggledY));
 
         // ASSERT
-        expect(toggledGrid.get(toggledX, toggledY)).toBe(true);
+        expect(toggledGrid.get(tuple(toggledX, toggledY))).toBe(true);
         for (const { coordinates: [x, y] } of toggledGrid) {
             if (x !== toggledX || y !== toggledY) {
-                expect(toggledGrid.get(x, y)).toBe(initialGrid.get(x, y));
+                expect(toggledGrid.get(tuple(x, y))).toBe(initialGrid.get(tuple(x, y)));
             }
         }
         

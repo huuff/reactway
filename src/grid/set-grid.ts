@@ -52,8 +52,8 @@ class SetGrid extends Grid {
         return new SetGrid(tuples, height, width );
     }
 
-    get(x: number, y: number): boolean {
-        const result = this.set.has(tuple(x, y));
+    get(coordinates: Coordinates): boolean {
+        const result = this.set.has(coordinates);
         return result;
     }
 
@@ -68,12 +68,12 @@ class SetGrid extends Grid {
 
         return new SetGrid(nextTuples, this.height, this.width);
     }
-    toggle(x: number, y: number): SetGrid {
+    toggle(coordinates: Coordinates): SetGrid {
         const newSet = new Set(this.set);
-        if (this.get(x, y)) {
-            newSet.delete(tuple(x, y));
+        if (this.get(coordinates)) {
+            newSet.delete(coordinates);
         } else {
-            newSet.add(tuple(x, y));
+            newSet.add(coordinates);
         }
 
         return new SetGrid(

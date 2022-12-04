@@ -30,24 +30,24 @@ abstract class Grid {
     abstract readonly height: number;
     abstract readonly width: number;
 
-    abstract get(x: number, y: number): boolean;
+    abstract get(coordinates: Coordinates): boolean;
     abstract tick(strategy: ConwayStrategy): Grid;
-    abstract toggle(x: number, y: number): Grid;
+    abstract toggle(coordinates: Coordinates): Grid;
 
-    contains(x: number, y: number): boolean {
+    contains([x, y]: Coordinates): boolean {
         return x >= 0 && y >= 0 && x <= (this.width - 1) && y <= (this.height - 1);
     }
 
-    liveNeighbours(x: number, y: number): number {
+    liveNeighbours([x, y]: Coordinates): number {
         let result = 0;
-        if (this.get(x-1, y-1)) result++;
-        if (this.get(x-1, y)) result++;
-        if (this.get(x-1, y+1)) result++;
-        if (this.get(x, y-1)) result++;
-        if (this.get(x, y+1)) result ++;
-        if (this.get(x+1, y-1)) result++;
-        if (this.get(x+1, y)) result++;
-        if (this.get(x+1, y+1)) result++;
+        if (this.get(tuple(x-1, y-1))) result++;
+        if (this.get(tuple(x-1, y))) result++;
+        if (this.get(tuple(x-1, y+1))) result++;
+        if (this.get(tuple(x, y-1))) result++;
+        if (this.get(tuple(x, y+1))) result ++;
+        if (this.get(tuple(x+1, y-1))) result++;
+        if (this.get(tuple(x+1, y))) result++;
+        if (this.get(tuple(x+1, y+1))) result++;
 
         return result;
     }
@@ -70,7 +70,7 @@ abstract class Grid {
             for (const x of range(minX, maxX+1)) {
                 yield {
                     coordinates: tuple(x, y),
-                    isAlive: this.get(x, y),
+                    isAlive: this.get(tuple(x, y)),
                 }
             }
         }
@@ -78,7 +78,7 @@ abstract class Grid {
 
     equals(other: Grid): boolean {
         for (const {coordinates: [x, y], isAlive} of this) {
-                if (isAlive != other.get(x, y)) {
+                if (isAlive != other.get(tuple(x, y))) {
                     return false;
                 }
         }

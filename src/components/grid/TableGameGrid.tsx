@@ -20,20 +20,22 @@ const TableGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps)
                     <tr key={`row-${y}`}>
                         {
                             [...Array(grid.width)].map((_, x) => {
-                                const coord = coordinatesToString(tuple(x, y));
+                                const coordinates = tuple(x, y)
+                                const coordinatesString = coordinatesToString(coordinates);
+                                const isAlive = grid.get(coordinates);
                                 return (
                                     <td
-                                        key={coord}
-                                        data-testid={coord}
-                                        onClick={() => toggleCell(tuple(x, y))}
+                                        key={coordinatesString}
+                                        data-testid={coordinatesString}
+                                        onClick={() => toggleCell(coordinates)}
                                         className={classNames(
                                             sizeClasses,
                                             "border",
                                             {
-                                                "bg-black": grid.get(x, y),
-                                                "bg-white": !grid.get(x, y),
-                                                "hover:bg-red-800": grid.get(x, y),
-                                                "hover:bg-red-400": !grid.get(x, y),
+                                                "bg-black": isAlive,
+                                                "bg-white": !isAlive,
+                                                "hover:bg-red-800": isAlive,
+                                                "hover:bg-red-400": !isAlive,
                                             })}>
                                     </td>
                                 )

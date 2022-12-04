@@ -34,7 +34,7 @@ const AsciiGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps)
                                     className="mx-1 hover:bg-red-400"
                                     onClick={() => toggleCell(tuple(x, y))}
                                 >
-                                    {grid.get(x, y) ? "X" : "O"}
+                                    {grid.get(tuple(x, y)) ? "X" : "O"}
                                 </span>
                             );
                         })

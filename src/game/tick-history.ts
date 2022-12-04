@@ -2,6 +2,7 @@ import { ConwayStrategy, defaultConwayStrategy } from "./conway-strategy";
 import { Coordinates, Grid } from "../grid/grid";
 import { getGridFactory } from "../grid/grid-factory";
 import { trimArray } from "../util/trim-array";
+import tuple from "immutable-tuple";
 
 const MAX_HISTORY_LENGTH = 15;
 
@@ -114,7 +115,7 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
         }
         case "toggle": {
             const [targetX, targetY] = action.value;
-            const nextGrid = previous.grid.toggle(targetX, targetY);
+            const nextGrid = previous.grid.toggle(tuple(targetX, targetY));
             const {
                 array: newContents,
                 newLength

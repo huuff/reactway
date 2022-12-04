@@ -28,22 +28,22 @@ class ArrayGrid extends Grid {
         return new ArrayGrid([...Array(settings.height)].map((_) =>
             [...Array(settings.width)].map((_) => shouldBeBornAlive(random, settings.birthFactor))
         ));
-    }
+    };
 
 
-    get([x, y]: Coordinates): boolean {
+    get = ([x, y]: Coordinates): boolean => {
         return this.contains(tuple(x, y)) && this.internalGrid[y][x];
-    }
+    };
 
-    tick(strategy: ConwayStrategy): ArrayGrid {
+    tick = (strategy: ConwayStrategy): ArrayGrid => {
         const newInternalGrid = this.internalGrid.map((_, y) => 
             this.internalGrid[y].map((_, x) => strategy(this, tuple(x, y)))
         )
 
         return new ArrayGrid(newInternalGrid);
-    }
+    };
     
-    toggle([x, y]: Coordinates): ArrayGrid {
+    toggle = ([x, y]: Coordinates): ArrayGrid => {
         const newInternalGrid = this.internalGrid.map((_, y_2) => 
             this.internalGrid[y].map((_, x_2) => !(x === x_2 && y === y_2)
                                                     ? this.internalGrid[y_2][x_2]
@@ -52,7 +52,7 @@ class ArrayGrid extends Grid {
         )   
 
         return new ArrayGrid(newInternalGrid);
-    }
+    };
 }
 
 export { ArrayGrid };

@@ -42,12 +42,12 @@ class MapGrid extends Grid {
 
     static create: CreateGrid = (settings: GridCreationSettings): MapGrid => {
         return new MapGrid(createInternalGrid(settings));
-    }
+    };
 
-    get(coordinates: Coordinates): boolean {
+    get = (coordinates: Coordinates): boolean => {
         return this.internalGrid.get(coordinates)!;
-    }
-    tick(strategy: ConwayStrategy): MapGrid {
+    };
+    tick = (strategy: ConwayStrategy): MapGrid => {
         // New grid with birthFactor 0, so it's empty
         const newGrid = createInternalGrid({
             height: this.height,
@@ -61,13 +61,13 @@ class MapGrid extends Grid {
         }
 
         return new MapGrid(newGrid);
-    }
+    };
 
-    toggle(coordinates: Coordinates): MapGrid {
+    toggle = (targetCoordinates: Coordinates): MapGrid => {
         const newInternalGrid = new Map<Coordinates, boolean>();
 
         for (const coordinates of this.internalGrid.keys()) {
-            if (coordinates !== coordinates) {
+            if (coordinates !== targetCoordinates) {
                 newInternalGrid.set(coordinates, this.internalGrid.get(coordinates)!)
             } else {
                 newInternalGrid.set(coordinates, !this.internalGrid.get(coordinates))
@@ -75,7 +75,7 @@ class MapGrid extends Grid {
         }
 
         return new MapGrid(newInternalGrid);
-    }
+    };
 
 }
 

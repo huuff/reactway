@@ -63,8 +63,8 @@ describe("TickHistory", () => {
         }
         expect(history.length).toBe(2);
         expect(history.position).toBe(1);
-        expect(history.contents)
-            .toStrictEqual([initialGrid, new SetGrid([], initialGrid.height, initialGrid.width)]);
+        expect(history.contents[0].equals(initialGrid)).toBe(true)
+        expect(history.contents[1].equals(new SetGrid([], initialGrid.height, initialGrid.width))).toBe(true)
     });
 
     describe("tick", () => {
@@ -85,9 +85,9 @@ describe("TickHistory", () => {
             const nextGrid = initialGrid.tick(defaultConwayStrategy);
             const [ history, ] = result.current;
             expect(history.length).toBe(2);
-            expect(history.grid).toStrictEqual(nextGrid);
-            expect(history.contents[0]).toStrictEqual(initialGrid);
-            expect(history.contents[1]).toStrictEqual(nextGrid);
+            expect(history.grid.equals(nextGrid)).toBe(true);
+            expect(history.contents[0].equals(initialGrid)).toBe(true);
+            expect(history.contents[1].equals(nextGrid)).toBe(true);
             expect(history.position).toBe(1);
         });
 
@@ -167,10 +167,11 @@ describe("TickHistory", () => {
             // ASSERT
             const [history,] = result.current;
             const expectedNextGrid = initialGrid.toggle(tuple(1, 1));
-            expect(history.grid).toStrictEqual(expectedNextGrid);
-            expect(history.contents).toStrictEqual([initialGrid, expectedNextGrid]);
+            expect(history.grid.equals(expectedNextGrid)).toBe(true);
             expect(history.length).toBe(2);
             expect(history.position).toBe(1);
+            expect(history.contents[0].equals(initialGrid)).toBe(true);
+            expect(history.contents[1].equals(expectedNextGrid)).toBe(true);
         });
 
     });

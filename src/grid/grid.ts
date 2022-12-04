@@ -24,7 +24,6 @@ type CreateGrid = (settings: GridCreationSettings) => Grid;
 
 type GridType = "array" | "map" | "set";
 
-// TODO: Should I make all functions arrows just in case?
 abstract class Grid {
     abstract readonly type: GridType;
     abstract readonly height: number;
@@ -34,11 +33,11 @@ abstract class Grid {
     abstract tick(strategy: ConwayStrategy): Grid;
     abstract toggle(coordinates: Coordinates): Grid;
 
-    contains([x, y]: Coordinates): boolean {
+    contains = ([x, y]: Coordinates): boolean => {
         return x >= 0 && y >= 0 && x <= (this.width - 1) && y <= (this.height - 1);
-    }
+    };
 
-    liveNeighbours([x, y]: Coordinates): number {
+    liveNeighbours = ([x, y]: Coordinates): number => {
         let result = 0;
         if (this.get(tuple(x-1, y-1))) result++;
         if (this.get(tuple(x-1, y))) result++;
@@ -50,11 +49,11 @@ abstract class Grid {
         if (this.get(tuple(x+1, y+1))) result++;
 
         return result;
-    }
+    };
 
-    iterateCoordinates(f: (coordinates: Coordinates) => void): void {
+    iterateCoordinates = (f: (coordinates: Coordinates) => void): void =>{
         iterateCoordinates(this.height, this.width, f);
-    }
+    };
 
     *[Symbol.iterator](): IterableIterator<Cell> {
         for (const cell of this.boundedIterator(new Box2D(tuple(0,0), tuple(this.width-1, this.height-1)))) {
@@ -76,7 +75,7 @@ abstract class Grid {
         }
     }
 
-    equals(other: Grid): boolean {
+    equals = (other: Grid): boolean  => {
         for (const {coordinates: [x, y], isAlive} of this) {
                 if (isAlive != other.get(tuple(x, y))) {
                     return false;
@@ -84,7 +83,7 @@ abstract class Grid {
         }
 
         return true;
-    }
+    };
 }
 
 type Cell = {

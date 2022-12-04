@@ -2,7 +2,7 @@ import "tailwindcss/tailwind.css";
 import { useEffect, useRef, useState, WheelEvent } from "react";
 import GameSettingsView from "../src/components/settings/GameSettingsView";
 import { defaultSettings, useSettings } from "../src/settings/settings";
-import { useInterval } from "usehooks-ts";
+import { useDarkMode, useInterval } from "usehooks-ts";
 import { useRouter } from "next/router";
 import { randomSeed } from "../src/util/birth-function";
 import { NextPage } from "next";
@@ -15,13 +15,14 @@ import { usePlayback } from "../src/settings/use-playback";
 import GameGridView from "../src/components/grid/GameGridView";
 import { useThrottledCallback } from "beautiful-react-hooks";
 import ScrollContainer from "react-indiana-drag-scroll";
-import DarkModeSelector from "../src/settings/dark-mode-selector";
+import DarkModeSelector from "../src/components/settings/DarkModeSelector";
 
 type GameProps = {
     readonly seed: string;
 }
 
 const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
+    const { isDarkMode } = useDarkMode();
     const [settings, dispatchSettings] = useSettings(defaultSettings);
     const { height, width, birthFactor, tickDuration, view, type, cellSize } = settings
     const playback = usePlayback();
@@ -77,7 +78,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
         })
     }
     return (
-        <div onWheel={wheelHandler}>
+        <div onWheel={wheelHandler} className={`${isDarkMode ? "bg-slate-800" : "bg-slate-100"} min-h-screen`}>
             <div className="cursor-move">
                 <ScrollContainer
                     ref={scrollContainerRef as any /* I don't know why this is needed */}
@@ -96,7 +97,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
             </div>
 
             <DarkModeSelector className="fixed top-1 right-5" />
-            <div className="
+            <div className={`
                 fixed
                 bottom-0 
                 inset-x-0 
@@ -105,9 +106,17 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                 v-1/4
                 mb-5
                 z-20
-                ">
+                `}>
                 <PlayBar
-                    className="border rounded-lg drop-shadow-lg bg-white p-2 mb-2 opacity-90"
+                    className={`
+                    border
+                    rounded-lg 
+                    drop-shadow-lg
+                    ${isDarkMode ? "bg-slate-800" : "bg-slate-100"}
+                    p-2 
+                    mb-2 
+                    opacity-90 
+                    `}
                     playback={playback}
                     historyPosition={historyPosition}
                     setHistoryPosition={setHistoryPosition}
@@ -116,7 +125,14 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                     clearGrid={clear}
                 />
                 <GameSettingsView
-                    className="border rounded-lg drop-shadow-lg bg-white p-2 opacity-90"
+                    className={`
+                    border 
+                    rounded-lg 
+                    drop-shadow-lg 
+                    ${isDarkMode ? "bg-slate-800" : "bg-slate-100"}
+                    p-2
+                    opacity-90
+                    `}
                     settings={settings}
                     dispatchSettings={dispatchSettings}
                 />

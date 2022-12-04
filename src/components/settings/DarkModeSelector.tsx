@@ -1,5 +1,5 @@
-import { useTernaryDarkMode } from "usehooks-ts"
-import { faSun, faMoon, faGear } from "@fortawesome/free-solid-svg-icons";
+import { useDarkMode } from "usehooks-ts"
+import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef } from "react";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
@@ -9,27 +9,21 @@ type DarkModeSelectorProps = {
 }
 
 // TODO: Test
+// TODO: Make this more visible in dark mode
 const DarkModeSelector = ({ className }: DarkModeSelectorProps) => {
-    const { ternaryDarkMode, toggleTernaryDarkMode } = useTernaryDarkMode();
+    const { isDarkMode, toggle } = useDarkMode();
     const iconRef = useRef<IconProp>();
 
     useEffect(() => {
-        switch (ternaryDarkMode) {
-            case "dark":
+            if (isDarkMode)
                 iconRef.current =  faMoon;
-                break;
-            case "light":
+            else
                 iconRef.current = faSun;
-                break;
-            case "system":
-                iconRef.current = faGear;
-                break;
-        }
-    }, [ternaryDarkMode])
+    }, [isDarkMode])
 
     return (
         <button className={`${className || ""} border rounded-lg drop-shadow-md px-2 py-1`} 
-                onClick={toggleTernaryDarkMode}>
+                onClick={toggle}>
             {iconRef.current && <FontAwesomeIcon icon={iconRef.current} className="w-4 h-4" />}
         </button>
     )

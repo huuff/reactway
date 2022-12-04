@@ -4,10 +4,12 @@ import classNames from "classnames";
 import { coordinatesToString } from "../../util/coordinates-to-string";
 import { useMemo } from "react";
 import tuple from "immutable-tuple";
+import { useDarkMode } from "usehooks-ts";
 
 const CELL_SIZE_MULTIPLIER = 2;
 
 const TableGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps) => {
+    const { isDarkMode } = useDarkMode();
     const sizeClasses = useMemo(() => classNames(
         `h-${cellSize * CELL_SIZE_MULTIPLIER}`,
         `w-${cellSize * CELL_SIZE_MULTIPLIER}`
@@ -32,8 +34,10 @@ const TableGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps)
                                             sizeClasses,
                                             "border",
                                             {
-                                                "bg-black": isAlive,
-                                                "bg-white": !isAlive,
+                                                "bg-black": !isDarkMode && isAlive,
+                                                "bg-white": !isDarkMode && !isAlive,
+                                                "bg-slate-400": isDarkMode && isAlive,
+                                                "bg-slate-800" : isDarkMode && !isAlive,
                                                 "hover:bg-red-800": isAlive,
                                                 "hover:bg-red-400": !isAlive,
                                             })}>

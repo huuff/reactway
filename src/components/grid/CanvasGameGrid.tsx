@@ -1,7 +1,7 @@
 import { CSSProperties, MouseEventHandler, RefObject, useCallback, useEffect, useMemo, useRef } from "react";
 import { Coordinates, GameGridProps, Grid } from "../../grid/grid";
 import { useMouseState, useViewportState } from "beautiful-react-hooks";
-import { useDebounce } from "usehooks-ts";
+import { useDarkMode, useDebounce, useTernaryDarkMode } from "usehooks-ts";
 import { Box2D } from "../../util/box-2d";
 import tuple from "immutable-tuple";
 
@@ -18,6 +18,7 @@ type Size = {
 
 // TODO: Test it? Can I?
 const CanvasGameGrid = ({ grid, className, toggleCell, cellSize, scrollX, scrollY }: CanvasGameGridProps) => {
+    const { isDarkMode } = useDarkMode();
     const cellSizePixels = useMemo(() => CELL_SIZE_MULTIPLIER * cellSize, [cellSize]);
     const gridCanvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -28,7 +29,7 @@ const CanvasGameGrid = ({ grid, className, toggleCell, cellSize, scrollX, scroll
     const visibleCellBounds = useVisibleBounds(windowWidth, windowHeight, scrollX, scrollY, gridSizePixels, cellSizePixels)
     const onMouseUp = useClickToggleHandler(gridCanvasRef, cellSizePixels, grid, toggleCell);
 
-    useDrawCanvasEffect(gridCanvasRef, grid, cellSizePixels, visibleCellBounds);
+    useDrawCanvasEffect(gridCanvasRef, grid, cellSizePixels, visibleCellBounds, isDarkMode);
 
 
     return (
@@ -94,8 +95,8 @@ function useVisibleBounds(
 ): Box2D {
     const visibleBounds = useDebounce(useMemo<Box2D>(() => new Box2D(
         tuple(
-            Math.max(scrollX - (windowWidth/2), 0),
-            Math.max(scrollY - (windowHeight/2), 0)
+            Math.max(scrollX - (windowWidth / 2), 0),
+            Math.max(scrollY - (windowHeight / 2), 0)
         ),
         tuple(
             Math.min(scrollX + (windowWidth * 1.5), gridSizePixels.width),
@@ -147,21 +148,27 @@ function useClickToggleHandler(
     }, [cellSizePixels, grid, toggleCell]);
 }
 
-function useDrawCanvasEffect(ref: RefObject<HTMLCanvasElement>, grid: Grid, cellSizePixels: number, visibleCellBounds: Box2D) {
+function useDrawCanvasEffect(
+    ref: RefObject<HTMLCanvasElement>,
+    grid: Grid,
+    cellSizePixels: number,
+    visibleCellBounds: Box2D,
+    isDarkMode: boolean
+) {
     useEffect(() => {
         const canvas = ref.current!;
 
         const ctx = canvas.getContext("2d")!;
         for (const { coordinates: [x, y], isAlive } of grid.boundedIterator(visibleCellBounds)) {
             if (isAlive) {
-                ctx.fillStyle = "black";
+                ctx.fillStyle = isDarkMode ? "#262626" : "#000000";
             } else {
-                ctx.fillStyle = "white";
+                ctx.fillStyle = isDarkMode ? "#666666" : "#F0F0F0";
                 ctx.strokeRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
             }
             ctx.fillRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
         };
-    }, [grid, cellSizePixels, visibleCellBounds])
+    }, [grid, cellSizePixels, visibleCellBounds, isDarkMode])
 }
 
 export default CanvasGameGrid;

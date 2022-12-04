@@ -1,6 +1,6 @@
 
-import { ChangeEvent, useCallback, useEffect } from "react";
-import { useDebounce } from "usehooks-ts";
+import { ChangeEvent, useCallback, useEffect, useMemo } from "react";
+import { useDarkMode, useDebounce } from "usehooks-ts";
 import { GridType } from "../../grid/grid";
 import { GameSettings, GameSettingsAction, GridViewType, NumberGameSetting } from "../../settings/settings";
 import { typedCapitalize } from "../../util/typed-capitalize";
@@ -38,6 +38,7 @@ function useNumberSetting<T extends Exclude<NumberGameSetting, "cellSize">>(
 
 // TODO: Test it?
 const GameSettingsView = ({ settings, dispatchSettings, className }: GameSettingsViewProps) => {
+    const { isDarkMode } = useDarkMode();
     const heightInput = useNumberSetting("height", settings, dispatchSettings);
     const widthInput = useNumberSetting("width", settings, dispatchSettings);
     const birthFactorInput = useNumberSetting("birthFactor", settings, dispatchSettings);
@@ -59,12 +60,14 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
         dispatchSettings({ type: "changeCellSize", value: "decrement" });
     }, [dispatchSettings]);
 
+    const inputBackground = useMemo(() => isDarkMode ? "bg-slate-700" : "bg-white", [isDarkMode]);
+
     return (
-        <div className={className || ""}>
+        <div className={`${className || ""} ${isDarkMode ? "text-white": "text-black"}`}>
             <div className="flex justify-between">
                 <label htmlFor="view" className="w-1/2 mr-2">View:</label>
                 <select
-                    className="w-1/4"
+                    className={`w-1/4 ${inputBackground}`}
                     name="view"
                     onChange={handleViewSettingsChange}
                     value={settings.view}
@@ -78,7 +81,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
             <div className="flex justify-between">
                 <label htmlFor="type" className="w-1/2 mr-2">Type:</label>
                 <select
-                    className="w-1/4"
+                    className={`w-1/4 ${inputBackground}`}
                     name="type"
                     onChange={handleTypeSettingsChange}
                     value={settings.type}
@@ -92,7 +95,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
             <div className="flex justify-between">
                 <label htmlFor="height" className="w-1/2 mr-2">Height:</label>
                 <input
-                    className="w-1/4"
+                    className={`w-1/4 ${inputBackground}`}
                     type="number"
                     name="height"
                     min="5"
@@ -105,7 +108,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
             <div className="flex justify-between">
                 <label htmlFor="width" className="w-1/2 mr-2">Width:</label>
                 <input
-                    className="w-1/4"
+                    className={`w-1/4 ${inputBackground}`}
                     type="number"
                     name="width"
                     min="5"
@@ -119,7 +122,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
             <div className="flex justify-between">
                 <label htmlFor="birth-factor" className="w-1/2 mr-2">Birth factor:</label>
                 <input
-                    className="w-1/4"
+                    className={`w-1/4 ${inputBackground}`}
                     type="number"
                     name="birth-factor"
                     step="0.05"
@@ -133,7 +136,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
             <div className="flex justify-between">
                 <label htmlFor="birth-factor" className="w-1/2 mr-2">Tick duration (ms):</label>
                 <input
-                    className="w-1/4"
+                    className={`w-1/4 ${inputBackground}`}
                     type="number"
                     name="tick-duration"
                     step="100"

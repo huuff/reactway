@@ -1,10 +1,13 @@
 
 import { GameGridProps } from "../../grid/grid";
-import { Fragment, useMemo } from "react";
+import { Fragment, useCallback, useMemo } from "react";
 import { coordinatesToString } from "../../util/coordinates-to-string";
 import tuple from "immutable-tuple";
+import { useDarkMode } from "usehooks-ts";
 
 const AsciiGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps) => {
+    const { isDarkMode } = useDarkMode();
+
     const sizeClass = useMemo(() => {
         switch (cellSize) {
             case 1: 
@@ -26,15 +29,17 @@ const AsciiGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps)
                 <Fragment key={`row-${y}`}>
                     {
                         [...Array(grid.width)].map((_, x) => {
-                            const coord = coordinatesToString(tuple(x, y));
+                            const coordinate = tuple(x, y)
+                            const coordinateString = coordinatesToString(coordinate);
+                            const isAlive = grid.get(tuple(x, y));
                             return (
                                 <span
-                                    key={coord}
-                                    data-testid={coord}
-                                    className="mx-1 hover:bg-red-400"
-                                    onClick={() => toggleCell(tuple(x, y))}
+                                    key={coordinateString}
+                                    data-testid={coordinateString}
+                                    className={`mx-1 hover:bg-red-400 ${isDarkMode ? "text-slate-100" : ""}`}
+                                    onClick={() => toggleCell(coordinate)}
                                 >
-                                    {grid.get(tuple(x, y)) ? "X" : "O"}
+                                    {isAlive ? "X" : "O"}
                                 </span>
                             );
                         })

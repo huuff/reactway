@@ -56,15 +56,9 @@ abstract class Grid {
         iterateCoordinates(this.height, this.width, f);
     }
 
-    // TODO: Use the bounded iterator for this
     *[Symbol.iterator](): IterableIterator<Cell> {
-        for (const y of range(0, this.height)) {
-            for (const x of range(0, this.width)) {
-                yield {
-                    coordinates: tuple(x, y),
-                    isAlive: this.get(x, y),
-                }
-            }
+        for (const cell of this.boundedIterator(new Box2D(tuple(0,0), tuple(this.width-1, this.height-1)))) {
+            yield cell;
         }
     }
 

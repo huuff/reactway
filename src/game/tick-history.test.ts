@@ -1,9 +1,10 @@
 import { renderHook, act } from "@testing-library/react";
-import tuple from "immutable-tuple";
 import { useReducer } from "react";
 import { SetGrid } from "../grid/set-grid";
 import { defaultConwayStrategy } from "./conway-strategy";
 import { historyReducer, newDefaultTickHistory } from "./tick-history";
+import tuple from "immutable-tuple";
+
 
 const initialGrid = new SetGrid([tuple(1, 1), tuple(2, 2)], 2, 2);
 describe("TickHistory", () => {
@@ -83,9 +84,10 @@ describe("TickHistory", () => {
             // ASSERT
             const nextGrid = initialGrid.tick(defaultConwayStrategy);
             const [ history, ] = result.current;
-            expect(history.contents).toStrictEqual([initialGrid, nextGrid]);
-            expect(history.grid).toStrictEqual(nextGrid);
             expect(history.length).toBe(2);
+            expect(history.grid).toStrictEqual(nextGrid);
+            expect(history.contents[0]).toStrictEqual(initialGrid);
+            expect(history.contents[1]).toStrictEqual(nextGrid);
             expect(history.position).toBe(1);
         });
 

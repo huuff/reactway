@@ -1,15 +1,16 @@
 import { CSSProperties, MouseEventHandler, RefObject, useCallback, useEffect, useMemo, useRef } from "react";
 import { Coordinates, GameGridProps, Grid } from "../../grid/grid";
 import { useMouseState, useViewportState } from "beautiful-react-hooks";
-import { useDarkMode, useDebounce, useTernaryDarkMode } from "usehooks-ts";
+import { useDarkMode, useDebounce } from "usehooks-ts";
 import { Box2D } from "../../util/box-2d";
 import tuple from "immutable-tuple";
 
 const CELL_SIZE_MULTIPLIER = 8;
 
 type CanvasGameGridProps = GameGridProps & {
-    scrollX: number;
-    scrollY: number;
+    scrollX?: number;
+    scrollY?: number;
+    viewMode?: "fullscreen" | "block";
 };
 type Size = {
     width: number;
@@ -17,7 +18,15 @@ type Size = {
 }
 
 // TODO: Test it? Can I?
-const CanvasGameGrid = ({ grid, className, toggleCell, cellSize, scrollX, scrollY }: CanvasGameGridProps) => {
+const CanvasGameGrid = ({
+    grid, 
+    className, 
+    toggleCell,
+    cellSize,
+    scrollX = 0,
+    scrollY = 0,
+    viewMode = "fullscreen"
+ }: CanvasGameGridProps) => {
     const { isDarkMode } = useDarkMode();
     const cellSizePixels = useMemo(() => CELL_SIZE_MULTIPLIER * cellSize, [cellSize]);
     const gridCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -33,7 +42,7 @@ const CanvasGameGrid = ({ grid, className, toggleCell, cellSize, scrollX, scroll
 
 
     return (
-        <div style={{ position: "relative", height: "100vh" }} onMouseUp={onMouseUp} >
+        <div style={viewMode === "fullscreen" ? {position: "relative", height: "100vh" } : { display: "block"}} onMouseUp={onMouseUp} >
             <div style={{
                 position: "absolute",
                 height: `${cellSizePixels}px`,

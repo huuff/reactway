@@ -9,7 +9,6 @@ type DarkModeSelectorProps = {
 }
 
 // TODO: Test
-// TODO: Make this more visible in dark mode
 const DarkModeSelector = ({ className }: DarkModeSelectorProps) => {
     const { isDarkMode, toggle } = useDarkMode();
     const iconRef = useRef<IconProp>();
@@ -22,9 +21,20 @@ const DarkModeSelector = ({ className }: DarkModeSelectorProps) => {
     }, [isDarkMode])
 
     return (
-        <button className={`${className || ""} border rounded-lg drop-shadow-md px-2 py-1`} 
+        <button className={`
+            ${className || ""}
+            border 
+            rounded-lg 
+            drop-shadow-md 
+            px-2
+            py-1
+            ${isDarkMode ? "bg-slate-600" : "bg-slate-100"}
+            `} 
                 onClick={toggle}>
-            {iconRef.current && <FontAwesomeIcon icon={iconRef.current} className="w-4 h-4" />}
+            {iconRef.current && <FontAwesomeIcon 
+                    icon={iconRef.current} 
+                    className={`w-4 h-4 ${isDarkMode ? "text-yellow-300" : "text-slate-900"}`}
+                />}
         </button>
     )
 }

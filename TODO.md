@@ -8,3 +8,4 @@
 * Hiding settings in a drawer
 * `MapGrid` and `ArrayGrid` tests are pretty much the same... can't I do some sort of property testing so I can pass the same parameters and just change the implementation?
 * Only showing the move cursor when the grid is larger than the screen?
+* Maybe use classNames everywhere? Seems like it'll be cleaner

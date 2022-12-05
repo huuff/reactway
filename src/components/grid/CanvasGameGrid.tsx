@@ -30,7 +30,11 @@ const CanvasGameGrid = ({
     const gridCanvasRef = useRef<HTMLCanvasElement>(null);
 
     const { width: windowWidth, height: windowHeight } = useViewportState();
-    const { sizePixels: gridSizePixels, style: gridCanvasStyle } = useGridStyle(grid, cellSizePixels, windowWidth);
+    
+    const gridSizePixels = useMemo(() => ({
+        width: grid.width * cellSizePixels,
+        height: grid.height * cellSizePixels,
+    }), [grid.height, grid.width, cellSizePixels]);
 
     const visibleCellBounds = useVisibleBounds(windowWidth, windowHeight, scrollX, scrollY, gridSizePixels, cellSizePixels)
 
@@ -133,28 +137,6 @@ const useHoveredCell = (
         Math.floor((mouseX - (mouseX % cellSizePixels)) / cellSizePixels),
         Math.floor((mouseY - (mouseY % cellSizePixels)) / cellSizePixels),
     )
-}
-
-
-function useGridStyle(
-    grid: Grid,
-    cellSizePixels: number,
-    windowWidth: number,
-): { sizePixels: Size, style: CSSProperties } {
-    const gridSizePixels = useMemo(() => ({
-        width: grid.width * cellSizePixels,
-        height: grid.height * cellSizePixels,
-    }), [grid.height, grid.width, cellSizePixels]);
-    const gridCanvasStyle = useMemo(() => ({
-        position: "absolute" as const,
-        left: gridSizePixels.width < windowWidth ? "50%" : undefined,
-        transform: gridSizePixels.width < windowWidth ? "translate(-50%)" : undefined,
-    }), [gridSizePixels, windowWidth]);
-
-    return {
-        sizePixels: gridSizePixels,
-        style: gridCanvasStyle,
-    };
 }
 
 function useClickToggleHandler(

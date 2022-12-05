@@ -24,9 +24,21 @@ const Lifeforms = () => {
         tuple(1, 3), tuple(2, 3), tuple(3, 3)
     ], 6, 6))
 
+    const {
+        grid: beaconGrid,
+        tick: tickBeacon,
+        toggleCell: toggleBeaconCell,
+    } = useGrid(new SetGrid([
+        tuple(1, 1), tuple(2, 1),
+        tuple(1, 2), tuple(2, 2),
+                                tuple(3, 3), tuple(4, 3),
+                                tuple(3, 4), tuple(4, 4),
+    ], 6, 6))
+
      useInterval(() => {
         tickBlinker();
         tickToad();
+        tickBeacon();
      }, 1000);
 
     return (
@@ -59,7 +71,11 @@ const Lifeforms = () => {
                             </tr>
                             <tr>
                                 <td>Beacon</td>
-                                <td></td>
+                                <td>
+                                    <NoSSR>
+                                        <CanvasGameGrid grid={beaconGrid} toggleCell={toggleBeaconCell} cellSize={3} />
+                                    </NoSSR>
+                                </td>
                             </tr>
                             <tr>
                                 <td>Pulsar</td>

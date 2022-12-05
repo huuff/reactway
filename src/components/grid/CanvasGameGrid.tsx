@@ -40,7 +40,7 @@ const CanvasGameGrid = ({
 
     useDrawCanvasEffect(gridCanvasRef, grid, cellSizePixels, visibleCellBounds, isDarkMode);
 
-    const hoveredCell = useHoveredCell(gridCanvasRef, cellSizePixels);
+    const hoveredCell = useHoveredCell(grid.width, grid.height, gridCanvasRef, cellSizePixels);
     const onMouseUp = useClickToggleHandler(gridCanvasRef, hoveredCell, grid, toggleCell);
 
     const highlightedCell = useHighlightedCell(gridCanvasRef, cellSizePixels, hoveredCell);
@@ -121,6 +121,8 @@ const useHighlightedCell = (
  * Returns the cell (in the grid data structure) that the cursor is hovering
  */
 const useHoveredCell = (
+    gridWidth: number,
+    gridHeight: number,
     gridCanvasRef: RefObject<HTMLCanvasElement>,
     cellSizePixels: number
 ): Coordinates => {
@@ -134,8 +136,8 @@ const useHoveredCell = (
     const mouseY = clientY < 0 ? 0 : Math.min(clientY, bottom);
 
     return tuple(
-        Math.floor((mouseX - (mouseX % cellSizePixels)) / cellSizePixels),
-        Math.floor((mouseY - (mouseY % cellSizePixels)) / cellSizePixels),
+        Math.min(Math.floor((mouseX - (mouseX % cellSizePixels)) / cellSizePixels), gridWidth-1),
+        Math.min(Math.floor((mouseY - (mouseY % cellSizePixels)) / cellSizePixels), gridHeight-1),
     )
 }
 

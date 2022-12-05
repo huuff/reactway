@@ -16,6 +16,10 @@ type Size = {
     height: number;
 }
 
+function getBoundingRectOrZeros(ref: RefObject<HTMLElement>) {
+    return ref.current?.getBoundingClientRect() ?? { left: 0, top: 0, right: 0, bottom: 0};
+}
+
 // TODO: Test it? Can I?
 const CanvasGameGrid = ({
     grid, 
@@ -107,11 +111,15 @@ const useHighlightedCell = (
     [hoveredCellX, hoveredCellY]: Coordinates
     ): Coordinates => {
 
-    const leftDisplacement = Math.max(gridCanvasRef?.current?.getBoundingClientRect().left ?? 0, 0);
+    const { left, top } = getBoundingRectOrZeros(gridCanvasRef);
+
+    const leftDisplacement = Math.max(left, 0);
+    const topDisplacement = Math.max(top, 0);
+
 
     const coordinates = tuple(
         (hoveredCellX * cellSizePixels) + leftDisplacement,
-        hoveredCellY * cellSizePixels,
+        (hoveredCellY * cellSizePixels) + topDisplacement,
     );
 
     return coordinates;
@@ -128,12 +136,13 @@ const useHoveredCell = (
 ): Coordinates => {
     const { clientX, clientY } = useMouseState();
 
-    const { left, bottom } = gridCanvasRef?.current?.getBoundingClientRect() ?? { left: 0, bottom: 0}
+    const { left, top, } = getBoundingRectOrZeros(gridCanvasRef);
 
     const gridDisplacementToTheRight =  Math.max(left, 0);
+    const gridDisplacementToTheBottom = Math.max(top, 0);
 
     const mouseX = Math.max(0, clientX - gridDisplacementToTheRight)
-    const mouseY = clientY < 0 ? 0 : Math.min(clientY, bottom);
+    const mouseY = Math.max(0, clientY - gridDisplacementToTheBottom)
 
     return tuple(
         Math.min(Math.floor((mouseX - (mouseX % cellSizePixels)) / cellSizePixels), gridWidth-1),

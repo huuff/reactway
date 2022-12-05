@@ -110,7 +110,7 @@ const useHoveredCell = (
 ): Coordinates => {
     const { clientX, clientY } = useMouseState();
 
-    const { left, right, top, bottom } = gridCanvasRef?.current?.getBoundingClientRect() ?? { left: 0, right: 0, top: 0, bottom: 0}
+    const { left, bottom } = gridCanvasRef?.current?.getBoundingClientRect() ?? { left: 0, bottom: 0}
 
     const gridDisplacementToTheRight =  Math.max(left, 0);
 

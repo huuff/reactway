@@ -46,33 +46,35 @@ const Lifeforms = () => {
         OOOOOO
     `);
     
-    /*
-    useGrid(new SetGrid([
-        tuple(1, 1), tuple(2, 1),
-        tuple(1, 2), tuple(2, 2),
-                                tuple(3, 3), tuple(4, 3),
-                                tuple(3, 4), tuple(4, 4),
-    ], 6, 6))
-    */
-
-    /*
     const {
         grid: pulsarGrid,
         tick: tickPulsar,
-        toggleCell: togglePulsarCell
-    } = useGrid(new SetGrid([
-                    tuple(5, 3), tuple(6, 3), tuple(7, 3),
-
-        tuple(3, 5),                                        tuple(8, 5),
-        tuple(3, 6),                                        tuple(8, 6),
-        tuple(3, 7),                                        tuple(8, 7),
-    ]))
-    */
+        toggleCell: togglePulsarCell,
+    } = useGrid(gridFromAscii`
+        OOOOOOOOOOOOOOOOO
+        OOOOOOOOOOOOOOOOO
+        OOOO###OOO###OOOO
+        OOOOOOOOOOOOOOOOO
+        OO#OOOO#O#OOOO#OO
+        OO#OOOO#O#OOOO#OO
+        OO#OOOO#O#OOOO#OO
+        OOOO###OOO###OOOO
+        OOOOOOOOOOOOOOOOO
+        OOOO###OOO###OOOO
+        OO#OOOO#O#OOOO#OO
+        OO#OOOO#O#OOOO#OO
+        OO#OOOO#O#OOOO#OO
+        OOOOOOOOOOOOOOOOO
+        OOOO###OOO###OOOO
+        OOOOOOOOOOOOOOOOO
+        OOOOOOOOOOOOOOOOO
+    `);
 
      useInterval(() => {
         tickBlinker();
         tickToad();
         tickBeacon();
+        tickPulsar();
      }, 1000);
 
     return (
@@ -113,7 +115,11 @@ const Lifeforms = () => {
                             </tr>
                             <tr>
                                 <td>Pulsar</td>
-                                <td></td>
+                                <td>
+                                    <NoSSR>
+                                        <CanvasGameGrid grid={pulsarGrid} toggleCell={togglePulsarCell} cellSize={3} />
+                                    </NoSSR>
+                                </td>
                             </tr>
                             <tr>
                                 <td>Penta-decathlon</td>

@@ -10,3 +10,4 @@
 * Only showing the move cursor when the grid is larger than the screen?
 * Maybe use classNames everywhere? Seems like it'll be cleaner
 * Use a theme somehow, because I'm messing colors all around
+* `CanvasGameGrid` hover breaks when scrolling down (see `/lifeforms`)

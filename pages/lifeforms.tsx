@@ -6,7 +6,6 @@ import { useGrid } from "../src/game/use-grid";
 import { SetGrid } from "../src/grid/set-grid";
 import NoSSR from "../src/components/util/NoSSR";
 
-// TODO: This looks pretty ugly! (Specially canvases superposing). Fix it.
 const Lifeforms = () => {
     const {
         grid: blinkerGrid, 

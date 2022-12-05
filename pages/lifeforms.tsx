@@ -5,15 +5,20 @@ import CanvasGameGrid from "../src/components/grid/CanvasGameGrid";
 import { useGrid } from "../src/game/use-grid";
 import { SetGrid } from "../src/grid/set-grid";
 import NoSSR from "../src/components/util/NoSSR";
+import { createGridFromAscii } from "../src/util/create-grid-from-ascii";
 
 const Lifeforms = () => {
     const {
         grid: blinkerGrid, 
         tick: tickBlinker,
         toggleCell: toggleBlinkerCell
-     } = useGrid(new SetGrid([
-        tuple(1,2), tuple(2, 2), tuple(3, 2)
-    ], 5, 5));
+     } = useGrid(createGridFromAscii(`
+        OOOOO
+        OOOOO
+        O###O
+        OOOOO
+        OOOOO
+     `));
 
      const {
         grid: toadGrid,

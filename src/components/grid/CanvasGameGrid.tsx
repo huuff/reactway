@@ -49,8 +49,11 @@ const CanvasGameGrid = ({
 
     const highlightedCell = useHighlightedCell(gridCanvasRef, cellSizePixels, hoveredCell);
 
+    const isMouseWithinGrid = useIsMouseWithinGrid(gridCanvasRef);
+
     return (
         <div onMouseUp={onMouseUp} >
+            { isMouseWithinGrid && (
             <div style={{
                 position: "absolute",
                 height: `${cellSizePixels}px`,
@@ -61,6 +64,7 @@ const CanvasGameGrid = ({
                 zIndex: 10,
                 opacity: 0.5,
             }} />
+            )}
             <canvas
                 ref={gridCanvasRef}
                 className="mx-auto"
@@ -70,6 +74,18 @@ const CanvasGameGrid = ({
             ></canvas>
         </div>
     )
+}
+
+function useIsMouseWithinGrid(gridCanvasRef: RefObject<HTMLCanvasElement>): boolean {
+    const { clientX, clientY } = useMouseState();
+    const boundingRect = gridCanvasRef.current?.getBoundingClientRect();
+    if (!boundingRect) {
+        return false;
+    }
+
+    const { left, top, right, bottom } = boundingRect;
+
+    return clientX >= left && clientX  <= right && clientY >= top && clientY <= bottom;
 }
 
 /**

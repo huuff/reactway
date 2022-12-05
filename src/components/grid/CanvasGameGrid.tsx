@@ -17,7 +17,6 @@ type Size = {
 }
 
 // TODO: Test it? Can I?
-// TODO: Document somehow the meaning of my mouse functions
 const CanvasGameGrid = ({
     grid, 
     className, 
@@ -65,6 +64,9 @@ const CanvasGameGrid = ({
     )
 }
 
+/**
+ * Returns a box that indicates the bounds of the visible part of the screen
+ */
 function useVisibleBounds(
     windowWidth: number,
     windowHeight: number,
@@ -91,6 +93,10 @@ function useVisibleBounds(
     return visibleCellBounds;
 }
 
+/**
+ * Returns coordinates that match the position of the highlighted cell in the screen,
+ * taking into account all displacements and transformations
+ */
 const useHighlightedCell = (
     gridCanvasRef: RefObject<HTMLCanvasElement>, 
     cellSizePixels: number,
@@ -107,6 +113,9 @@ const useHighlightedCell = (
     return coordinates;
 }
 
+/**
+ * Returns the cell (in the grid data structure) that the cursor is hovering
+ */
 const useHoveredCell = (
     gridCanvasRef: RefObject<HTMLCanvasElement>,
     cellSizePixels: number

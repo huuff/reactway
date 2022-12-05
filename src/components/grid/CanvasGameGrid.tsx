@@ -40,7 +40,7 @@ const CanvasGameGrid = ({
     const hoveredCell = useHoveredCell(gridCanvasRef, cellSizePixels);
     const onMouseUp = useClickToggleHandler(gridCanvasRef, hoveredCell, grid, toggleCell);
 
-    const highlightedCell = useMouseHighlightedCell(gridCanvasRef, cellSizePixels);
+    const highlightedCell = useHighlightedCell(gridCanvasRef, cellSizePixels, hoveredCell);
 
     return (
         <div onMouseUp={onMouseUp} >
@@ -91,14 +91,17 @@ function useVisibleBounds(
     return visibleCellBounds;
 }
 
-const useMouseHighlightedCell = (gridCanvasRef: RefObject<HTMLCanvasElement>, cellSizePixels: number): Coordinates => {
-    const { clientX, clientY } = useMouseState();
+const useHighlightedCell = (
+    gridCanvasRef: RefObject<HTMLCanvasElement>, 
+    cellSizePixels: number,
+    [hoveredCellX, hoveredCellY]: Coordinates
+    ): Coordinates => {
 
-    const leftDisplacementCoercedToCell = Math.max(gridCanvasRef?.current?.getBoundingClientRect().left ?? 0, 0) % cellSizePixels;
+    const leftDisplacement = Math.max(gridCanvasRef?.current?.getBoundingClientRect().left ?? 0, 0);
 
     const coordinates = tuple(
-        (clientX - (clientX % cellSizePixels)) + leftDisplacementCoercedToCell,
-        clientY - (clientY % cellSizePixels)
+        (hoveredCellX * cellSizePixels) + leftDisplacement,
+        hoveredCellY * cellSizePixels,
     );
 
     return coordinates;

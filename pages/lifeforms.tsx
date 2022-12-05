@@ -4,6 +4,7 @@ import tuple from "immutable-tuple";
 import CanvasGameGrid from "../src/components/grid/CanvasGameGrid";
 import { useGrid } from "../src/game/use-grid";
 import { SetGrid } from "../src/grid/set-grid";
+import NoSSR from "../src/components/util/NoSSR";
 
 // TODO: This looks pretty ugly! (Specially canvases superposing). Fix it.
 const Lifeforms = () => {
@@ -44,13 +45,17 @@ const Lifeforms = () => {
                             <tr>
                                 <td>Blinker</td>
                                 <td>
-                                    <CanvasGameGrid grid={blinkerGrid} toggleCell={toggleBlinkerCell} cellSize={3}/>
+                                    <NoSSR>
+                                        <CanvasGameGrid grid={blinkerGrid} toggleCell={toggleBlinkerCell} cellSize={3}/>
+                                    </NoSSR>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Toad</td>
                                 <td>
-                                    <CanvasGameGrid grid={toadGrid} toggleCell={toggleToadCell} cellSize={3} />
+                                    <NoSSR>
+                                        <CanvasGameGrid grid={toadGrid} toggleCell={toggleToadCell} cellSize={3} />
+                                    </NoSSR>
                                 </td>
                             </tr>
                             <tr>

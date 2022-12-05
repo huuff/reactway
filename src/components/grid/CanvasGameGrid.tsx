@@ -37,7 +37,7 @@ const CanvasGameGrid = ({
 
     useDrawCanvasEffect(gridCanvasRef, grid, cellSizePixels, visibleCellBounds, isDarkMode);
 
-    const hoveredCell = useHoveredCell(gridCanvasRef, cellSize);
+    const hoveredCell = useHoveredCell(gridCanvasRef, cellSizePixels);
     const onMouseUp = useClickToggleHandler(gridCanvasRef, hoveredCell, grid, toggleCell);
 
     const highlightedCell = useMouseHighlightedCell(gridCanvasRef, cellSizePixels);
@@ -110,12 +110,12 @@ const useHoveredCell = (
 ): Coordinates => {
     const { clientX, clientY } = useMouseState();
 
-    const { left, right } = gridCanvasRef?.current?.getBoundingClientRect() ?? { left: 0, right: 0}
+    const { left, right, top, bottom } = gridCanvasRef?.current?.getBoundingClientRect() ?? { left: 0, right: 0, top: 0, bottom: 0}
 
     const gridDisplacementToTheRight =  Math.max(left, 0);
 
     const mouseX = Math.max(0, clientX - gridDisplacementToTheRight)
-    const mouseY = clientY < 0 ? 0 : Math.min(clientY, right);
+    const mouseY = clientY < 0 ? 0 : Math.min(clientY, bottom);
 
     return tuple(
         Math.floor((mouseX - (mouseX % cellSizePixels)) / cellSizePixels),
@@ -152,6 +152,7 @@ function useClickToggleHandler(
     toggleCell: (coordinates: Coordinates) => void,
 ): MouseEventHandler<HTMLElement> {
     return useCallback((event) => {
+        console.log(`Toggling cell ${JSON.stringify(mouseCell)}`);
         if (grid.contains(mouseCell)) {
             toggleCell(mouseCell);
         }

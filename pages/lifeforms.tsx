@@ -21,8 +21,8 @@ const Lifeforms = () => {
         tick: tickToad,
         toggleCell: toggleToadCell,
      } = useGrid(new SetGrid([
-            tuple(3, 3), tuple(4, 3), tuple(5,3),
-        tuple(2, 4), tuple(3, 4), tuple(4, 4)
+            tuple(2, 2), tuple(3, 2), tuple(4,2),
+        tuple(1, 3), tuple(2, 3), tuple(3, 3)
     ], 6, 6))
 
      useInterval(() => {

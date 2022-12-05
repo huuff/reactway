@@ -2,7 +2,8 @@ import tuple from "immutable-tuple";
 import { Coordinates, Grid } from "../grid/grid";
 import { SetGrid } from "../grid/set-grid";
 
-function createGridFromAscii(ascii: string): Grid {
+function gridFromAscii(input: TemplateStringsArray): Grid {
+    const ascii = input[0];
     const lines = ascii.split("\n").filter((it) => it.trim().length > 0);
     const height = lines.length;
     const width = lines[0].trim().length;
@@ -21,4 +22,4 @@ function createGridFromAscii(ascii: string): Grid {
     return new SetGrid(aliveCells, height, width);
 }
 
-export { createGridFromAscii };
+export { gridFromAscii };

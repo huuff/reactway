@@ -24,21 +24,36 @@ const Lifeforms = () => {
         grid: toadGrid,
         tick: tickToad,
         toggleCell: toggleToadCell,
-     } = useGrid(new SetGrid([
-            tuple(2, 2), tuple(3, 2), tuple(4,2),
-        tuple(1, 3), tuple(2, 3), tuple(3, 3)
-    ], 6, 6))
+     } = useGrid(gridFromAscii`
+        OOOOOO
+        OOOOOO
+        OO###O
+        O###OO
+        OOOOOO
+        OOOOOO
+     `);
 
     const {
         grid: beaconGrid,
         tick: tickBeacon,
         toggleCell: toggleBeaconCell,
-    } = useGrid(new SetGrid([
+    } = useGrid(gridFromAscii`
+        OOOOOO
+        O##OOO
+        O##OOO
+        OOO##O
+        OOO##O
+        OOOOOO
+    `);
+    
+    /*
+    useGrid(new SetGrid([
         tuple(1, 1), tuple(2, 1),
         tuple(1, 2), tuple(2, 2),
                                 tuple(3, 3), tuple(4, 3),
                                 tuple(3, 4), tuple(4, 4),
     ], 6, 6))
+    */
 
     /*
     const {

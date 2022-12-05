@@ -44,13 +44,13 @@ const Lifeforms = () => {
                             <tr>
                                 <td>Blinker</td>
                                 <td>
-                                    <CanvasGameGrid grid={blinkerGrid} toggleCell={toggleBlinkerCell} cellSize={3} viewMode="block"/>
+                                    <CanvasGameGrid grid={blinkerGrid} toggleCell={toggleBlinkerCell} cellSize={3}/>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Toad</td>
                                 <td>
-                                    <CanvasGameGrid grid={toadGrid} toggleCell={toggleToadCell} cellSize={3} viewMode="block" />
+                                    <CanvasGameGrid grid={toadGrid} toggleCell={toggleToadCell} cellSize={3} />
                                 </td>
                             </tr>
                             <tr>

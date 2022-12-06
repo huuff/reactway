@@ -45,12 +45,11 @@ const CanvasGameGrid = ({
 
     useDrawCanvasEffect(gridCanvasRef, grid, cellSizePixels, visibleCellBounds, isDarkMode);
 
-    const hoveredCell = useHoveredCell(grid.width, grid.height, gridCanvasRef, cellSizePixels);
+    const hoveredCell = useDebounce(useHoveredCell(grid.width, grid.height, gridCanvasRef, cellSizePixels), 5);
     const previousHoveredCell = usePreviousValue(hoveredCell);
     const isMouseWithinGrid = useIsMouseWithinGrid(gridCanvasRef);
 
     // TODO: Split it somewhere
-    // TODO: Debounce to optimize it
     // TODO: This leaves a weird trail of unaligned cell wherever it passes through
     // TODO: Adapt to dark mode
     // TODO: Disable when ticking is getting slow

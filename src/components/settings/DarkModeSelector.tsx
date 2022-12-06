@@ -15,7 +15,7 @@ const DarkModeSelector = ({ className }: DarkModeSelectorProps) => {
 
     useEffect(() => {
             if (isDarkMode)
-                iconRef.current =  faMoon;
+                iconRef.current = faMoon;
             else
                 iconRef.current = faSun;
     }, [isDarkMode])

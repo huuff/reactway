@@ -149,7 +149,6 @@ const useHoveredCell = (
     cellSizePixels: number
 ): Coordinates => {
     const { clientX, clientY } = useMouseState();
-    const { width: viewportWidth, height: viewportHeight } = useViewportState();
 
     const { left: leftDisplacement, top, } = getBoundingRectOrZeros(gridCanvasRef);
 

@@ -154,9 +154,6 @@ const useHoveredCell = (
     const { left: leftDisplacement, top, } = getBoundingRectOrZeros(gridCanvasRef);
 
     const gridDisplacementToTheBottom = Math.max(top, 0);
-    console.log(`Grid displacement to the bottom: ${gridDisplacementToTheBottom}`);
-    console.log(`Viewport width: ${viewportWidth}`);
-    console.log(`Viewport heght: ${viewportHeight}`);
 
     const mouseX = Math.max(0, clientX - leftDisplacement)
     const mouseY = Math.max(0, clientY - gridDisplacementToTheBottom)
@@ -176,7 +173,6 @@ function useClickToggleHandler(
     toggleCell: (coordinates: Coordinates) => void,
 ): MouseEventHandler<HTMLElement> {
     return useCallback((event) => {
-        console.log(`Toggling cell ${JSON.stringify(mouseCell)}`);
         if (grid.contains(mouseCell)) {
             toggleCell(mouseCell);
         }

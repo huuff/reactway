@@ -4,10 +4,10 @@ import CanvasGameGrid from "../src/components/grid/CanvasGameGrid";
 import { useGrid } from "../src/game/use-grid";
 import NoSSR from "../src/components/util/NoSSR";
 import { gridFromAscii } from "../src/util/create-grid-from-ascii";
+import { typesafeKeys } from "../src/util/typesafe-keys";
 
 // TODO: Nicer styles
 // TODO: Enable dark mode here
-// TODO: Generate the JSX from the grids structure
 
 const INITIAL_GRIDS = {
     "Still Life": {
@@ -159,15 +159,15 @@ type AssortedGrids = {
     }
 };
 
-type GridType = keyof typeof INITIAL_GRIDS;
-type GridName = keyof typeof INITIAL_GRIDS[GridType];
+type LifeformType = keyof typeof INITIAL_GRIDS;
+type LifeformName = keyof typeof INITIAL_GRIDS[LifeformType];
 // TODO: Can't I at least remove some type assertions?
 function createGrids(): AssortedGrids {
     return Object.keys(INITIAL_GRIDS).reduce((result, gridType) => ({
         ...result,
-        [gridType]: Object.keys(INITIAL_GRIDS[gridType as GridType]).reduce((gridsOfType, gridName) => ({
+        [gridType]: Object.keys(INITIAL_GRIDS[gridType as LifeformType]).reduce((gridsOfType, gridName) => ({
             ...gridsOfType,
-            [gridName]: useGrid(INITIAL_GRIDS[gridType as GridType][gridName as GridName])
+            [gridName]: useGrid(INITIAL_GRIDS[gridType as LifeformType][gridName as LifeformName])
         }), {} as typeof INITIAL_GRIDS[keyof typeof INITIAL_GRIDS])
     }), {} as AssortedGrids);
 }
@@ -183,122 +183,42 @@ const Lifeforms = () => {
         });
     }, 1000);
 
-    const oscillators = grids["Oscillators"];
-    const blinker = oscillators["Blinker"];
-    const toad = oscillators["Toad"];
-    const beacon = oscillators["Beacon"];
-    const pulsar = oscillators["Pulsar"];
-    const pentadecathlon = oscillators["Penta-decathlon"];
-
-    const stillLifes = grids["Still Life"];
-    const block = stillLifes["Block"];
-    const beehive = stillLifes["Beehive"];
-    const loaf = stillLifes["Loaf"];
-    const boat = stillLifes["Boat"];
-    const tub = stillLifes["Tub"];
-
-    const spaceships = grids["Spaceships"];
-    const glider = spaceships["Glider"];
-    const lightweightSpaceship = spaceships["Lightweight Spaceship"];
-    const middleweightSpaceship = spaceships["Middleweight Spaceship"];
-    const heavyweightSpaceship = spaceships["Heavyweight Spaceship"];
-
     return (
         <>
             <header className="text-lg text-center">Lifeforms</header>
             <main className="flex flex-row justify-evenly">
                 <div>
-                    Still lifes
-                    <div>
-                        Block
-                        <NoSSR>
-                            <CanvasGameGrid grid={block.grid} toggleCell={block.toggleCell} cellSize={2} />
-                        </NoSSR>
-                    </div>
-                    <div>
-                        Beehive
-                        <NoSSR>
-                            <CanvasGameGrid grid={beehive.grid} toggleCell={beehive.toggleCell} cellSize={2} />
-                        </NoSSR>
-                    </div>
-                    <div>
-                        Loaf
-                        <NoSSR>
-                            <CanvasGameGrid grid={loaf.grid} toggleCell={loaf.toggleCell} cellSize={2} />
-                        </NoSSR>
-                    </div>
-                    <div>
-                        Boat
-                        <NoSSR>
-                            <CanvasGameGrid grid={boat.grid} toggleCell={boat.toggleCell} cellSize={2} />
-                        </NoSSR>
-                    </div>
-                    <div>
-                        Tub
-                        <NoSSR>
-                            <CanvasGameGrid grid={tub.grid} toggleCell={tub.toggleCell} cellSize={2} />
-                        </NoSSR>
-                    </div>
+                    Still Lifes
+                    { Object.entries(grids["Still Life"]).map(([lifeformName, lifeform]) => (
+                        <div>
+                            { lifeformName }
+                            <NoSSR>
+                                <CanvasGameGrid grid={lifeform.grid} toggleCell={lifeform.toggleCell} cellSize={2} />
+                            </NoSSR>
+                        </div>
+                    ))}
                 </div>
                 <div>
                     Oscillators
-                    <div>
-                        Blinker
-                        <NoSSR>
-                            <CanvasGameGrid grid={blinker.grid} toggleCell={blinker.toggleCell} cellSize={2} />
-                        </NoSSR>
-                    </div>
-                    <div>
-                        Toad
-                        <NoSSR>
-                            <CanvasGameGrid grid={toad.grid} toggleCell={toad.toggleCell} cellSize={2} />
-                        </NoSSR>
-                    </div>
-                    <div>
-                        Beacon
-                        <NoSSR>
-                            <CanvasGameGrid grid={beacon.grid} toggleCell={beacon.toggleCell} cellSize={2} />
-                        </NoSSR>
-                    </div>
-                    <div>
-                        Pulsar
-                        <NoSSR>
-                            <CanvasGameGrid grid={pulsar.grid} toggleCell={pulsar.toggleCell} cellSize={2} />
-                        </NoSSR>
-                    </div>
-                    <div>
-                        Penta-decathlon
-                        <NoSSR>
-                            <CanvasGameGrid grid={pentadecathlon.grid} toggleCell={pentadecathlon.toggleCell} cellSize={2} />
-                        </NoSSR>
-                    </div>
+                    { Object.entries(grids["Oscillators"]).map(([lifeformName, lifeform]) => (
+                        <div>
+                            { lifeformName }
+                            <NoSSR>
+                                <CanvasGameGrid grid={lifeform.grid} toggleCell={lifeform.toggleCell} cellSize={2} />
+                            </NoSSR>
+                        </div>
+                    ))}
                 </div>
                 <div>
                     Spaceships
-                    <div>
-                        Glider
-                        <NoSSR>
-                            <CanvasGameGrid grid={glider.grid} toggleCell={glider.toggleCell} cellSize={2} />
-                        </NoSSR>
-                    </div>
-                    <div>
-                        Lightweight Spaceship
-                        <NoSSR>
-                            <CanvasGameGrid grid={lightweightSpaceship.grid} toggleCell={lightweightSpaceship.toggleCell} cellSize={2} />
-                        </NoSSR>
-                    </div>
-                    <div>
-                        Middleweight Spaceship
-                        <NoSSR>
-                            <CanvasGameGrid grid={middleweightSpaceship.grid} toggleCell={middleweightSpaceship.toggleCell} cellSize={2} />
-                        </NoSSR>
-                    </div>
-                    <div>
-                        Heavyweight Spaceship
-                        <NoSSR>
-                            <CanvasGameGrid grid={heavyweightSpaceship.grid} toggleCell={heavyweightSpaceship.toggleCell} cellSize={2} />
-                        </NoSSR>
-                    </div>
+                    { Object.entries(grids["Spaceships"]).map(([lifeformName, lifeform]) => (
+                        <div>
+                            { lifeformName }
+                            <NoSSR>
+                                <CanvasGameGrid grid={lifeform.grid} toggleCell={lifeform.toggleCell} cellSize={2} />
+                            </NoSSR>
+                        </div>
+                    ))}
                 </div>
             </main>
         </>

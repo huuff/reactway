@@ -1,4 +1,4 @@
-const myCustomTheme = require("./theme.ts");
+const myCustomTheme = require("./theme.js");
 
 /** @type {import('tailwindcss').Config} */
 

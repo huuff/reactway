@@ -26,16 +26,20 @@ function drawCell(
     coordinates: Coordinates,
     isAlive: boolean,
     isDarkMode: boolean,
-    cellSizePixels: number
+    cellSizePixels: number,
+    drawInsideOnly = false, // Only draw in the inside of the cell, not the whole of it
 ) {
+    const rectSizePixels = drawInsideOnly ? cellSizePixels - 1 : cellSizePixels;
+
     const [x, y] = coordinates;
     if (isAlive) {
         canvasContext.fillStyle = isDarkMode ? "#262626" : "#000000";
     } else {
         canvasContext.fillStyle = isDarkMode ? "#666666" : "#F0F0F0";
-        canvasContext.strokeRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
+        canvasContext.strokeStyle
+        canvasContext.strokeRect(x * cellSizePixels, y * cellSizePixels, rectSizePixels, rectSizePixels);
     }
-    canvasContext.fillRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
+    canvasContext.fillRect(x * cellSizePixels, y * cellSizePixels, rectSizePixels, rectSizePixels);
 }
 
 // TODO: Test it? Can I?
@@ -199,7 +203,9 @@ type HighlightedCellEffectParams = {
     isMouseWithinGrid: boolean,
     isDragging: boolean,
 }
-// TODO: This leaves a weird trail of unaligned cells wherever it passes through
+// XXX: This still leaves a trail of cells with a stroke that looks thicker than the rest...
+// but that's much nicer than what I had before, so I'm leaving it so for now.
+
 // TODO: Disable when ticking is getting slow
 function useDrawHighlightedCellEffect({
     grid,
@@ -221,11 +227,10 @@ function useDrawHighlightedCellEffect({
         const canvas = gridCanvasRef.current!;
 
         const ctx = canvas.getContext("2d")!;
-
         // First, cleanup the previously hovered cell
         if (previousHoveredCell) {
             const isPreviousAlive = grid.get(previousHoveredCell);
-            drawCell(ctx, previousHoveredCell, isPreviousAlive, isDarkMode, cellSizePixels);
+            drawCell(ctx, previousHoveredCell, isPreviousAlive, isDarkMode, cellSizePixels, true);
         }
 
         if (!isMouseWithinGrid) {
@@ -237,12 +242,13 @@ function useDrawHighlightedCellEffect({
         const isAlive = grid.get(hoveredCell);
         const [x, y] = hoveredCell;
 
+        // TODO: Merge this with the drawcell function?
         if (isAlive) {
             ctx.fillStyle = "#660000";
         } else {
             ctx.fillStyle = isDarkMode ? "#B30000" : "#FF3333";
         }
-        ctx.fillRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
+        ctx.fillRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels-1, cellSizePixels-1);
 
     }, [hoveredCell, previousHoveredCell, grid, isMouseWithinGrid, isDarkMode, isDragging])
 }

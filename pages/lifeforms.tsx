@@ -1,12 +1,13 @@
 import "tailwindcss/tailwind.css";
 import { useInterval } from "beautiful-react-hooks";
-import tuple from "immutable-tuple";
 import CanvasGameGrid from "../src/components/grid/CanvasGameGrid";
 import { useGrid } from "../src/game/use-grid";
-import { SetGrid } from "../src/grid/set-grid";
 import NoSSR from "../src/components/util/NoSSR";
 import { gridFromAscii } from "../src/util/create-grid-from-ascii";
 
+// TODO: Nicer styles
+// TODO: Enable dark mode here
+// TODO: Generate the JSX from the grids structure
 
 const INITIAL_GRIDS = {
     "Still Life": {

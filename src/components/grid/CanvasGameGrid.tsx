@@ -52,7 +52,7 @@ const CanvasGameGrid = ({
     const isMouseWithinGrid = useIsMouseWithinGrid(gridCanvasRef);
 
     return (
-        <div onMouseUp={onMouseUp} >
+        <div onMouseUp={onMouseUp} className={className}>
             { isMouseWithinGrid && (
             <div style={{
                 position: "absolute",

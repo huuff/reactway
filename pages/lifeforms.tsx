@@ -119,7 +119,7 @@ const Lifeforms = () => {
                                 <td>Blinker</td>
                                 <td>
                                     <NoSSR>
-                                        <CanvasGameGrid grid={blinkerGrid} toggleCell={toggleBlinkerCell} cellSize={3}/>
+                                        <CanvasGameGrid grid={blinkerGrid} toggleCell={toggleBlinkerCell} cellSize={2}/>
                                     </NoSSR>
                                 </td>
                             </tr>
@@ -127,7 +127,7 @@ const Lifeforms = () => {
                                 <td>Toad</td>
                                 <td>
                                     <NoSSR>
-                                        <CanvasGameGrid grid={toadGrid} toggleCell={toggleToadCell} cellSize={3} />
+                                        <CanvasGameGrid grid={toadGrid} toggleCell={toggleToadCell} cellSize={2} />
                                     </NoSSR>
                                 </td>
                             </tr>
@@ -135,7 +135,7 @@ const Lifeforms = () => {
                                 <td>Beacon</td>
                                 <td>
                                     <NoSSR>
-                                        <CanvasGameGrid grid={beaconGrid} toggleCell={toggleBeaconCell} cellSize={3} />
+                                        <CanvasGameGrid grid={beaconGrid} toggleCell={toggleBeaconCell} cellSize={2} />
                                     </NoSSR>
                                 </td>
                             </tr>
@@ -143,7 +143,7 @@ const Lifeforms = () => {
                                 <td>Pulsar</td>
                                 <td>
                                     <NoSSR>
-                                        <CanvasGameGrid grid={pulsarGrid} toggleCell={togglePulsarCell} cellSize={3} />
+                                        <CanvasGameGrid grid={pulsarGrid} toggleCell={togglePulsarCell} cellSize={2} />
                                     </NoSSR>
                                 </td>
                             </tr>
@@ -151,7 +151,7 @@ const Lifeforms = () => {
                                 <td>Penta-decathlon</td>
                                 <td>
                                     <NoSSR>
-                                        <CanvasGameGrid grid={pentadecathlonGrid} toggleCell={togglePentadecathlonCell} cellSize={3} />
+                                        <CanvasGameGrid grid={pentadecathlonGrid} toggleCell={togglePentadecathlonCell} cellSize={2} />
                                     </NoSSR>
                                 </td>
                             </tr>

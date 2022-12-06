@@ -127,11 +127,9 @@ const useHighlightedCell = (
     [hoveredCellX, hoveredCellY]: Coordinates
     ): Coordinates => {
 
-    const { left, top } = getBoundingRectOrZeros(gridCanvasRef);
+    const { left: leftDisplacement, top } = getBoundingRectOrZeros(gridCanvasRef);
 
-    const leftDisplacement = Math.max(left, 0);
     const topDisplacement = Math.max(top, 0);
-
 
     const coordinates = tuple(
         (hoveredCellX * cellSizePixels) + leftDisplacement,
@@ -151,19 +149,24 @@ const useHoveredCell = (
     cellSizePixels: number
 ): Coordinates => {
     const { clientX, clientY } = useMouseState();
+    const { width: viewportWidth, height: viewportHeight } = useViewportState();
 
-    const { left, top, } = getBoundingRectOrZeros(gridCanvasRef);
+    const { left: leftDisplacement, top, } = getBoundingRectOrZeros(gridCanvasRef);
 
-    const gridDisplacementToTheRight =  Math.max(left, 0);
     const gridDisplacementToTheBottom = Math.max(top, 0);
+    console.log(`Grid displacement to the bottom: ${gridDisplacementToTheBottom}`);
+    console.log(`Viewport width: ${viewportWidth}`);
+    console.log(`Viewport heght: ${viewportHeight}`);
 
-    const mouseX = Math.max(0, clientX - gridDisplacementToTheRight)
+    const mouseX = Math.max(0, clientX - leftDisplacement)
     const mouseY = Math.max(0, clientY - gridDisplacementToTheBottom)
 
-    return tuple(
+    const result = tuple(
         Math.min(Math.floor((mouseX - (mouseX % cellSizePixels)) / cellSizePixels), gridWidth-1),
         Math.min(Math.floor((mouseY - (mouseY % cellSizePixels)) / cellSizePixels), gridHeight-1),
-    )
+    );
+
+    return result;
 }
 
 function useClickToggleHandler(

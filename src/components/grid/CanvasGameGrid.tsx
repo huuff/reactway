@@ -198,6 +198,7 @@ type HighlightedCellEffectParams = {
 }
 // TODO: This leaves a weird trail of unaligned cell wherever it passes through
 // TODO: Disable when ticking is getting slow
+// TODO: Disable while dragging! That might help the performance when moving around the grid
 function useDrawHighlightedCellEffect({
     grid,
     gridCanvasRef,

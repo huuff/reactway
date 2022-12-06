@@ -39,19 +39,20 @@ const CanvasGameGrid = ({
         width: grid.width * cellSizePixels,
         height: grid.height * cellSizePixels,
     }), [grid.height, grid.width, cellSizePixels]);
-
+    
+    // TODO: Do I need scrollX and scrollY? I might be able to get them from the bounding rect of the grid
     const visibleCellBounds = useVisibleBounds(windowWidth, windowHeight, scrollX, scrollY, gridSizePixels, cellSizePixels)
 
     useDrawCanvasEffect(gridCanvasRef, grid, cellSizePixels, visibleCellBounds, isDarkMode);
 
     const hoveredCell = useHoveredCell(grid.width, grid.height, gridCanvasRef, cellSizePixels);
     const previousHoveredCell = usePreviousValue(hoveredCell);
+    const isMouseWithinGrid = useIsMouseWithinGrid(gridCanvasRef);
 
     // TODO: Split it somewhere
     // TODO: Debounce to optimize it
     // TODO: This leaves a weird trail of unaligned cell wherever it passes through
     // TODO: Adapt to dark mode
-    // TODO: Use only if the mouse is within grid
     // TODO: Disable when ticking is getting slow
     useEffect(() => {
         const canvas = gridCanvasRef.current!;
@@ -73,6 +74,11 @@ const CanvasGameGrid = ({
             ctx.fillRect(previousX * cellSizePixels, previousY * cellSizePixels, cellSizePixels, cellSizePixels);
         }
 
+        if (!isMouseWithinGrid) {
+            // The mouse is outside the grid, so it doesn't make sense to paint any hovered cell
+            return;
+        }
+
         // Then, we paint the currently hovered cell
         const isAlive = grid.get(hoveredCell);
         const [x, y] = hoveredCell;
@@ -84,7 +90,7 @@ const CanvasGameGrid = ({
         }
         ctx.fillRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
 
-    }, [hoveredCell, previousHoveredCell, grid])
+    }, [hoveredCell, previousHoveredCell, grid, isMouseWithinGrid, isDarkMode])
 
     const onMouseUp = useClickToggleHandler(gridCanvasRef, hoveredCell, grid, toggleCell);
 

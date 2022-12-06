@@ -9,6 +9,43 @@ import { gridFromAscii } from "../src/util/create-grid-from-ascii";
 
 
 const INITIAL_GRIDS = {
+    "Still Life": {
+        "Block": gridFromAscii`
+            OOOO
+            O##O
+            O##O
+            OOOO
+        `,
+        "Beehive": gridFromAscii`
+            OOOOOO
+            OO##OO
+            O#OO#O
+            OO##OO
+            OOOOOO
+        `,
+        "Loaf": gridFromAscii`
+            OOOOOO
+            OO##OO
+            O#OO#O
+            OO#O#O
+            OOO#OO
+            OOOOOO
+        `,
+        "Boat": gridFromAscii`
+            OOOOO
+            O##OO
+            O#O#O
+            OO#OO
+            OOOOO
+        `,
+        "Tub": gridFromAscii`
+            OOOOO
+            OO#OO
+            O#O#O
+            OO#OO
+            OOOOO
+        `,
+    },
     "Oscillators": {
         "Blinker": gridFromAscii`
                         OOOOO
@@ -112,12 +149,49 @@ const Lifeforms = () => {
     const pulsar = oscillators["Pulsar"];
     const pentadecathlon = oscillators["Penta-decathlon"];
 
+    const stillLifes = grids["Still Life"];
+    const block = stillLifes["Block"];
+    const beehive = stillLifes["Beehive"];
+    const loaf = stillLifes["Loaf"];
+    const boat = stillLifes["Boat"];
+    const tub = stillLifes["Tub"];
+
     return (
         <>
             <header className="text-lg text-center">Lifeforms</header>
             <main className="flex flex-row justify-evenly">
                 <div>
                     Still lifes
+                    <div>
+                        Block
+                        <NoSSR>
+                            <CanvasGameGrid grid={block.grid} toggleCell={block.toggleCell} cellSize={2} />
+                        </NoSSR>
+                    </div>
+                    <div>
+                        Beehive
+                        <NoSSR>
+                            <CanvasGameGrid grid={beehive.grid} toggleCell={beehive.toggleCell} cellSize={2} />
+                        </NoSSR>
+                    </div>
+                    <div>
+                        Loaf
+                        <NoSSR>
+                            <CanvasGameGrid grid={loaf.grid} toggleCell={loaf.toggleCell} cellSize={2} />
+                        </NoSSR>
+                    </div>
+                    <div>
+                        Boat
+                        <NoSSR>
+                            <CanvasGameGrid grid={boat.grid} toggleCell={boat.toggleCell} cellSize={2} />
+                        </NoSSR>
+                    </div>
+                    <div>
+                        Tub
+                        <NoSSR>
+                            <CanvasGameGrid grid={tub.grid} toggleCell={tub.toggleCell} cellSize={2} />
+                        </NoSSR>
+                    </div>
                 </div>
                 <div>
                     Oscillators

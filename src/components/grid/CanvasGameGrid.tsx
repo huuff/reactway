@@ -68,7 +68,6 @@ const CanvasGameGrid = ({
 
     // TODO: Split it somewhere
     // TODO: This leaves a weird trail of unaligned cell wherever it passes through
-    // TODO: Adapt to dark mode
     // TODO: Disable when ticking is getting slow
     useEffect(() => {
         const canvas = gridCanvasRef.current!;
@@ -93,7 +92,7 @@ const CanvasGameGrid = ({
         if (isAlive) {
             ctx.fillStyle = "#660000";
         } else {
-            ctx.fillStyle = "#FF3333";
+            ctx.fillStyle = isDarkMode ? "#B30000" : "#FF3333";
         }
         ctx.fillRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
 

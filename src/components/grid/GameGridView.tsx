@@ -6,8 +6,6 @@ import TableGameGrid from "./TableGameGrid";
 
 type GameGridViewProps = GameGridProps & {
     view: GridViewType;
-    scrollX: number,
-    scrollY: number,
 }
 
 const GameGridView = (props: GameGridViewProps) => {

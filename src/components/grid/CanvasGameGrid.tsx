@@ -8,10 +8,6 @@ import { useIsDragging } from "../../util/use-is-dragging";
 
 const CELL_SIZE_MULTIPLIER = 8;
 
-type CanvasGameGridProps = GameGridProps & {
-    scrollX?: number;
-    scrollY?: number;
-};
 type Size = {
     width: number;
     height: number;
@@ -48,9 +44,7 @@ const CanvasGameGrid = ({
     className,
     toggleCell,
     cellSize,
-    scrollX = 0,
-    scrollY = 0,
-}: CanvasGameGridProps) => {
+}: GameGridProps) => {
     const { isDarkMode } = useDarkMode();
     const cellSizePixels = useMemo(() => CELL_SIZE_MULTIPLIER * cellSize, [cellSize]);
     const gridCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -62,8 +56,7 @@ const CanvasGameGrid = ({
         height: grid.height * cellSizePixels,
     }), [grid.height, grid.width, cellSizePixels]);
 
-    // TODO: Do I need scrollX and scrollY? I might be able to get them from the bounding rect of the grid
-    const visibleCellBounds = useVisibleBounds(windowWidth, windowHeight, scrollX, scrollY, gridSizePixels, cellSizePixels)
+    const visibleCellBounds = useVisibleBounds(gridCanvasRef, windowWidth, windowHeight, gridSizePixels, cellSizePixels)
 
     useDrawCanvasEffect(gridCanvasRef, grid, cellSizePixels, visibleCellBounds, isDarkMode);
 
@@ -114,23 +107,23 @@ function useIsMouseWithinGrid(gridCanvasRef: RefObject<HTMLCanvasElement>): bool
  * Returns a box that indicates the bounds of the visible part of the screen
  */
 function useVisibleBounds(
+    gridCanvasRef: RefObject<HTMLCanvasElement>,
     windowWidth: number,
     windowHeight: number,
-    scrollX: number,
-    scrollY: number,
     gridSizePixels: Size,
     cellSizePixels: number
 ): Box2D {
+    const { top, left } = getBoundingRectOrZeros(gridCanvasRef);
     const visibleBounds = useDebounce(useMemo<Box2D>(() => new Box2D(
         tuple(
-            Math.max(scrollX - (windowWidth / 2), 0),
-            Math.max(scrollY - (windowHeight / 2), 0)
+            Math.max(-left - (windowWidth / 2), 0),
+            Math.max(-top - (windowHeight / 2), 0)
         ),
         tuple(
-            Math.min(scrollX + (windowWidth * 1.5), gridSizePixels.width),
-            Math.min(scrollY + (windowHeight * 1.5), gridSizePixels.height),
+            Math.min(-left + (windowWidth * 1.5), gridSizePixels.width),
+            Math.min(-top + (windowHeight * 1.5), gridSizePixels.height),
         ),
-    ), [windowHeight, windowWidth, scrollX, scrollY, gridSizePixels]), 250);
+    ), [windowHeight, windowWidth, top, left, gridSizePixels]), 250);
     const visibleCellBounds = useMemo<Box2D>(
         () => visibleBounds.divide(cellSizePixels),
         [visibleBounds, cellSizePixels]

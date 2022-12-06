@@ -1,5 +1,5 @@
 import "tailwindcss/tailwind.css";
-import { useEffect, useRef, useState, WheelEvent } from "react";
+import { useEffect, WheelEvent } from "react";
 import GameSettingsView from "../src/components/settings/GameSettingsView";
 import { defaultSettings, useSettings } from "../src/settings/settings";
 import { useDarkMode, useInterval } from "usehooks-ts";
@@ -69,20 +69,10 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
         })
     }
 
-    const scrollContainerRef = useRef<HTMLElement>();
-    const [scroll, setScroll] = useState({ scrollX: 0, scrollY: 0 })
-    const onScroll = () => {
-        setScroll({
-            scrollX: scrollContainerRef?.current?.scrollLeft ?? 0,
-            scrollY: scrollContainerRef?.current?.scrollTop ?? 0,
-        })
-    }
     return (
         <div onWheel={wheelHandler} className={`${isDarkMode ? "bg-slate-800" : "bg-slate-100"}`}>
             <div className="cursor-move">
                 <ScrollContainer
-                    ref={scrollContainerRef as any /* I don't know why this is needed */}
-                    onScroll={onScroll}
                     className="h-screen"
                 >
                     <NoSsr>
@@ -90,8 +80,6 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                             view={view}
                             cellSize={cellSize}
                             toggleCell={toggleCell}
-                            scrollX={scroll.scrollX}
-                            scrollY={scroll.scrollY}
                         />
                     </NoSsr>
                 </ScrollContainer>

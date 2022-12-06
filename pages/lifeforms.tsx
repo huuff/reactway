@@ -127,7 +127,18 @@ const INITIAL_GRIDS = {
             OOO####OO
             OOOOOOOOO
             OOOOOOOOO
-        `
+        `,
+        "Middleweight Spaceship": gridFromAscii`
+            OOOOOOOOOO
+            OOOOOOOOOO
+            OOOOOOOOOO
+            OOO#####OO
+            OO#OOOO#OO
+            OOOOOOO#OO
+            OO#OOO#OOO
+            OOOO#OOOOO
+            OOOOOOOOOO
+        `,
     }
 }
 
@@ -178,6 +189,7 @@ const Lifeforms = () => {
     const spaceships = grids["Spaceships"];
     const glider = spaceships["Glider"];
     const lightweightSpaceship = spaceships["Lightweight Spaceship"];
+    const middleweightSpaceship = spaceships["Middleweight Spaceship"];
 
     return (
         <>
@@ -261,6 +273,12 @@ const Lifeforms = () => {
                         Lightweight Spaceship
                         <NoSSR>
                             <CanvasGameGrid grid={lightweightSpaceship.grid} toggleCell={lightweightSpaceship.toggleCell} cellSize={2} />
+                        </NoSSR>
+                    </div>
+                    <div>
+                        Middleweight Spaceship
+                        <NoSSR>
+                            <CanvasGameGrid grid={middleweightSpaceship.grid} toggleCell={middleweightSpaceship.toggleCell} cellSize={2} />
                         </NoSSR>
                     </div>
                 </div>

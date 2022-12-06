@@ -4,6 +4,7 @@ import { useMouseState, usePreviousValue, useViewportState } from "beautiful-rea
 import { useDarkMode, useDebounce } from "usehooks-ts";
 import { Box2D } from "../../util/box-2d";
 import tuple from "immutable-tuple";
+import { BooleanLiteral } from "typescript";
 
 const CELL_SIZE_MULTIPLIER = 8;
 
@@ -66,40 +67,17 @@ const CanvasGameGrid = ({
     const previousHoveredCell = usePreviousValue(hoveredCell);
     const isMouseWithinGrid = useIsMouseWithinGrid(gridCanvasRef);
 
-    // TODO: Split it somewhere
-    // TODO: This leaves a weird trail of unaligned cell wherever it passes through
-    // TODO: Disable when ticking is getting slow
-    useEffect(() => {
-        const canvas = gridCanvasRef.current!;
-
-        const ctx = canvas.getContext("2d")!;
-
-        // First, cleanup the previously hovered cell
-        if (previousHoveredCell) {
-            const isPreviousAlive = grid.get(previousHoveredCell);
-            drawCell(ctx, previousHoveredCell, isPreviousAlive, isDarkMode, cellSizePixels);
-        }
-
-        if (!isMouseWithinGrid) {
-            // The mouse is outside the grid, so it doesn't make sense to paint any hovered cell
-            return;
-        }
-
-        // Then, we paint the currently hovered cell
-        const isAlive = grid.get(hoveredCell);
-        const [x, y] = hoveredCell;
-
-        if (isAlive) {
-            ctx.fillStyle = "#660000";
-        } else {
-            ctx.fillStyle = isDarkMode ? "#B30000" : "#FF3333";
-        }
-        ctx.fillRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
-
-    }, [hoveredCell, previousHoveredCell, grid, isMouseWithinGrid, isDarkMode])
+    useDrawHighlightedCellEffect({
+        grid,
+        gridCanvasRef,
+        hoveredCell,
+        previousHoveredCell,
+        cellSizePixels,
+        isDarkMode,
+        isMouseWithinGrid
+    });
 
     const onMouseUp = useClickToggleHandler(gridCanvasRef, hoveredCell, grid, toggleCell);
-
 
     return (
         <div onMouseUp={onMouseUp} className={className}>
@@ -207,6 +185,56 @@ function useDrawCanvasEffect(
             drawCell(ctx, coordinates, isAlive, isDarkMode, cellSizePixels);
         };
     }, [grid, cellSizePixels, visibleCellBounds, isDarkMode])
+}
+
+type HighlightedCellEffectParams = {
+    grid: Grid,
+    gridCanvasRef: RefObject<HTMLCanvasElement>,
+    hoveredCell: Coordinates,
+    previousHoveredCell: Coordinates,
+    isDarkMode: boolean,
+    cellSizePixels: number,
+    isMouseWithinGrid: boolean,
+}
+// TODO: This leaves a weird trail of unaligned cell wherever it passes through
+// TODO: Disable when ticking is getting slow
+function useDrawHighlightedCellEffect({
+    grid,
+    gridCanvasRef,
+    hoveredCell,
+    previousHoveredCell,
+    isDarkMode,
+    cellSizePixels,
+    isMouseWithinGrid
+}: HighlightedCellEffectParams) {
+    useEffect(() => {
+        const canvas = gridCanvasRef.current!;
+
+        const ctx = canvas.getContext("2d")!;
+
+        // First, cleanup the previously hovered cell
+        if (previousHoveredCell) {
+            const isPreviousAlive = grid.get(previousHoveredCell);
+            drawCell(ctx, previousHoveredCell, isPreviousAlive, isDarkMode, cellSizePixels);
+        }
+
+        if (!isMouseWithinGrid) {
+            // The mouse is outside the grid, so it doesn't make sense to paint any hovered cell
+            return;
+        }
+
+        // Then, we paint the currently hovered cell
+        const isAlive = grid.get(hoveredCell);
+        const [x, y] = hoveredCell;
+
+        if (isAlive) {
+            ctx.fillStyle = "#660000";
+        } else {
+            ctx.fillStyle = isDarkMode ? "#B30000" : "#FF3333";
+        }
+        ctx.fillRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
+
+    }, [hoveredCell, previousHoveredCell, grid, isMouseWithinGrid, isDarkMode])
 }
 
 export default CanvasGameGrid;

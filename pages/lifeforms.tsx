@@ -110,6 +110,24 @@ const INITIAL_GRIDS = {
                     OOOOOOOOOOO
                     OOOOOOOOOOO
                     `,
+    },
+    "Spaceships": {
+        "Glider": gridFromAscii`
+            OOOOO
+            OO#OO
+            #O#OO
+            O##OO
+            OOOOO
+        `,
+        "Lightweight Spaceship": gridFromAscii`
+            OOOOOOOOO
+            OO#OO#OOO
+            OOOOOO#OO
+            OO#OOO#OO
+            OOO####OO
+            OOOOOOOOO
+            OOOOOOOOO
+        `
     }
 }
 
@@ -156,6 +174,10 @@ const Lifeforms = () => {
     const loaf = stillLifes["Loaf"];
     const boat = stillLifes["Boat"];
     const tub = stillLifes["Tub"];
+
+    const spaceships = grids["Spaceships"];
+    const glider = spaceships["Glider"];
+    const lightweightSpaceship = spaceships["Lightweight Spaceship"];
 
     return (
         <>
@@ -229,6 +251,18 @@ const Lifeforms = () => {
                 </div>
                 <div>
                     Spaceships
+                    <div>
+                        Glider
+                        <NoSSR>
+                            <CanvasGameGrid grid={glider.grid} toggleCell={glider.toggleCell} cellSize={2} />
+                        </NoSSR>
+                    </div>
+                    <div>
+                        Lightweight Spaceship
+                        <NoSSR>
+                            <CanvasGameGrid grid={lightweightSpaceship.grid} toggleCell={lightweightSpaceship.toggleCell} cellSize={2} />
+                        </NoSSR>
+                    </div>
                 </div>
             </main>
         </>

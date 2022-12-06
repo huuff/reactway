@@ -20,6 +20,23 @@ function getBoundingRectOrZeros(ref: RefObject<HTMLElement>) {
     return ref.current?.getBoundingClientRect() ?? { left: 0, top: 0, right: 0, bottom: 0 };
 }
 
+function drawCell(
+    canvasContext: CanvasRenderingContext2D,
+    coordinates: Coordinates,
+    isAlive: boolean,
+    isDarkMode: boolean,
+    cellSizePixels: number
+) {
+    const [x, y] = coordinates;
+    if (isAlive) {
+        canvasContext.fillStyle = isDarkMode ? "#262626" : "#000000";
+    } else {
+        canvasContext.fillStyle = isDarkMode ? "#666666" : "#F0F0F0";
+        canvasContext.strokeRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
+    }
+    canvasContext.fillRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
+}
+
 // TODO: Test it? Can I?
 const CanvasGameGrid = ({
     grid,
@@ -39,7 +56,7 @@ const CanvasGameGrid = ({
         width: grid.width * cellSizePixels,
         height: grid.height * cellSizePixels,
     }), [grid.height, grid.width, cellSizePixels]);
-    
+
     // TODO: Do I need scrollX and scrollY? I might be able to get them from the bounding rect of the grid
     const visibleCellBounds = useVisibleBounds(windowWidth, windowHeight, scrollX, scrollY, gridSizePixels, cellSizePixels)
 
@@ -61,16 +78,7 @@ const CanvasGameGrid = ({
         // First, cleanup the previously hovered cell
         if (previousHoveredCell) {
             const isPreviousAlive = grid.get(previousHoveredCell);
-            const [previousX, previousY] = previousHoveredCell;
-
-            // TODO: Copypasted from the drawing, DRY it
-            if (isPreviousAlive) {
-                ctx.fillStyle = isDarkMode ? "#262626" : "#000000";
-            } else {
-                ctx.fillStyle = isDarkMode ? "#666666" : "#F0F0F0";
-                ctx.strokeRect(previousX * cellSizePixels, previousY * cellSizePixels, cellSizePixels, cellSizePixels);
-            }
-            ctx.fillRect(previousX * cellSizePixels, previousY * cellSizePixels, cellSizePixels, cellSizePixels);
+            drawCell(ctx, previousHoveredCell, isPreviousAlive, isDarkMode, cellSizePixels);
         }
 
         if (!isMouseWithinGrid) {
@@ -196,14 +204,8 @@ function useDrawCanvasEffect(
         const canvas = ref.current!;
 
         const ctx = canvas.getContext("2d")!;
-        for (const { coordinates: [x, y], isAlive } of grid.boundedIterator(visibleCellBounds)) {
-            if (isAlive) {
-                ctx.fillStyle = isDarkMode ? "#262626" : "#000000";
-            } else {
-                ctx.fillStyle = isDarkMode ? "#666666" : "#F0F0F0";
-                ctx.strokeRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
-            }
-            ctx.fillRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
+        for (const { coordinates, isAlive } of grid.boundedIterator(visibleCellBounds)) {
+            drawCell(ctx, coordinates, isAlive, isDarkMode, cellSizePixels);
         };
     }, [grid, cellSizePixels, visibleCellBounds, isDarkMode])
 }

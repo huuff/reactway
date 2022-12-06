@@ -1,6 +1,6 @@
-import { CSSProperties, MouseEventHandler, RefObject, useCallback, useEffect, useMemo, useRef } from "react";
+import { MouseEventHandler, RefObject, useCallback, useEffect, useMemo, useRef } from "react";
 import { Coordinates, GameGridProps, Grid } from "../../grid/grid";
-import { useMouseState, useViewportState } from "beautiful-react-hooks";
+import { useMouseState, usePreviousValue, useViewportState } from "beautiful-react-hooks";
 import { useDarkMode, useDebounce } from "usehooks-ts";
 import { Box2D } from "../../util/box-2d";
 import tuple from "immutable-tuple";
@@ -17,24 +17,24 @@ type Size = {
 }
 
 function getBoundingRectOrZeros(ref: RefObject<HTMLElement>) {
-    return ref.current?.getBoundingClientRect() ?? { left: 0, top: 0, right: 0, bottom: 0};
+    return ref.current?.getBoundingClientRect() ?? { left: 0, top: 0, right: 0, bottom: 0 };
 }
 
 // TODO: Test it? Can I?
 const CanvasGameGrid = ({
-    grid, 
-    className, 
+    grid,
+    className,
     toggleCell,
     cellSize,
     scrollX = 0,
     scrollY = 0,
- }: CanvasGameGridProps) => {
+}: CanvasGameGridProps) => {
     const { isDarkMode } = useDarkMode();
     const cellSizePixels = useMemo(() => CELL_SIZE_MULTIPLIER * cellSize, [cellSize]);
     const gridCanvasRef = useRef<HTMLCanvasElement>(null);
 
     const { width: windowWidth, height: windowHeight } = useViewportState();
-    
+
     const gridSizePixels = useMemo(() => ({
         width: grid.width * cellSizePixels,
         height: grid.height * cellSizePixels,
@@ -45,26 +45,52 @@ const CanvasGameGrid = ({
     useDrawCanvasEffect(gridCanvasRef, grid, cellSizePixels, visibleCellBounds, isDarkMode);
 
     const hoveredCell = useHoveredCell(grid.width, grid.height, gridCanvasRef, cellSizePixels);
+    const previousHoveredCell = usePreviousValue(hoveredCell);
+
+    // TODO: Split it somewhere
+    // TODO: Debounce to optimize it
+    // TODO: This leaves a weird trail of unaligned cell wherever it passes through
+    // TODO: Adapt to dark mode
+    // TODO: Use only if the mouse is within grid
+    // TODO: Disable when ticking is getting slow
+    useEffect(() => {
+        const canvas = gridCanvasRef.current!;
+
+        const ctx = canvas.getContext("2d")!;
+
+        // First, cleanup the previously hovered cell
+        if (previousHoveredCell) {
+            const isPreviousAlive = grid.get(previousHoveredCell);
+            const [previousX, previousY] = previousHoveredCell;
+
+            // TODO: Copypasted from the drawing, DRY it
+            if (isPreviousAlive) {
+                ctx.fillStyle = isDarkMode ? "#262626" : "#000000";
+            } else {
+                ctx.fillStyle = isDarkMode ? "#666666" : "#F0F0F0";
+                ctx.strokeRect(previousX * cellSizePixels, previousY * cellSizePixels, cellSizePixels, cellSizePixels);
+            }
+            ctx.fillRect(previousX * cellSizePixels, previousY * cellSizePixels, cellSizePixels, cellSizePixels);
+        }
+
+        // Then, we paint the currently hovered cell
+        const isAlive = grid.get(hoveredCell);
+        const [x, y] = hoveredCell;
+
+        if (isAlive) {
+            ctx.fillStyle = "#660000";
+        } else {
+            ctx.fillStyle = "#FF3333";
+        }
+        ctx.fillRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
+
+    }, [hoveredCell, previousHoveredCell, grid])
+
     const onMouseUp = useClickToggleHandler(gridCanvasRef, hoveredCell, grid, toggleCell);
 
-    const highlightedCell = useHighlightedCell(gridCanvasRef, cellSizePixels, hoveredCell);
-
-    const isMouseWithinGrid = useIsMouseWithinGrid(gridCanvasRef);
 
     return (
         <div onMouseUp={onMouseUp} className={className}>
-            { isMouseWithinGrid && (
-            <div style={{
-                position: "absolute",
-                height: `${cellSizePixels}px`,
-                width: `${cellSizePixels}px`,
-                backgroundColor: "red",
-                left: highlightedCell[0],
-                top: highlightedCell[1],
-                zIndex: 10,
-                opacity: 0.5,
-            }} />
-            )}
             <canvas
                 ref={gridCanvasRef}
                 className="mx-auto"
@@ -85,7 +111,7 @@ function useIsMouseWithinGrid(gridCanvasRef: RefObject<HTMLCanvasElement>): bool
 
     const { left, top, right, bottom } = boundingRect;
 
-    return clientX >= left && clientX  <= right && clientY >= top && clientY <= bottom;
+    return clientX >= left && clientX <= right && clientY >= top && clientY <= bottom;
 }
 
 /**
@@ -118,28 +144,6 @@ function useVisibleBounds(
 }
 
 /**
- * Returns coordinates that match the position of the highlighted cell in the screen,
- * taking into account all displacements and transformations
- */
-const useHighlightedCell = (
-    gridCanvasRef: RefObject<HTMLCanvasElement>, 
-    cellSizePixels: number,
-    [hoveredCellX, hoveredCellY]: Coordinates
-    ): Coordinates => {
-
-    const { left: leftDisplacement, top } = getBoundingRectOrZeros(gridCanvasRef);
-
-    const topDisplacement = Math.max(top, 0);
-
-    const coordinates = tuple(
-        (hoveredCellX * cellSizePixels) + leftDisplacement,
-        (hoveredCellY * cellSizePixels) + topDisplacement,
-    );
-
-    return coordinates;
-}
-
-/**
  * Returns the cell (in the grid data structure) that the cursor is hovering
  */
 const useHoveredCell = (
@@ -150,16 +154,14 @@ const useHoveredCell = (
 ): Coordinates => {
     const { clientX, clientY } = useMouseState();
 
-    const { left: leftDisplacement, top, } = getBoundingRectOrZeros(gridCanvasRef);
-
-    const gridDisplacementToTheBottom = Math.max(top, 0);
+    const { left: leftDisplacement, top: topDisplacement, } = getBoundingRectOrZeros(gridCanvasRef);
 
     const mouseX = Math.max(0, clientX - leftDisplacement)
-    const mouseY = Math.max(0, clientY - gridDisplacementToTheBottom)
+    const mouseY = Math.max(0, clientY - topDisplacement)
 
     const result = tuple(
-        Math.min(Math.floor((mouseX - (mouseX % cellSizePixels)) / cellSizePixels), gridWidth-1),
-        Math.min(Math.floor((mouseY - (mouseY % cellSizePixels)) / cellSizePixels), gridHeight-1),
+        Math.min(Math.floor((mouseX - (mouseX % cellSizePixels)) / cellSizePixels), gridWidth - 1),
+        Math.min(Math.floor((mouseY - (mouseY % cellSizePixels)) / cellSizePixels), gridHeight - 1),
     );
 
     return result;

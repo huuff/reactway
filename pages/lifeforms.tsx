@@ -5,6 +5,7 @@ import { useGrid } from "../src/game/use-grid";
 import NoSSR from "../src/components/util/NoSSR";
 import { gridFromAscii } from "../src/util/create-grid-from-ascii";
 import { typesafeKeys } from "../src/util/typesafe-keys";
+import { ReactElement } from "react";
 
 // TODO: Nicer styles
 // TODO: Enable dark mode here
@@ -169,6 +170,22 @@ function createGrids(): AssortedGrids {
     }), {} as AssortedGrids);
 }
 
+function renderGrids(grids: AssortedGrids, lifeformType: keyof AssortedGrids): ReactElement {
+    return (
+        <div>
+            {lifeformType}
+            {Object.entries(grids[lifeformType]).map(([lifeformName, lifeform]) => (
+                <div>
+                    {lifeformName}
+                    <NoSSR>
+                        <CanvasGameGrid grid={lifeform.grid} toggleCell={lifeform.toggleCell} cellSize={2} />
+                    </NoSSR>
+                </div>
+            ))}
+        </div>
+    )
+}
+
 const Lifeforms = () => {
     const grids = createGrids();
 
@@ -184,39 +201,9 @@ const Lifeforms = () => {
         <>
             <header className="text-lg text-center">Lifeforms</header>
             <main className="flex flex-row justify-evenly">
-                <div>
-                    Still Lifes
-                    { Object.entries(grids["Still Life"]).map(([lifeformName, lifeform]) => (
-                        <div>
-                            { lifeformName }
-                            <NoSSR>
-                                <CanvasGameGrid grid={lifeform.grid} toggleCell={lifeform.toggleCell} cellSize={2} />
-                            </NoSSR>
-                        </div>
-                    ))}
-                </div>
-                <div>
-                    Oscillators
-                    { Object.entries(grids["Oscillators"]).map(([lifeformName, lifeform]) => (
-                        <div>
-                            { lifeformName }
-                            <NoSSR>
-                                <CanvasGameGrid grid={lifeform.grid} toggleCell={lifeform.toggleCell} cellSize={2} />
-                            </NoSSR>
-                        </div>
-                    ))}
-                </div>
-                <div>
-                    Spaceships
-                    { Object.entries(grids["Spaceships"]).map(([lifeformName, lifeform]) => (
-                        <div>
-                            { lifeformName }
-                            <NoSSR>
-                                <CanvasGameGrid grid={lifeform.grid} toggleCell={lifeform.toggleCell} cellSize={2} />
-                            </NoSSR>
-                        </div>
-                    ))}
-                </div>
+                { renderGrids(grids, "Still Life") }
+                { renderGrids(grids, "Oscillators") }
+                { renderGrids(grids, "Spaceships") }
             </main>
         </>
     )

@@ -1,6 +1,5 @@
 # Tasks
 * Show population somewhere?
-* There's some slight displacement in the colored box that follows the cursor to indicate where a click would toggle a cell in `CanvasGridView` when the grid takes less than the viewport size... this is obviously due to the transform to center it, but so far I've found no way to fix it.
 * Try to make it so I don't need that `NoSsr` stuff... I think it comes from using `LocalStorage`?
 * Rendering only the visible parts:
   * Do it for `TableGrid` too

@@ -9,6 +9,8 @@ import { ReactElement } from "react";
 
 // TODO: Nicer styles
 // TODO: Enable dark mode here
+// TODO: Try to draw the spaceships in a dragscrollable small container and a grid that's larger than it, so you
+// can follow the course of the spaceship by dragscrolling
 
 const INITIAL_GRIDS = {
     "Still Life": {

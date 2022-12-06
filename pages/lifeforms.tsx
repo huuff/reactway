@@ -70,11 +70,37 @@ const Lifeforms = () => {
         OOOOOOOOOOOOOOOOO
     `);
 
+    const {
+        grid: pentadecathlonGrid,
+        tick: tickPentadecathlon,
+        toggleCell: togglePentadecathlonCell,
+    } = useGrid(gridFromAscii`
+        OOOOOOOOOOO
+        OOOOOOOOOOO
+        OOOOOOOOOOO
+        OOOO###OOOO
+        OOOOO#OOOOO
+        OOOOO#OOOOO
+        OOOO###OOOO
+        OOOOOOOOOOO
+        OOOO###OOOO
+        OOOO###OOOO
+        OOOOOOOOOOO
+        OOOO###OOOO
+        OOOOO#OOOOO
+        OOOOO#OOOOO
+        OOOO###OOOO
+        OOOOOOOOOOO
+        OOOOOOOOOOO
+        OOOOOOOOOOO
+    `);
+
      useInterval(() => {
         tickBlinker();
         tickToad();
         tickBeacon();
         tickPulsar();
+        tickPentadecathlon();
      }, 1000);
 
     return (
@@ -123,7 +149,11 @@ const Lifeforms = () => {
                             </tr>
                             <tr>
                                 <td>Penta-decathlon</td>
-                                <td></td>
+                                <td>
+                                    <NoSSR>
+                                        <CanvasGameGrid grid={pentadecathlonGrid} toggleCell={togglePentadecathlonCell} cellSize={3} />
+                                    </NoSSR>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

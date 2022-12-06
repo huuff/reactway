@@ -4,6 +4,7 @@ import { Fragment, useCallback, useMemo } from "react";
 import { coordinatesToString } from "../../util/coordinates-to-string";
 import tuple from "immutable-tuple";
 import { useDarkMode } from "usehooks-ts";
+import classNames from "classnames";
 
 const AsciiGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps) => {
     const { isDarkMode } = useDarkMode();
@@ -36,7 +37,13 @@ const AsciiGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps)
                                 <span
                                     key={coordinateString}
                                     data-testid={coordinateString}
-                                    className={`mx-1 hover:bg-red-400 ${isDarkMode ? "text-slate-100" : ""}`}
+                                    className={
+                                        classNames(
+                                            "mx-1",
+                                            "hover:bg-reed-400",
+                                            {"text-slate-100": isDarkMode}
+                                        )
+                                    }
                                     onClick={() => toggleCell(coordinate)}
                                 >
                                     {isAlive ? "X" : "O"}

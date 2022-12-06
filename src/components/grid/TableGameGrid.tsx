@@ -33,14 +33,11 @@ const TableGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps)
                                         className={classNames(
                                             sizeClasses,
                                             "border",
-                                            {
-                                                "bg-black": !isDarkMode && isAlive,
-                                                "bg-white": !isDarkMode && !isAlive,
-                                                "bg-slate-400": isDarkMode && isAlive,
-                                                "bg-slate-800" : isDarkMode && !isAlive,
-                                                "hover:bg-red-800": isAlive,
-                                                "hover:bg-red-400": !isAlive,
-                                            })}>
+                                            isDarkMode
+                                                ? (isAlive ? "bg-slate-400" : "bg-slate-800")
+                                                : (isAlive ? "bg-black" : "bg-white"),
+                                            isAlive ? "hover:bg-red-800" : "hover:bg-red-400",
+                                        )}>
                                     </td>
                                 )
                             })

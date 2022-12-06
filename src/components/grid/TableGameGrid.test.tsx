@@ -15,18 +15,18 @@ jest.mock("usehooks-ts", () => ({
 
 const liveCells: Coordinates[] = [tuple(2, 3), tuple(2, 1), tuple(3, 2), tuple(3,3), tuple(4, 2)];
 describe("TableGameGrid", () => {
-    test("live cells are X", () => {
+    test("live cells have the alive color", () => {
         render(<TableGameGrid grid={new SetGrid(liveCells)} toggleCell={jest.fn()} cellSize={3}/>);
 
         for (const coord of liveCells) {
-            expect(screen.getByTestId(coordinatesToString(coord))).toHaveClass("bg-black");
+            expect(screen.getByTestId(coordinatesToString(coord))).toHaveClass("bg-light-alive-cell");
         }
     });
 
-    test("dead cells are O", () => {
+    test("dead cells have the dead color", () => {
         render(<TableGameGrid grid={new SetGrid(liveCells)} toggleCell={jest.fn()} cellSize={3}/>);
 
-        expect(screen.getByTestId(coordinatesToString(tuple(2, 2)))).toHaveClass("bg-white");
+        expect(screen.getByTestId(coordinatesToString(tuple(2, 2)))).toHaveClass("bg-light-dead-cell");
     });
 
     test("snapshot", () => {

@@ -7,108 +7,108 @@ exports[`TableGameGrid snapshot 1`] = `
   <tbody>
     <tr>
       <td
-        className="h-6 w-6 border bg-white hover:bg-red-400"
+        className="h-6 w-6 border bg-light-dead-cell hover:bg-red-400"
         data-testid="(0,0)"
         onClick={[Function]}
       />
       <td
-        className="h-6 w-6 border bg-white hover:bg-red-400"
+        className="h-6 w-6 border bg-light-dead-cell hover:bg-red-400"
         data-testid="(1,0)"
         onClick={[Function]}
       />
       <td
-        className="h-6 w-6 border bg-white hover:bg-red-400"
+        className="h-6 w-6 border bg-light-dead-cell hover:bg-red-400"
         data-testid="(2,0)"
         onClick={[Function]}
       />
       <td
-        className="h-6 w-6 border bg-white hover:bg-red-400"
+        className="h-6 w-6 border bg-light-dead-cell hover:bg-red-400"
         data-testid="(3,0)"
         onClick={[Function]}
       />
       <td
-        className="h-6 w-6 border bg-white hover:bg-red-400"
+        className="h-6 w-6 border bg-light-dead-cell hover:bg-red-400"
         data-testid="(4,0)"
         onClick={[Function]}
       />
     </tr>
     <tr>
       <td
-        className="h-6 w-6 border bg-white hover:bg-red-400"
+        className="h-6 w-6 border bg-light-dead-cell hover:bg-red-400"
         data-testid="(0,1)"
         onClick={[Function]}
       />
       <td
-        className="h-6 w-6 border bg-white hover:bg-red-400"
+        className="h-6 w-6 border bg-light-dead-cell hover:bg-red-400"
         data-testid="(1,1)"
         onClick={[Function]}
       />
       <td
-        className="h-6 w-6 border bg-black hover:bg-red-800"
+        className="h-6 w-6 border bg-light-alive-cell hover:bg-red-800"
         data-testid="(2,1)"
         onClick={[Function]}
       />
       <td
-        className="h-6 w-6 border bg-white hover:bg-red-400"
+        className="h-6 w-6 border bg-light-dead-cell hover:bg-red-400"
         data-testid="(3,1)"
         onClick={[Function]}
       />
       <td
-        className="h-6 w-6 border bg-white hover:bg-red-400"
+        className="h-6 w-6 border bg-light-dead-cell hover:bg-red-400"
         data-testid="(4,1)"
         onClick={[Function]}
       />
     </tr>
     <tr>
       <td
-        className="h-6 w-6 border bg-white hover:bg-red-400"
+        className="h-6 w-6 border bg-light-dead-cell hover:bg-red-400"
         data-testid="(0,2)"
         onClick={[Function]}
       />
       <td
-        className="h-6 w-6 border bg-white hover:bg-red-400"
+        className="h-6 w-6 border bg-light-dead-cell hover:bg-red-400"
         data-testid="(1,2)"
         onClick={[Function]}
       />
       <td
-        className="h-6 w-6 border bg-white hover:bg-red-400"
+        className="h-6 w-6 border bg-light-dead-cell hover:bg-red-400"
         data-testid="(2,2)"
         onClick={[Function]}
       />
       <td
-        className="h-6 w-6 border bg-black hover:bg-red-800"
+        className="h-6 w-6 border bg-light-alive-cell hover:bg-red-800"
         data-testid="(3,2)"
         onClick={[Function]}
       />
       <td
-        className="h-6 w-6 border bg-black hover:bg-red-800"
+        className="h-6 w-6 border bg-light-alive-cell hover:bg-red-800"
         data-testid="(4,2)"
         onClick={[Function]}
       />
     </tr>
     <tr>
       <td
-        className="h-6 w-6 border bg-white hover:bg-red-400"
+        className="h-6 w-6 border bg-light-dead-cell hover:bg-red-400"
         data-testid="(0,3)"
         onClick={[Function]}
       />
       <td
-        className="h-6 w-6 border bg-white hover:bg-red-400"
+        className="h-6 w-6 border bg-light-dead-cell hover:bg-red-400"
         data-testid="(1,3)"
         onClick={[Function]}
       />
       <td
-        className="h-6 w-6 border bg-black hover:bg-red-800"
+        className="h-6 w-6 border bg-light-alive-cell hover:bg-red-800"
         data-testid="(2,3)"
         onClick={[Function]}
       />
       <td
-        className="h-6 w-6 border bg-black hover:bg-red-800"
+        className="h-6 w-6 border bg-light-alive-cell hover:bg-red-800"
         data-testid="(3,3)"
         onClick={[Function]}
       />
       <td
-        className="h-6 w-6 border bg-white hover:bg-red-400"
+        className="h-6 w-6 border bg-light-dead-cell hover:bg-red-400"
         data-testid="(4,3)"
         onClick={[Function]}
       />

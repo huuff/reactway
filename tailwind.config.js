@@ -1,4 +1,7 @@
+const myCustomTheme = require("./theme.ts");
+
 /** @type {import('tailwindcss').Config} */
+
 module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
@@ -14,7 +17,14 @@ module.exports = {
     "h-14", "w-14",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "light-alive-cell": myCustomTheme.light.aliveCell,
+        "light-dead-cell": myCustomTheme.light.deadCell,
+        "dark-alive-cell": myCustomTheme.dark.aliveCell,
+        "dark-dead-cell": myCustomTheme.dark.deadCell,
+      },
+    },
   },
   plugins: [],
 }

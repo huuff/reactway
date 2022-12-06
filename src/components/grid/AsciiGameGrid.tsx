@@ -1,6 +1,6 @@
 
 import { GameGridProps } from "../../grid/grid";
-import { Fragment, useCallback, useMemo } from "react";
+import { Fragment, useMemo } from "react";
 import { coordinatesToString } from "../../util/coordinates-to-string";
 import tuple from "immutable-tuple";
 import { useDarkMode } from "usehooks-ts";
@@ -40,7 +40,7 @@ const AsciiGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps)
                                     className={
                                         classNames(
                                             "mx-1",
-                                            "hover:bg-reed-400",
+                                            "hover:bg-red-400",
                                             {"text-slate-100": isDarkMode}
                                         )
                                     }

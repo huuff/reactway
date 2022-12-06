@@ -159,15 +159,12 @@ type AssortedGrids = {
     }
 };
 
-type LifeformType = keyof typeof INITIAL_GRIDS;
-type LifeformName = keyof typeof INITIAL_GRIDS[LifeformType];
-// TODO: Can't I at least remove some type assertions?
 function createGrids(): AssortedGrids {
-    return Object.keys(INITIAL_GRIDS).reduce((result, gridType) => ({
+    return typesafeKeys(INITIAL_GRIDS).reduce((result, gridType) => ({
         ...result,
-        [gridType]: Object.keys(INITIAL_GRIDS[gridType as LifeformType]).reduce((gridsOfType, gridName) => ({
+        [gridType]: typesafeKeys(INITIAL_GRIDS[gridType]).reduce((gridsOfType, gridName) => ({
             ...gridsOfType,
-            [gridName]: useGrid(INITIAL_GRIDS[gridType as LifeformType][gridName as LifeformName])
+            [gridName]: useGrid(INITIAL_GRIDS[gridType][gridName])
         }), {} as typeof INITIAL_GRIDS[keyof typeof INITIAL_GRIDS])
     }), {} as AssortedGrids);
 }

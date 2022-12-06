@@ -4,7 +4,7 @@ import { useMouseState, usePreviousValue, useViewportState } from "beautiful-rea
 import { useDarkMode, useDebounce } from "usehooks-ts";
 import { Box2D } from "../../util/box-2d";
 import tuple from "immutable-tuple";
-import { BooleanLiteral } from "typescript";
+import { useIsDragging } from "../../util/use-is-dragging";
 
 const CELL_SIZE_MULTIPLIER = 8;
 
@@ -67,6 +67,7 @@ const CanvasGameGrid = ({
     const previousHoveredCell = usePreviousValue(hoveredCell);
     const isMouseWithinGrid = useIsMouseWithinGrid(gridCanvasRef);
 
+    const isDragging = useIsDragging();
     useDrawHighlightedCellEffect({
         grid,
         gridCanvasRef,
@@ -74,7 +75,8 @@ const CanvasGameGrid = ({
         previousHoveredCell,
         cellSizePixels,
         isDarkMode,
-        isMouseWithinGrid
+        isMouseWithinGrid,
+        isDragging,
     });
 
     const onMouseUp = useClickToggleHandler(gridCanvasRef, hoveredCell, grid, toggleCell);
@@ -195,10 +197,10 @@ type HighlightedCellEffectParams = {
     isDarkMode: boolean,
     cellSizePixels: number,
     isMouseWithinGrid: boolean,
+    isDragging: boolean,
 }
-// TODO: This leaves a weird trail of unaligned cell wherever it passes through
+// TODO: This leaves a weird trail of unaligned cells wherever it passes through
 // TODO: Disable when ticking is getting slow
-// TODO: Disable while dragging! That might help the performance when moving around the grid
 function useDrawHighlightedCellEffect({
     grid,
     gridCanvasRef,
@@ -206,9 +208,16 @@ function useDrawHighlightedCellEffect({
     previousHoveredCell,
     isDarkMode,
     cellSizePixels,
-    isMouseWithinGrid
+    isMouseWithinGrid,
+    isDragging,
 }: HighlightedCellEffectParams) {
     useEffect(() => {
+        if (isDragging) {
+            // We don't want this effect to run when dragging (i.e. when moving the grid)
+            // because that's already slow enoug for large grids, and besides, it doesn't really add much there
+            return;
+        }
+
         const canvas = gridCanvasRef.current!;
 
         const ctx = canvas.getContext("2d")!;
@@ -235,7 +244,7 @@ function useDrawHighlightedCellEffect({
         }
         ctx.fillRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels, cellSizePixels);
 
-    }, [hoveredCell, previousHoveredCell, grid, isMouseWithinGrid, isDarkMode])
+    }, [hoveredCell, previousHoveredCell, grid, isMouseWithinGrid, isDarkMode, isDragging])
 }
 
 export default CanvasGameGrid;

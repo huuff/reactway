@@ -106,60 +106,46 @@ const Lifeforms = () => {
     return (
         <>
             <header className="text-lg text-center">Lifeforms</header>
-            <main className="columns-3 gap-8">
+            <main className="flex flex-row justify-evenly">
                 <div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th colSpan={2}>Oscillators</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Blinker</td>
-                                <td>
-                                    <NoSSR>
-                                        <CanvasGameGrid grid={blinkerGrid} toggleCell={toggleBlinkerCell} cellSize={2}/>
-                                    </NoSSR>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Toad</td>
-                                <td>
-                                    <NoSSR>
-                                        <CanvasGameGrid grid={toadGrid} toggleCell={toggleToadCell} cellSize={2} />
-                                    </NoSSR>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Beacon</td>
-                                <td>
-                                    <NoSSR>
-                                        <CanvasGameGrid grid={beaconGrid} toggleCell={toggleBeaconCell} cellSize={2} />
-                                    </NoSSR>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Pulsar</td>
-                                <td>
-                                    <NoSSR>
-                                        <CanvasGameGrid grid={pulsarGrid} toggleCell={togglePulsarCell} cellSize={2} />
-                                    </NoSSR>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Penta-decathlon</td>
-                                <td>
-                                    <NoSSR>
-                                        <CanvasGameGrid grid={pentadecathlonGrid} toggleCell={togglePentadecathlonCell} cellSize={2} />
-                                    </NoSSR>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
+                    Still lifes
                 </div>
-                
+                <div>
+                    Oscillators
+                    <div>
+                        Blinker
+                        <NoSSR>
+                            <CanvasGameGrid grid={blinkerGrid} toggleCell={toggleBlinkerCell} cellSize={2}/>
+                        </NoSSR>
+                    </div>
+                    <div>
+                        Toad
+                        <NoSSR>
+                            <CanvasGameGrid grid={toadGrid} toggleCell={toggleToadCell} cellSize={2} />
+                        </NoSSR>
+                    </div>
+                    <div>
+                        Beacon
+                        <NoSSR>
+                            <CanvasGameGrid grid={beaconGrid} toggleCell={toggleBeaconCell} cellSize={2} />
+                        </NoSSR>
+                    </div>
+                    <div>
+                        Pulsar
+                        <NoSSR>
+                            <CanvasGameGrid grid={pulsarGrid} toggleCell={togglePulsarCell} cellSize={2} />
+                        </NoSSR>
+                    </div>
+                    <div>
+                        Penta-decathlon
+                        <NoSSR>
+                            <CanvasGameGrid grid={pentadecathlonGrid} toggleCell={togglePentadecathlonCell} cellSize={2} />
+                        </NoSSR>
+                    </div>
+                </div>
+                <div>
+                    Spaceships
+                </div>
             </main>
         </>
     )

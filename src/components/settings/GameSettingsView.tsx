@@ -63,14 +63,12 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
         dispatchSettings({ type: "changeCellSize", value: "decrement" });
     }, [dispatchSettings]);
 
-    const inputBackground = useMemo(() => isDarkMode ? "bg-slate-700" : "bg-white", [isDarkMode]);
-
     return (
         <div className={`${className || ""} text-${theme.text.className}`}>
             <div className="flex justify-between">
                 <label htmlFor="view" className="w-1/2 mr-2">View:</label>
                 <select
-                    className={`w-1/4 ${inputBackground}`}
+                    className={`w-1/4 bg-${theme.input.className}`}
                     name="view"
                     onChange={handleViewSettingsChange}
                     value={settings.view}
@@ -84,7 +82,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
             <div className="flex justify-between">
                 <label htmlFor="type" className="w-1/2 mr-2">Type:</label>
                 <select
-                    className={`w-1/4 ${inputBackground}`}
+                    className={`w-1/4 bg-${theme.input.className}`}
                     name="type"
                     onChange={handleTypeSettingsChange}
                     value={settings.type}
@@ -98,7 +96,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
             <div className="flex justify-between">
                 <label htmlFor="height" className="w-1/2 mr-2">Height:</label>
                 <input
-                    className={`w-1/4 ${inputBackground}`}
+                    className={`w-1/4 bg-${theme.input.className}`}
                     type="number"
                     name="height"
                     min="5"
@@ -111,7 +109,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
             <div className="flex justify-between">
                 <label htmlFor="width" className="w-1/2 mr-2">Width:</label>
                 <input
-                    className={`w-1/4 ${inputBackground}`}
+                    className={`w-1/4 bg-${theme.input.className}`}
                     type="number"
                     name="width"
                     min="5"
@@ -125,7 +123,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
             <div className="flex justify-between">
                 <label htmlFor="birth-factor" className="w-1/2 mr-2">Birth factor:</label>
                 <input
-                    className={`w-1/4 ${inputBackground}`}
+                    className={`w-1/4 bg-${theme.input.className}`}
                     type="number"
                     name="birth-factor"
                     step="0.05"
@@ -139,7 +137,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
             <div className="flex justify-between">
                 <label htmlFor="birth-factor" className="w-1/2 mr-2">Tick duration (ms):</label>
                 <input
-                    className={`w-1/4 ${inputBackground}`}
+                    className={`w-1/4 bg-${theme.input.className}`}
                     type="number"
                     name="tick-duration"
                     step="100"

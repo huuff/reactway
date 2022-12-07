@@ -30,6 +30,9 @@ module.exports = {
 
     `text-${conwayTheme.light.text.className}`,
     `text-${conwayTheme.dark.text.className}`,
+
+    `bg-${conwayTheme.light.input.className}`,
+    `bg-${conwayTheme.dark.input.className}`,
   ],
   theme: {
     extend: {
@@ -49,6 +52,9 @@ module.exports = {
 
         [conwayTheme.light.text.className]: conwayTheme.light.text.color,
         [conwayTheme.dark.text.className]: conwayTheme.dark.text.color,
+
+        [conwayTheme.light.input.className]: conwayTheme.light.input.color,
+        [conwayTheme.dark.input.className]: conwayTheme.dark.input.color,
       },
     },
   },

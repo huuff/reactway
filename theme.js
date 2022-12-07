@@ -28,6 +28,10 @@ module.exports =  {
       className: "light-text-color",
       color: "#0F172A",
     },
+    input: {
+      className: "light-input-background",
+      color: "#E2E8F0",
+    }
   },
 
   dark:  {
@@ -59,6 +63,10 @@ module.exports =  {
       className: "dark-text-color",
       color: "#F1F5F9",
     },
+    input: {
+      className: "dark-input-background",
+      color: "#334155",
+    }
   }
 };
 

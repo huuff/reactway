@@ -5,6 +5,7 @@ import { coordinatesToString } from "../../util/coordinates-to-string";
 import { Coordinates } from "../../grid/grid";
 import renderer from "react-test-renderer";
 import tuple from "immutable-tuple";
+import theme from "../../../theme";
 
 jest.mock("usehooks-ts", () => ({
     ...jest.requireActual("usehooks-ts"),
@@ -19,14 +20,14 @@ describe("TableGameGrid", () => {
         render(<TableGameGrid grid={new SetGrid(liveCells)} toggleCell={jest.fn()} cellSize={3}/>);
 
         for (const coord of liveCells) {
-            expect(screen.getByTestId(coordinatesToString(coord))).toHaveClass("bg-light-alive-cell");
+            expect(screen.getByTestId(coordinatesToString(coord))).toHaveClass(`bg-${theme.light.cell.alive.className}`);
         }
     });
 
     test("dead cells have the dead color", () => {
         render(<TableGameGrid grid={new SetGrid(liveCells)} toggleCell={jest.fn()} cellSize={3}/>);
 
-        expect(screen.getByTestId(coordinatesToString(tuple(2, 2)))).toHaveClass("bg-light-dead-cell");
+        expect(screen.getByTestId(coordinatesToString(tuple(2, 2)))).toHaveClass(`bg-${theme.light.cell.dead.className}`);
     });
 
     test("snapshot", () => {

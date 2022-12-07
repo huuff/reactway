@@ -5,9 +5,11 @@ import { coordinatesToString } from "../../util/coordinates-to-string";
 import tuple from "immutable-tuple";
 import { useDarkMode } from "usehooks-ts";
 import classNames from "classnames";
+import { getTheme } from "../../util/get-theme";
 
 const AsciiGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps) => {
     const { isDarkMode } = useDarkMode();
+    const theme = useMemo(() => getTheme(isDarkMode), [isDarkMode]);
 
     const sizeClass = useMemo(() => {
         switch (cellSize) {
@@ -40,7 +42,7 @@ const AsciiGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps)
                                     className={
                                         classNames(
                                             "mx-1",
-                                            "hover:bg-red-400",
+                                            `hover:bg-${theme.cell.hovered[isAlive ? "alive" : "dead"].className}`,
                                             {"text-slate-100": isDarkMode}
                                         )
                                     }

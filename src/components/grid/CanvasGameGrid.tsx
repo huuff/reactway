@@ -5,7 +5,7 @@ import { useDarkMode, useDebounce } from "usehooks-ts";
 import { Box2D } from "../../util/box-2d";
 import tuple from "immutable-tuple";
 import { useIsDragging } from "../../util/use-is-dragging";
-import theme from "../../../theme";
+import { getTheme } from "../../util/get-theme";
 
 const CELL_SIZE_MULTIPLIER = 8;
 
@@ -30,9 +30,9 @@ function drawCell(
 
     const [x, y] = coordinates;
     if (isAlive) {
-        canvasContext.fillStyle = isDarkMode ? theme.dark.aliveCell : theme.light.aliveCell;
+        canvasContext.fillStyle = getTheme(isDarkMode).cell.alive.color;
     } else {
-        canvasContext.fillStyle = isDarkMode ? theme.dark.deadCell : theme.light.deadCell;
+        canvasContext.fillStyle = getTheme(isDarkMode).cell.dead.color;
         canvasContext.strokeStyle
         canvasContext.strokeRect(x * cellSizePixels, y * cellSizePixels, rectSizePixels, rectSizePixels);
     }

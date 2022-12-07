@@ -5,6 +5,7 @@ import { coordinatesToString } from "../../util/coordinates-to-string";
 import { useMemo } from "react";
 import tuple from "immutable-tuple";
 import { useDarkMode } from "usehooks-ts";
+import { getTheme } from "../../util/get-theme";
 
 const CELL_SIZE_MULTIPLIER = 2;
 
@@ -14,6 +15,7 @@ const TableGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps)
         `h-${cellSize * CELL_SIZE_MULTIPLIER}`,
         `w-${cellSize * CELL_SIZE_MULTIPLIER}`
     ), [cellSize]);
+    const theme = useMemo(() => getTheme(isDarkMode), [isDarkMode]);
 
     return (
         <table className={`${className || ""} w-72 table-fixed`}>
@@ -25,6 +27,7 @@ const TableGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps)
                                 const coordinates = tuple(x, y)
                                 const coordinatesString = coordinatesToString(coordinates);
                                 const isAlive = grid.get(coordinates);
+                                const color = theme.cell[isAlive ? "alive" : "dead"].className;
                                 return (
                                     <td
                                         key={coordinatesString}
@@ -33,9 +36,7 @@ const TableGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps)
                                         className={classNames(
                                             sizeClasses,
                                             "border",
-                                            isDarkMode
-                                                ? (isAlive ? "bg-dark-alive-cell" : "bg-dark-dead-cell")
-                                                : (isAlive ? "bg-light-alive-cell" : "bg-light-dead-cell"),
+                                            `bg-${color}`,
                                             isAlive ? "hover:bg-red-800" : "hover:bg-red-400",
                                         )}>
                                     </td>

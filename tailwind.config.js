@@ -1,4 +1,4 @@
-const myCustomTheme = require("./theme.js");
+const conwayTheme = require("./theme.js");
 
 /** @type {import('tailwindcss').Config} */
 
@@ -15,14 +15,18 @@ module.exports = {
     "h-10", "w-10",
     "h-12", "w-12",
     "h-14", "w-14",
+    `bg-${conwayTheme.light.cell.alive.className}`,
+    `bg-${conwayTheme.light.cell.dead.className}`,
+    `bg-${conwayTheme.dark.cell.alive.className}`,
+    `bg-${conwayTheme.dark.cell.dead.className}`,
   ],
   theme: {
     extend: {
       colors: {
-        "light-alive-cell": myCustomTheme.light.aliveCell,
-        "light-dead-cell": myCustomTheme.light.deadCell,
-        "dark-alive-cell": myCustomTheme.dark.aliveCell,
-        "dark-dead-cell": myCustomTheme.dark.deadCell,
+        [conwayTheme.light.cell.alive.className]: conwayTheme.light.cell.alive.color,
+        [conwayTheme.light.cell.dead.className]: conwayTheme.light.cell.dead.color,
+        [conwayTheme.dark.cell.alive.className]: conwayTheme.dark.cell.alive.color,
+        [conwayTheme.dark.cell.dead.className]: conwayTheme.dark.cell.dead.color,
       },
     },
   },

@@ -1,4 +1,3 @@
-import "tailwindcss/tailwind.css";
 import { useEffect, WheelEvent } from "react";
 import GameSettingsView from "../src/components/settings/GameSettingsView";
 import { defaultSettings, useSettings } from "../src/settings/settings";

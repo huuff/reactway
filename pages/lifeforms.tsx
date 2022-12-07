@@ -1,4 +1,3 @@
-import "tailwindcss/tailwind.css";
 import { useInterval } from "beautiful-react-hooks";
 import CanvasGameGrid from "../src/components/grid/CanvasGameGrid";
 import { useGrid } from "../src/game/use-grid";

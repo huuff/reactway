@@ -1,13 +1,28 @@
-// TODO: This is nice, but add also the colors for the hovered cells
 module.exports =  {
   light: {
-    aliveCell: "#000000",
-    deadCell: "#F0F0F0",
+    cell: {
+      alive: {
+        className: "light-alive-cell",
+        color: "#000000",
+      },
+      dead: {
+        className: "light-dead-cell",
+        color: "#F0F0F0",
+      },
+    },
   },
 
   dark:  {
-    aliveCell: "#262626",
-    deadCell: "#666666",
+    cell: {
+      alive: {
+        className: "dark-alive-cell",
+        color: "#262626",
+      },
+      dead: {
+        className: "dark-dead-cell",
+        color: "#666666",
+      },
+    },
   }
 };
 

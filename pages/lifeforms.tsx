@@ -9,9 +9,7 @@ import { useDarkMode } from "usehooks-ts";
 import { getTheme, Theme } from "../src/util/get-theme";
 import classNames from "classnames";
 import DarkModeSelector from "../src/components/settings/DarkModeSelector";
-
-// TODO: Try to draw the spaceships in a dragscrollable small container and a grid that's larger than it, so you
-// can follow the course of the spaceship by dragscrolling
+import ScrollContainer from "react-indiana-drag-scroll";
 
 const INITIAL_GRIDS = {
     "Still Life": {
@@ -117,42 +115,47 @@ const INITIAL_GRIDS = {
     },
     "Spaceships": {
         "Glider": gridFromAscii`
-            OOOOO
-            OO#OO
-            #O#OO
-            O##OO
-            OOOOO
+            OOOOOOOOOOOOO
+            OO#OOOOOOOOOO
+            #O#OOOOOOOOOO
+            O##OOOOOOOOOO
+            OOOOOOOOOOOOO
+            OOOOOOOOOOOOO
+            OOOOOOOOOOOOO
+            OOOOOOOOOOOOO
+            OOOOOOOOOOOOO
+            OOOOOOOOOOOOO
         `,
         "Lightweight Spaceship": gridFromAscii`
-            OOOOOOOOO
-            OO#OO#OOO
-            OOOOOO#OO
-            OO#OOO#OO
-            OOO####OO
-            OOOOOOOOO
-            OOOOOOOOO
+            OOOOOOOOOOOOOO
+            OO#OO#OOOOOOOO
+            OOOOOO#OOOOOOO
+            OO#OOO#OOOOOOO
+            OOO####OOOOOOO
+            OOOOOOOOOOOOOO
         `,
         "Middleweight Spaceship": gridFromAscii`
-            OOOOOOOOOO
-            OOOOOOOOOO
-            OOOOOOOOOO
-            OOO#####OO
-            OO#OOOO#OO
-            OOOOOOO#OO
-            OO#OOO#OOO
-            OOOO#OOOOO
-            OOOOOOOOOO
+            OOOOOOOOOOOOOOO
+            OOOOOOOOOOOOOOO
+            OOOOOOOOOOOOOOO
+            OOO#####OOOOOOO
+            OO#OOOO#OOOOOOO
+            OOOOOOO#OOOOOOO
+            OO#OOO#OOOOOOOO
+            OOOO#OOOOOOOOOO
+            OOOOOOOOOOOOOOO
+            OOOOOOOOOOOOOOO
         `,
         "Heavyweight Spaceship": gridFromAscii`
-            OOOOOOOOOOO
-            OOOOOOOOOOO
-            OOOOOOOOOOO
-            OOO######OO
-            OO#OOOOO#OO
-            OOOOOOOO#OO
-            OO#OOOO#OOO
-            OOOO##OOOOO
-            OOOOOOOOOOO
+            OOOOOOOOOOOOOOOOO
+            OOOOOOOOOOOOOOOOO
+            OOOOOOOOOOOOOOOOO
+            OOO######OOOOOOOO
+            OO#OOOOO#OOOOOOOO
+            OOOOOOOO#OOOOOOOO
+            OO#OOOO#OOOOOOOOO
+            OOOO##OOOOOOOOOOO
+            OOOOOOOOOOOOOOOOO
         `,
     }
 }
@@ -189,7 +192,13 @@ function renderGrids(grids: AssortedGrids, lifeformType: keyof AssortedGrids, th
                     <div>
                         <h3 className={`text-lg text-center mt-2 font-semibold text-${theme.text.className}`}>{lifeformName}</h3>
                         <NoSSR>
-                            <CanvasGameGrid grid={lifeform.grid} toggleCell={lifeform.toggleCell} cellSize={2} />
+                            { lifeformType === "Spaceships"
+                                ? <ScrollContainer className="w-40 h-25 mx-auto cursor-move">
+                                    <CanvasGameGrid grid={lifeform.grid} toggleCell={lifeform.toggleCell} cellSize={2} />
+                                  </ScrollContainer>
+                                : <CanvasGameGrid grid={lifeform.grid} toggleCell={lifeform.toggleCell} cellSize={2} />
+                            }
+                            
                         </NoSSR>
                     </div>
                 ))}

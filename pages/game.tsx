@@ -72,7 +72,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     }
 
     return (
-        <div onWheel={wheelHandler} className={`${isDarkMode ? "bg-slate-800" : "bg-slate-100"}`}>
+        <div onWheel={wheelHandler} className={`bg-${theme.windowBackground.className}`}>
             <div className="cursor-move">
                 <ScrollContainer
                     className="h-screen"

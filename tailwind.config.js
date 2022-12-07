@@ -24,6 +24,9 @@ module.exports = {
     `hover:bg-${conwayTheme.light.cell.hovered.dead.className}`,
     `hover:bg-${conwayTheme.dark.cell.hovered.alive.className}`,
     `hover:bg-${conwayTheme.dark.cell.hovered.dead.className}`,
+
+    `bg-${conwayTheme.light.windowBackground.className}`,
+    `bg-${conwayTheme.dark.windowBackground.className}`,
   ],
   theme: {
     extend: {
@@ -32,6 +35,9 @@ module.exports = {
         [conwayTheme.light.cell.dead.className]: conwayTheme.light.cell.dead.color,
         [conwayTheme.dark.cell.alive.className]: conwayTheme.dark.cell.alive.color,
         [conwayTheme.dark.cell.dead.className]: conwayTheme.dark.cell.dead.color,
+
+        [conwayTheme.light.windowBackground.className]: conwayTheme.light.windowBackground.color,
+        [conwayTheme.dark.windowBackground.className]: conwayTheme.dark.windowBackground.color,
 
         [conwayTheme.light.cell.hovered.alive.className]: conwayTheme.light.cell.hovered.alive.color,
         [conwayTheme.light.cell.hovered.dead.className]: conwayTheme.light.cell.hovered.dead.color,

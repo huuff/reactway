@@ -13,7 +13,8 @@ type Theme = {
             alive: ClassAndColor;
             dead: ClassAndColor;
         }
-    }
+    },
+    windowBackground: ClassAndColor,
 }
 
 function getTheme(darkMode: boolean): Theme {

@@ -1,4 +1,4 @@
-import { useEffect, WheelEvent } from "react";
+import { useEffect, useMemo, WheelEvent } from "react";
 import GameSettingsView from "../src/components/settings/GameSettingsView";
 import { defaultSettings, useSettings } from "../src/settings/settings";
 import { useDarkMode, useInterval } from "usehooks-ts";
@@ -15,6 +15,7 @@ import GameGridView from "../src/components/grid/GameGridView";
 import { useThrottledCallback } from "beautiful-react-hooks";
 import ScrollContainer from "react-indiana-drag-scroll";
 import DarkModeSelector from "../src/components/settings/DarkModeSelector";
+import { getTheme } from "../src/util/get-theme";
 
 type GameProps = {
     readonly seed: string;
@@ -22,6 +23,8 @@ type GameProps = {
 
 const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     const { isDarkMode } = useDarkMode();
+    const theme = useMemo(() => getTheme(isDarkMode), [ isDarkMode ]);
+
     const [settings, dispatchSettings] = useSettings(defaultSettings);
     const { height, width, birthFactor, tickDuration, view, type, cellSize } = settings
     const playback = usePlayback();
@@ -100,7 +103,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                     border
                     rounded-lg 
                     drop-shadow-lg
-                    ${isDarkMode ? "bg-slate-800" : "bg-slate-100"}
+                    bg-${theme.windowBackground.className}
                     p-2 
                     mb-2 
                     opacity-90 
@@ -117,7 +120,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                     border 
                     rounded-lg 
                     drop-shadow-lg 
-                    ${isDarkMode ? "bg-slate-800" : "bg-slate-100"}
+                    bg-${theme.windowBackground.className}
                     p-2
                     opacity-90
                     `}

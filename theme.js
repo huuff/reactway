@@ -20,6 +20,10 @@ module.exports =  {
         },
       },
     },
+    windowBackground: {
+      className: "light-window-background",
+      color: "#F1F5F9",
+    },
   },
 
   dark:  {
@@ -42,6 +46,10 @@ module.exports =  {
           color: "#CC0000",
         },
       },
+    },
+    windowBackground: {
+      className: "dark-window-background",
+      color: "#1E293B",
     },
   }
 };

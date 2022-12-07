@@ -238,9 +238,9 @@ function useDrawHighlightedCellEffect({
 
         // TODO: Merge this with the drawcell function?
         if (isAlive) {
-            ctx.fillStyle = "#660000";
+            ctx.fillStyle = getTheme(isDarkMode).cell.hovered.alive.color;
         } else {
-            ctx.fillStyle = isDarkMode ? "#B30000" : "#FF3333";
+            ctx.fillStyle = getTheme(isDarkMode).cell.hovered.dead.color;
         }
         ctx.fillRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels-1, cellSizePixels-1);
 

@@ -1,3 +1,4 @@
+// TODO: A different hover alive color for light and dark
 module.exports =  {
   light: {
     cell: {
@@ -8,6 +9,16 @@ module.exports =  {
       dead: {
         className: "light-dead-cell",
         color: "#F0F0F0",
+      },
+      hovered: {
+        alive: {
+          className: "hovered-light-alive-cell",
+          color: "#660000",
+        },
+        dead: {
+          className: "hovered-light-dead-cell",
+          color: "#FF3333",
+        },
       },
     },
   },
@@ -21,6 +32,16 @@ module.exports =  {
       dead: {
         className: "dark-dead-cell",
         color: "#666666",
+      },
+      hovered: {
+        alive: {
+          className: "hovered-dark-alive-cell",
+          color:"#660000",
+        },
+        dead: {
+          className: "hovered-dark-dead-cell",
+          color: "#B30000",
+        },
       },
     },
   }

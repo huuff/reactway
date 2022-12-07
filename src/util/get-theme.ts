@@ -9,6 +9,10 @@ type Theme = {
     cell: {
         alive: ClassAndColor;
         dead: ClassAndColor;
+        hovered: {
+            alive: ClassAndColor;
+            dead: ClassAndColor;
+        }
     }
 }
 

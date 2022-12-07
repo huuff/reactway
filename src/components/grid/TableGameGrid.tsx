@@ -28,6 +28,7 @@ const TableGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps)
                                 const coordinatesString = coordinatesToString(coordinates);
                                 const isAlive = grid.get(coordinates);
                                 const color = theme.cell[isAlive ? "alive" : "dead"].className;
+                                const hoverColor = theme.cell.hovered[isAlive ? "alive" : "dead"].className;
                                 return (
                                     <td
                                         key={coordinatesString}
@@ -37,7 +38,7 @@ const TableGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps)
                                             sizeClasses,
                                             "border",
                                             `bg-${color}`,
-                                            isAlive ? "hover:bg-red-800" : "hover:bg-red-400",
+                                            `hover:bg-${hoverColor}`,
                                         )}>
                                     </td>
                                 )

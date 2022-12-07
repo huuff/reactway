@@ -17,6 +17,9 @@ type Theme = {
     windowBackground: ClassAndColor,
     text: ClassAndColor,
     input: ClassAndColor,
+    button: {
+        hover: ClassAndColor,
+    }
 }
 
 function getTheme(darkMode: boolean): Theme {

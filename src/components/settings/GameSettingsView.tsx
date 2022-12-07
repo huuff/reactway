@@ -151,7 +151,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
             <div className="flex justify-around">
                 <div
                     onClick={dispatchDecreaseCellSize}
-                    className="w-1/4 hover:bg-slate-300 pt-1 rounded-md">
+                    className={`w-1/4 hover:bg-${theme.button.hover.className} pt-1 rounded-md`}>
                     <FontAwesomeIcon
                         icon={faMinus}
                         className="h-4 mx-auto"
@@ -160,7 +160,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
                 <p className="w-1/2 text-center">Cell size: {settings.cellSize}</p>
                 <div
                     onClick={dispatchIncreaseCellSize}
-                    className="w-1/4 hover:bg-slate-300 pt-1 rounded-md">
+                    className={`w-1/4 hover:bg-${theme.button.hover.className} pt-1 rounded-md`}>
                     <FontAwesomeIcon
                         icon={faPlus}
                         className="h-4 mx-auto"

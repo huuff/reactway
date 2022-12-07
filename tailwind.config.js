@@ -33,6 +33,9 @@ module.exports = {
 
     `bg-${conwayTheme.light.input.className}`,
     `bg-${conwayTheme.dark.input.className}`,
+
+    `hover:bg-${conwayTheme.light.button.hover.className}`,
+    `hover:bg-${conwayTheme.dark.button.hover.className}`,
   ],
   theme: {
     extend: {
@@ -55,6 +58,9 @@ module.exports = {
 
         [conwayTheme.light.input.className]: conwayTheme.light.input.color,
         [conwayTheme.dark.input.className]: conwayTheme.dark.input.color,
+
+        [conwayTheme.light.button.hover.className]: conwayTheme.light.button.hover.color,
+        [conwayTheme.dark.button.hover.className]: conwayTheme.dark.button.hover.color,
       },
     },
   },

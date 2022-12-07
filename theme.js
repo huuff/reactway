@@ -31,7 +31,13 @@ module.exports =  {
     input: {
       className: "light-input-background",
       color: "#E2E8F0",
-    }
+    },
+    button: {
+      hover: {
+        className: "light-button-hover",
+        color: "#CBD5E1",
+      },
+    },
   },
 
   dark:  {
@@ -66,7 +72,13 @@ module.exports =  {
     input: {
       className: "dark-input-background",
       color: "#334155",
-    }
-  }
+    },
+    button: {
+      hover: {
+        className: "hover-dark-button",
+        color: "#475569",
+      },
+    },
+  },
 };
 

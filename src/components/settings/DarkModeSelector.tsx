@@ -20,14 +20,18 @@ const DarkModeSelector = ({ className }: DarkModeSelectorProps) => {
                 iconRef.current = faSun;
     }, [isDarkMode])
 
+    // TODO: Theme for the background
     return (
         <button className={`
-            ${className || ""}
+            fixed
+            top-1 
+            right-5
             border 
             rounded-lg 
             drop-shadow-md 
             px-2
             py-1
+            -z-100
             ${isDarkMode ? "bg-slate-600" : "bg-slate-100"}
             `} 
                 onClick={toggle}>

@@ -27,3 +27,4 @@ function getTheme(darkMode: boolean): Theme {
 }
 
 export { getTheme };
+export type { Theme };

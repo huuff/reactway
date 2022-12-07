@@ -87,7 +87,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                 </ScrollContainer>
             </div>
 
-            <DarkModeSelector className="fixed top-1 right-5" />
+            <DarkModeSelector />
             <div className={`
                 fixed
                 bottom-0 

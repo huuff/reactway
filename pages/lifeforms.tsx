@@ -4,10 +4,12 @@ import { useGrid } from "../src/game/use-grid";
 import NoSSR from "../src/components/util/NoSSR";
 import { gridFromAscii } from "../src/util/create-grid-from-ascii";
 import { typesafeKeys } from "../src/util/typesafe-keys";
-import { ReactElement } from "react";
+import { ReactElement, useMemo } from "react";
+import { useDarkMode } from "usehooks-ts";
+import { getTheme, Theme } from "../src/util/get-theme";
+import classNames from "classnames";
+import DarkModeSelector from "../src/components/settings/DarkModeSelector";
 
-// TODO: Nicer styles
-// TODO: Enable dark mode here
 // TODO: Try to draw the spaceships in a dragscrollable small container and a grid that's larger than it, so you
 // can follow the course of the spaceship by dragscrolling
 
@@ -171,24 +173,36 @@ function createGrids(): AssortedGrids {
     }), {} as AssortedGrids);
 }
 
-function renderGrids(grids: AssortedGrids, lifeformType: keyof AssortedGrids): ReactElement {
+function renderGrids(grids: AssortedGrids, lifeformType: keyof AssortedGrids, theme: Theme): ReactElement {
     return (
-        <div>
-            {lifeformType}
-            {Object.entries(grids[lifeformType]).map(([lifeformName, lifeform]) => (
-                <div>
-                    {lifeformName}
-                    <NoSSR>
-                        <CanvasGameGrid grid={lifeform.grid} toggleCell={lifeform.toggleCell} cellSize={2} />
-                    </NoSSR>
-                </div>
-            ))}
-        </div>
+        <section className="basis-1/6">
+            <h2 className={`text-xl text-center mb-2 font-semibold text-${theme.text.className}`}>{lifeformType}</h2>
+            <div className={classNames(
+                `bg-${theme.input.className}`, // XXX: Not really an input though!!
+                "rounded-lg",
+                "px-3",
+                "pb-4",
+                "shadow-lg",
+                )}>
+
+                {Object.entries(grids[lifeformType]).map(([lifeformName, lifeform]) => (
+                    <div>
+                        <h3 className={`text-lg text-center mt-2 font-semibold text-${theme.text.className}`}>{lifeformName}</h3>
+                        <NoSSR>
+                            <CanvasGameGrid grid={lifeform.grid} toggleCell={lifeform.toggleCell} cellSize={2} />
+                        </NoSSR>
+                    </div>
+                ))}
+
+            </div>
+        </section>
     )
 }
 
 const Lifeforms = () => {
     const grids = createGrids();
+    const { isDarkMode } = useDarkMode();
+    const theme = useMemo(() => getTheme(isDarkMode), [isDarkMode]);
 
     useInterval(() => {
         Object.values(grids).forEach((gridType) => {
@@ -200,12 +214,21 @@ const Lifeforms = () => {
 
     return (
         <>
-            <header className="text-lg text-center">Lifeforms</header>
-            <main className="flex flex-row justify-evenly">
-                { renderGrids(grids, "Still Life") }
-                { renderGrids(grids, "Oscillators") }
-                { renderGrids(grids, "Spaceships") }
-            </main>
+            <div className={`min-h-screen bg-${theme.windowBackground.className}`}>
+                <DarkModeSelector />
+                <header className={classNames(
+                    "text-3xl",
+                    "font-bold",
+                    "text-center", 
+                    "mb-10",
+                    `text-${theme.text.className}`,
+                    )}>Lifeforms</header>
+                <main className="flex flex-row justify-evenly">
+                    {renderGrids(grids, "Still Life", theme)}
+                    {renderGrids(grids, "Oscillators", theme)}
+                    {renderGrids(grids, "Spaceships", theme)}
+                </main>
+            </div>
         </>
     )
 };

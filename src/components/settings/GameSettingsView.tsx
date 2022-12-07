@@ -7,6 +7,7 @@ import { typedCapitalize } from "../../util/typed-capitalize";
 import { useNumberInput } from "../../util/use-number-input";
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { getTheme } from "../../util/get-theme";
 
 type GameSettingsViewProps = {
     settings: GameSettings,
@@ -39,6 +40,8 @@ function useNumberSetting<T extends Exclude<NumberGameSetting, "cellSize">>(
 // TODO: Test it?
 const GameSettingsView = ({ settings, dispatchSettings, className }: GameSettingsViewProps) => {
     const { isDarkMode } = useDarkMode();
+    const theme = useMemo(() => getTheme(isDarkMode), [isDarkMode]);
+
     const heightInput = useNumberSetting("height", settings, dispatchSettings);
     const widthInput = useNumberSetting("width", settings, dispatchSettings);
     const birthFactorInput = useNumberSetting("birthFactor", settings, dispatchSettings);
@@ -63,7 +66,7 @@ const GameSettingsView = ({ settings, dispatchSettings, className }: GameSetting
     const inputBackground = useMemo(() => isDarkMode ? "bg-slate-700" : "bg-white", [isDarkMode]);
 
     return (
-        <div className={`${className || ""} ${isDarkMode ? "text-white": "text-black"}`}>
+        <div className={`${className || ""} text-${theme.text.className}`}>
             <div className="flex justify-between">
                 <label htmlFor="view" className="w-1/2 mr-2">View:</label>
                 <select

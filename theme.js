@@ -24,6 +24,10 @@ module.exports =  {
       className: "light-window-background",
       color: "#F1F5F9",
     },
+    text: {
+      className: "light-text-color",
+      color: "#0F172A",
+    },
   },
 
   dark:  {
@@ -50,6 +54,10 @@ module.exports =  {
     windowBackground: {
       className: "dark-window-background",
       color: "#1E293B",
+    },
+    text: {
+      className: "dark-text-color",
+      color: "#F1F5F9",
     },
   }
 };

@@ -43,7 +43,7 @@ const AsciiGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps)
                                         classNames(
                                             "mx-1",
                                             `hover:bg-${theme.cell.hovered[isAlive ? "alive" : "dead"].className}`,
-                                            {"text-slate-100": isDarkMode}
+                                            `text-${theme.text.className}`,
                                         )
                                     }
                                     onClick={() => toggleCell(coordinate)}

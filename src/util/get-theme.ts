@@ -15,6 +15,7 @@ type Theme = {
         }
     },
     windowBackground: ClassAndColor,
+    text: ClassAndColor,
 }
 
 function getTheme(darkMode: boolean): Theme {

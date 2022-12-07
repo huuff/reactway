@@ -27,6 +27,9 @@ module.exports = {
 
     `bg-${conwayTheme.light.windowBackground.className}`,
     `bg-${conwayTheme.dark.windowBackground.className}`,
+
+    `text-${conwayTheme.light.text.className}`,
+    `text-${conwayTheme.dark.text.className}`,
   ],
   theme: {
     extend: {
@@ -43,6 +46,9 @@ module.exports = {
         [conwayTheme.light.cell.hovered.dead.className]: conwayTheme.light.cell.hovered.dead.color,
         [conwayTheme.dark.cell.hovered.alive.className]: conwayTheme.dark.cell.hovered.alive.color,
         [conwayTheme.dark.cell.hovered.dead.className]: conwayTheme.dark.cell.hovered.dead.color,
+
+        [conwayTheme.light.text.className]: conwayTheme.light.text.color,
+        [conwayTheme.dark.text.className]: conwayTheme.dark.text.color,
       },
     },
   },

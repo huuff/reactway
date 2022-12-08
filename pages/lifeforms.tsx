@@ -189,7 +189,7 @@ function renderGrids(grids: AssortedGrids, lifeformType: keyof AssortedGrids, th
                 )}>
 
                 {Object.entries(grids[lifeformType]).map(([lifeformName, lifeform]) => (
-                    <div>
+                    <div key={lifeformName}>
                         <h3 className={`text-lg text-center mt-2 font-semibold text-${theme.text.className}`}>{lifeformName}</h3>
                         <NoSSR>
                             { lifeformType === "Spaceships"

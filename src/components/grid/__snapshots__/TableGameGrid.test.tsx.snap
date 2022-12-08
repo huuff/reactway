@@ -1,118 +1,120 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TableGameGrid snapshot 1`] = `
-<table
-  className=" w-72 table-fixed"
->
-  <tbody>
-    <tr>
-      <td
-        className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
-        data-testid="(0,0)"
-        onClick={[Function]}
-      />
-      <td
-        className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
-        data-testid="(1,0)"
-        onClick={[Function]}
-      />
-      <td
-        className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
-        data-testid="(2,0)"
-        onClick={[Function]}
-      />
-      <td
-        className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
-        data-testid="(3,0)"
-        onClick={[Function]}
-      />
-      <td
-        className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
-        data-testid="(4,0)"
-        onClick={[Function]}
-      />
-    </tr>
-    <tr>
-      <td
-        className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
-        data-testid="(0,1)"
-        onClick={[Function]}
-      />
-      <td
-        className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
-        data-testid="(1,1)"
-        onClick={[Function]}
-      />
-      <td
-        className="h-6 w-6 border bg-light-alive-cell hover:bg-hovered-light-alive-cell"
-        data-testid="(2,1)"
-        onClick={[Function]}
-      />
-      <td
-        className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
-        data-testid="(3,1)"
-        onClick={[Function]}
-      />
-      <td
-        className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
-        data-testid="(4,1)"
-        onClick={[Function]}
-      />
-    </tr>
-    <tr>
-      <td
-        className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
-        data-testid="(0,2)"
-        onClick={[Function]}
-      />
-      <td
-        className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
-        data-testid="(1,2)"
-        onClick={[Function]}
-      />
-      <td
-        className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
-        data-testid="(2,2)"
-        onClick={[Function]}
-      />
-      <td
-        className="h-6 w-6 border bg-light-alive-cell hover:bg-hovered-light-alive-cell"
-        data-testid="(3,2)"
-        onClick={[Function]}
-      />
-      <td
-        className="h-6 w-6 border bg-light-alive-cell hover:bg-hovered-light-alive-cell"
-        data-testid="(4,2)"
-        onClick={[Function]}
-      />
-    </tr>
-    <tr>
-      <td
-        className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
-        data-testid="(0,3)"
-        onClick={[Function]}
-      />
-      <td
-        className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
-        data-testid="(1,3)"
-        onClick={[Function]}
-      />
-      <td
-        className="h-6 w-6 border bg-light-alive-cell hover:bg-hovered-light-alive-cell"
-        data-testid="(2,3)"
-        onClick={[Function]}
-      />
-      <td
-        className="h-6 w-6 border bg-light-alive-cell hover:bg-hovered-light-alive-cell"
-        data-testid="(3,3)"
-        onClick={[Function]}
-      />
-      <td
-        className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
-        data-testid="(4,3)"
-        onClick={[Function]}
-      />
-    </tr>
-  </tbody>
-</table>
+<div>
+  <table
+    className=" w-72 table-fixed"
+  >
+    <tbody>
+      <tr>
+        <td
+          className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
+          data-testid="(0,0)"
+          onClick={[Function]}
+        />
+        <td
+          className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
+          data-testid="(1,0)"
+          onClick={[Function]}
+        />
+        <td
+          className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
+          data-testid="(2,0)"
+          onClick={[Function]}
+        />
+        <td
+          className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
+          data-testid="(3,0)"
+          onClick={[Function]}
+        />
+        <td
+          className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
+          data-testid="(4,0)"
+          onClick={[Function]}
+        />
+      </tr>
+      <tr>
+        <td
+          className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
+          data-testid="(0,1)"
+          onClick={[Function]}
+        />
+        <td
+          className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
+          data-testid="(1,1)"
+          onClick={[Function]}
+        />
+        <td
+          className="h-6 w-6 border bg-light-alive-cell hover:bg-hovered-light-alive-cell"
+          data-testid="(2,1)"
+          onClick={[Function]}
+        />
+        <td
+          className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
+          data-testid="(3,1)"
+          onClick={[Function]}
+        />
+        <td
+          className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
+          data-testid="(4,1)"
+          onClick={[Function]}
+        />
+      </tr>
+      <tr>
+        <td
+          className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
+          data-testid="(0,2)"
+          onClick={[Function]}
+        />
+        <td
+          className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
+          data-testid="(1,2)"
+          onClick={[Function]}
+        />
+        <td
+          className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
+          data-testid="(2,2)"
+          onClick={[Function]}
+        />
+        <td
+          className="h-6 w-6 border bg-light-alive-cell hover:bg-hovered-light-alive-cell"
+          data-testid="(3,2)"
+          onClick={[Function]}
+        />
+        <td
+          className="h-6 w-6 border bg-light-alive-cell hover:bg-hovered-light-alive-cell"
+          data-testid="(4,2)"
+          onClick={[Function]}
+        />
+      </tr>
+      <tr>
+        <td
+          className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
+          data-testid="(0,3)"
+          onClick={[Function]}
+        />
+        <td
+          className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
+          data-testid="(1,3)"
+          onClick={[Function]}
+        />
+        <td
+          className="h-6 w-6 border bg-light-alive-cell hover:bg-hovered-light-alive-cell"
+          data-testid="(2,3)"
+          onClick={[Function]}
+        />
+        <td
+          className="h-6 w-6 border bg-light-alive-cell hover:bg-hovered-light-alive-cell"
+          data-testid="(3,3)"
+          onClick={[Function]}
+        />
+        <td
+          className="h-6 w-6 border bg-light-dead-cell hover:bg-hovered-light-dead-cell"
+          data-testid="(4,3)"
+          onClick={[Function]}
+        />
+      </tr>
+    </tbody>
+  </table>
+</div>
 `;

@@ -11,9 +11,9 @@ import classNames from "classnames";
 import DarkModeSelector from "../src/components/settings/DarkModeSelector";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { usePerformanceTracker } from "../src/hooks/use-performance-tracker";
+import SlowIndicator from "../src/components/SlowIndicator";
 
 // TODO: Make this responsive
-// TODO: Add the slow indicator to this page too!
 const INITIAL_GRIDS = {
     "Still Life": {
         "Block": gridFromAscii`
@@ -229,6 +229,7 @@ const Lifeforms = () => {
         <>
             <div className={`min-h-screen bg-${theme.windowBackground.className}`}>
                 <DarkModeSelector />
+                <SlowIndicator tracker={performanceTracker} resetSettings={() => {}}/>
                 <header className={classNames(
                     "text-3xl",
                     "font-bold",

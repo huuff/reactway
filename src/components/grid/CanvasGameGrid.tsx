@@ -4,7 +4,7 @@ import { useMouseState, usePreviousValue, useViewportState } from "beautiful-rea
 import { useDarkMode, useDebounce } from "usehooks-ts";
 import { Box2D } from "../../util/box-2d";
 import tuple from "immutable-tuple";
-import { useIsDragging } from "../../util/use-is-dragging";
+import { useIsDragging } from "../../hooks/use-is-dragging";
 import { getTheme, LiveStatusDependent, ClassAndColor } from "../../util/get-theme";
 
 const CELL_SIZE_MULTIPLIER = 8;

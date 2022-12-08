@@ -23,6 +23,30 @@ describe("usePerformanceTracker", () => {
         expect(result.current.averageTickDuration).toBe(100);
     });
 
+    test("correctly batches ticks", () => {
+        // ARRANGE
+        const { result } = renderHook(() => usePerformanceTracker());
+
+        // ACT
+        act(() => {
+            let nextTickTime = 0;
+            for (const i of range(1, 10)) {
+                result.current.recordTick(50, new Date(nextTickTime));
+                // Tries to send ticks in batches of three, so every thirdtick, sets the next one to
+                // have a time 100 seconds in the future
+                if (i % 3 === 0) {
+                    nextTickTime += 100_000
+                } else {
+                    nextTickTime += 10
+                }
+            }
+        })
+
+        // ASSERT
+        // 150 is the total duration of each batch
+        expect(result.current.averageTickDuration).toBe(150);
+    });
+
     test("correctly detects slow performance", () => {
         // ARRANGE
         const { result } = renderHook(() => usePerformanceTracker());

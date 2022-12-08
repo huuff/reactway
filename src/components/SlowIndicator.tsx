@@ -54,7 +54,9 @@ const SlowIndicator = ({ tracker, resetSettings }: SlowIndicatorProps) => {
                         </div>
                     )
                 }
-                <p className="font-bold cursor-pointer" onClick={resetSettings}>Click here to restore settings</p>
+                <p className="font-bold cursor-pointer" onClick={() => { resetSettings(); tracker.reset()}}>
+                    Click here to restore settings
+                </p>
             </div>
         </div>)
 };

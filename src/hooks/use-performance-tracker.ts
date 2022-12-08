@@ -25,6 +25,7 @@ type PerformanceTracker = {
     recordTick: (timeSpentMs: TickRecord["timeSpentMs"], timeOfRecord: TickRecord["timeOfRecord"]) => void;
     disabledFeatures: Feature[];
     isDisabled: (feature: Feature["name"]) => boolean;
+    reset: () => void;
 }
 
 /**
@@ -37,7 +38,7 @@ const MAX_TICK_DURATION_MS = 90;
 /**
  * When ticks' duration start to exceed this parameter, performance degrades and dragging becomes sluggish
  */
-const MAX_EXPECTED_TICK_DURATION_MS = 100;
+const MAX_EXPECTED_TICK_DURATION_MS = 90;
 
 /**
  * Time to wait before updating whether the game is being slow. It's not a fast algorithm and updating it
@@ -99,7 +100,9 @@ function usePerformanceTracker(): PerformanceTracker {
 
     const isSlow = useMemo(() => averageTickDuration > MAX_EXPECTED_TICK_DURATION_MS, [records]);
 
-    return { isSlow, averageTickDuration, disabledFeatures, isDisabled, recordTick };
+    const reset = useCallback(() => setRecords([]), [setRecords]);
+
+    return { isSlow, averageTickDuration, disabledFeatures, isDisabled, recordTick, reset };
 }
 
 export { usePerformanceTracker };

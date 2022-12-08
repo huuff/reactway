@@ -48,9 +48,6 @@ const MAX_EXPECTED_TICK_DURATION_MS = 100;
  */
 const SLICE_OF_SLOW_CALCULATION = 500;
 
-function getUnixTimestampMs(date: Date): number {
-    return Math.floor(date.getTime() / 100);
-}
 
 function usePerformanceTracker(): PerformanceTracker {
     const [ records, setRecords ] = useState<TickRecord[]>([]);
@@ -69,17 +66,20 @@ function usePerformanceTracker(): PerformanceTracker {
         const tickTimeBatches: number[][] = [];
 
         let currentBatch: number[] = [];
-        let currentBatchStartTime = getUnixTimestampMs(records[0].timeOfRecord);
+        let currentBatchStartTime = records[0].timeOfRecord.getTime();
         for (const record of records) {
-            if (getUnixTimestampMs(record.timeOfRecord) > currentBatchStartTime + MAX_TICK_DURATION_MS) {
+            if (record.timeOfRecord.getTime() > currentBatchStartTime + MAX_TICK_DURATION_MS) {
                 tickTimeBatches.push(currentBatch);
                 currentBatch = [record.timeSpentMs];
-                currentBatchStartTime = getUnixTimestampMs(record.timeOfRecord);
+                currentBatchStartTime = record.timeOfRecord.getTime();
             } else {
                 currentBatch.push(record.timeSpentMs);
             }
         }
-
+        if (currentBatch.length !== 0) {
+            tickTimeBatches.push(currentBatch);
+        }
+        
         return sum(tickTimeBatches.map(
             (batchRecords) => sum(batchRecords))
         ) / tickTimeBatches.length;

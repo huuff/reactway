@@ -44,6 +44,7 @@ const CanvasGameGrid = ({
     className,
     toggleCell,
     cellSize,
+    innerRef,
 }: GameGridProps) => {
     const { isDarkMode } = useDarkMode();
     const cellSizePixels = useMemo(() => CELL_SIZE_MULTIPLIER * cellSize, [cellSize]);
@@ -79,7 +80,7 @@ const CanvasGameGrid = ({
     const onMouseUp = useClickToggleHandler(gridCanvasRef, hoveredCell, grid, toggleCell);
 
     return (
-        <div onMouseUp={onMouseUp} className={className}>
+        <div onMouseUp={onMouseUp} className={className} ref={innerRef}>
             <canvas
                 ref={gridCanvasRef}
                 className="mx-auto"

@@ -7,7 +7,7 @@ import { useDarkMode } from "usehooks-ts";
 import classNames from "classnames";
 import { getTheme } from "../../util/get-theme";
 
-const AsciiGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps) => {
+const AsciiGameGrid = ({ grid, className, toggleCell, cellSize, innerRef }: GameGridProps) => {
     const { isDarkMode } = useDarkMode();
     const theme = useMemo(() => getTheme(isDarkMode), [isDarkMode]);
 
@@ -27,7 +27,7 @@ const AsciiGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps)
     }, [cellSize]);
 
     return (
-        <div className={`${className || ""} font-mono leading-none ${sizeClass}`}>
+        <div className={`${className || ""} font-mono leading-none ${sizeClass}`} ref={innerRef}>
             {[...Array(grid.height)].map((_, y) => (
                 <Fragment key={`row-${y}`}>
                     {

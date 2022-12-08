@@ -4,11 +4,13 @@ import { iterateCoordinates } from "../util/iterate-coordinates";
 import { GridStateWrapper } from "../game/use-grid";
 import { Box2D } from "../util/box-2d";
 import tuple, {Tuple} from "immutable-tuple";
+import { RefObject } from "react";
 
 type GameGridProps = {
     grid: Grid,
     toggleCell: GridStateWrapper["toggleCell"],
     cellSize: number,
+    innerRef?: (node: HTMLDivElement | null) => void,
 } & { className?: string };
 
 type Coordinates = Tuple;

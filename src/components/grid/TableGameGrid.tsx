@@ -9,7 +9,7 @@ import { getTheme } from "../../util/get-theme";
 
 const CELL_SIZE_MULTIPLIER = 2;
 
-const TableGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps) => {
+const TableGameGrid = ({ grid, className, toggleCell, cellSize, innerRef }: GameGridProps) => {
     const { isDarkMode } = useDarkMode();
     const sizeClasses = useMemo(() => classNames(
         `h-${cellSize * CELL_SIZE_MULTIPLIER}`,
@@ -18,36 +18,38 @@ const TableGameGrid = ({ grid, className, toggleCell, cellSize }: GameGridProps)
     const theme = useMemo(() => getTheme(isDarkMode), [isDarkMode]);
 
     return (
-        <table className={`${className || ""} w-72 table-fixed`}>
-            <tbody>
-                {[...Array(grid.height)].map((_, y) => (
-                    <tr key={`row-${y}`}>
-                        {
-                            [...Array(grid.width)].map((_, x) => {
-                                const coordinates = tuple(x, y)
-                                const coordinatesString = coordinatesToString(coordinates);
-                                const isAlive = grid.get(coordinates);
-                                const color = theme.cell[isAlive ? "alive" : "dead"].className;
-                                const hoverColor = theme.cell.hovered[isAlive ? "alive" : "dead"].className;
-                                return (
-                                    <td
-                                        key={coordinatesString}
-                                        data-testid={coordinatesString}
-                                        onClick={() => toggleCell(coordinates)}
-                                        className={classNames(
-                                            sizeClasses,
-                                            "border",
-                                            `bg-${color}`,
-                                            `hover:bg-${hoverColor}`,
-                                        )}>
-                                    </td>
-                                )
-                            })
-                        }
-                    </tr>
-                ))}
-            </tbody>
-        </table>
+        <div ref={innerRef}>
+            <table className={`${className || ""} w-72 table-fixed`}>
+                <tbody>
+                    {[...Array(grid.height)].map((_, y) => (
+                        <tr key={`row-${y}`}>
+                            {
+                                [...Array(grid.width)].map((_, x) => {
+                                    const coordinates = tuple(x, y)
+                                    const coordinatesString = coordinatesToString(coordinates);
+                                    const isAlive = grid.get(coordinates);
+                                    const color = theme.cell[isAlive ? "alive" : "dead"].className;
+                                    const hoverColor = theme.cell.hovered[isAlive ? "alive" : "dead"].className;
+                                    return (
+                                        <td
+                                            key={coordinatesString}
+                                            data-testid={coordinatesString}
+                                            onClick={() => toggleCell(coordinates)}
+                                            className={classNames(
+                                                sizeClasses,
+                                                "border",
+                                                `bg-${color}`,
+                                                `hover:bg-${hoverColor}`,
+                                            )}>
+                                        </td>
+                                    )
+                                })
+                            }
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
     )
 }
 

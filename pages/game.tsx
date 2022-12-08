@@ -1,7 +1,7 @@
-import { useEffect, useMemo, WheelEvent } from "react";
+import { RefObject, useEffect, useMemo, useRef, WheelEvent } from "react";
 import GameSettingsView from "../src/components/settings/GameSettingsView";
 import { defaultSettings, useSettings } from "../src/settings/settings";
-import { useDarkMode, useInterval } from "usehooks-ts";
+import { useDarkMode, useElementSize, useInterval, useWindowSize } from "usehooks-ts";
 import { useRouter } from "next/router";
 import { randomSeed } from "../src/util/birth-function";
 import { NextPage } from "next";
@@ -12,10 +12,11 @@ import PlayBar from "../src/components/settings/PlayBar";
 import { useGrid } from "../src/game/use-grid";
 import { usePlayback } from "../src/settings/use-playback";
 import GameGridView from "../src/components/grid/GameGridView";
-import { useThrottledCallback } from "beautiful-react-hooks";
+import { useThrottledCallback, useWindowScroll } from "beautiful-react-hooks";
 import ScrollContainer from "react-indiana-drag-scroll";
 import DarkModeSelector from "../src/components/settings/DarkModeSelector";
 import { getTheme } from "../src/util/get-theme";
+import classNames from "classnames";
 
 type GameProps = {
     readonly seed: string;
@@ -23,7 +24,7 @@ type GameProps = {
 
 const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     const { isDarkMode } = useDarkMode();
-    const theme = useMemo(() => getTheme(isDarkMode), [ isDarkMode ]);
+    const theme = useMemo(() => getTheme(isDarkMode), [isDarkMode]);
 
     const [settings, dispatchSettings] = useSettings(defaultSettings);
     const { height, width, birthFactor, tickDuration, view, type, cellSize } = settings
@@ -71,21 +72,25 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
         })
     }
 
+    const [gridRef, isGridBiggerThanViewport] = useIsGridBiggerThanViewport();
+
     return (
         <div onWheel={wheelHandler} className={`bg-${theme.windowBackground.className}`}>
-            <div className="cursor-move">
-                <ScrollContainer
-                    className="h-screen"
-                >
-                    <NoSsr>
-                        <GameGridView grid={grid}
-                            view={view}
-                            cellSize={cellSize}
-                            toggleCell={toggleCell}
-                        />
-                    </NoSsr>
-                </ScrollContainer>
-            </div>
+            <ScrollContainer
+                className={classNames(
+                    "h-screen",
+                    { "cursor-move": isGridBiggerThanViewport },
+                )}
+            >
+                <NoSsr>
+                    <GameGridView grid={grid}
+                        view={view}
+                        cellSize={cellSize}
+                        toggleCell={toggleCell}
+                        innerRef={gridRef}
+                    />
+                </NoSsr>
+            </ScrollContainer>
 
             <DarkModeSelector />
             <div className={`
@@ -138,6 +143,16 @@ Game.getInitialProps = async ({ query }) => {
     } else {
         return { seed: "fixed seed" };
     }
+}
+
+function useIsGridBiggerThanViewport(): [((node: HTMLDivElement | null) => void), boolean] {
+    const { width: windowWidth, height: windowHeight } = useWindowSize();
+    const [ref, { width: gridWidth, height: gridHeight }] = useElementSize<HTMLDivElement>();
+
+    return [
+        ref,
+        gridWidth > windowWidth || gridHeight > windowHeight,
+    ]
 }
 
 export default Game;

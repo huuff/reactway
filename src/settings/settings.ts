@@ -179,6 +179,7 @@ function useSettings(
                         break;
                     }
                 }
+                break;
             }
             case "reset": {
                 nextQueryParams = toStringObject(defaultSettings);

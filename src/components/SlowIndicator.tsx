@@ -8,6 +8,7 @@ type SlowIndicatorProps = {
     resetSettings: () => void;
 }
 
+// TODO: Test
 const SlowIndicator = ({ tracker, resetSettings }: SlowIndicatorProps) => {
     if (!tracker.isSlow) {
         return null;

@@ -1,7 +1,6 @@
 import { sum } from "lodash";
 import { useCallback, useMemo, useState } from "react";
 import { trimArray } from "../util/trim-array";
-import { useThrottle } from "react-use";
 
 type TickRecord = {
     timeSpentMs: number;

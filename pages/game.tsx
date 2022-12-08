@@ -18,6 +18,7 @@ import DarkModeSelector from "../src/components/settings/DarkModeSelector";
 import { getTheme } from "../src/util/get-theme";
 import classNames from "classnames";
 import { usePerformanceTracker } from "../src/hooks/use-performance-tracker";
+import SlowIndicator from "../src/components/SlowIndicator";
 
 type GameProps = {
     readonly seed: string;
@@ -96,6 +97,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
             </ScrollContainer>
 
             <DarkModeSelector />
+            <SlowIndicator tracker={performanceTracker} />
             <div className={`
                 fixed
                 bottom-0 

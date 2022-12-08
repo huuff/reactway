@@ -12,7 +12,6 @@ import DarkModeSelector from "../src/components/settings/DarkModeSelector";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { usePerformanceTracker } from "../src/hooks/use-performance-tracker";
 
-
 // TODO: Make this responsive
 const INITIAL_GRIDS = {
     "Still Life": {

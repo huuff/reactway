@@ -9,6 +9,7 @@ type TickRecord = {
 
 type PerformanceTracker = {
     isSlow: boolean;
+    averageTickDuration: number;
     recordTick: (timeSpentMs: TickRecord["timeSpentMs"], timeOfRecord: TickRecord["timeOfRecord"]) => void;
 }
 
@@ -46,9 +47,9 @@ function usePerformanceTracker(): PerformanceTracker {
 
     // TODO: This seems pretty slow! I should make a custom hook that only calls this function every certain number
     // of milliseconds
-    const isSlow = useMemo(() => {
+    const averageTickDuration = useMemo(() => {
         if (records.length === 0) {
-            return false;
+            return 0;
         }
 
         const tickTimeBatches: number[][] = [];
@@ -57,28 +58,22 @@ function usePerformanceTracker(): PerformanceTracker {
         let currentBatchStartTime = getUnixTimestampMs(records[0].timeOfRecord);
         for (const record of records) {
             if (getUnixTimestampMs(record.timeOfRecord) > currentBatchStartTime + MAX_TICK_DURATION_MS) {
-                currentBatch.push(record.timeSpentMs);
-            } else {
                 tickTimeBatches.push(currentBatch);
                 currentBatch = [record.timeSpentMs];
                 currentBatchStartTime = getUnixTimestampMs(record.timeOfRecord);
+            } else {
+                currentBatch.push(record.timeSpentMs);
             }
         }
 
-        const averageTimeSpent = sum(tickTimeBatches.map(
+        return sum(tickTimeBatches.map(
             (batchRecords) => sum(batchRecords))
         ) / tickTimeBatches.length;
-
-        const result = averageTimeSpent > MAX_EXPECTED_TICK_DURATION_MS;
-
-        if (result) {
-            console.log(`Ticking is becoming sluggish! Average time spent: ${averageTimeSpent}`);
-        }
-
-        return result;
     }, [records]);
 
-    return { isSlow, recordTick };
+    const isSlow = useMemo(() => averageTickDuration > MAX_EXPECTED_TICK_DURATION_MS, [records]);
+
+    return { isSlow, averageTickDuration, recordTick };
 }
 
 export { usePerformanceTracker };

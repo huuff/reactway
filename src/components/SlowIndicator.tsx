@@ -1,10 +1,14 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FC } from "react"
 import { PerformanceTracker } from "../hooks/use-performance-tracker"
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
 
-const SlowIndicator: FC<{ tracker: PerformanceTracker }> = ({ tracker }) => {
+type SlowIndicatorProps = {
+    tracker: PerformanceTracker;
+    resetSettings: () => void;
+}
+
+const SlowIndicator = ({ tracker, resetSettings }: SlowIndicatorProps) => {
     if (!tracker.isSlow) {
         return null;
     }
@@ -38,7 +42,7 @@ const SlowIndicator: FC<{ tracker: PerformanceTracker }> = ({ tracker }) => {
                 "text-xs",
             )}>
                 {/*<p className="mb-1">Some features have been disabled</p> */}
-                <p className="font-bold">Click here to restore settings</p>
+                <p className="font-bold cursor-pointer" onClick={resetSettings}>Click here to restore settings</p>
             </div>
         </div>)
 };

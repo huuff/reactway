@@ -97,7 +97,9 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
             </ScrollContainer>
 
             <DarkModeSelector />
-            <SlowIndicator tracker={performanceTracker} />
+            <SlowIndicator 
+                tracker={performanceTracker} 
+                resetSettings={() => dispatchSettings({type: "reset"})}/>
             <div className={`
                 fixed
                 bottom-0 

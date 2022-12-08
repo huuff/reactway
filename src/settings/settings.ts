@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useMemo } from "react";
 import { GridType } from "../grid/grid";
-import { StringObject } from "../util/to-string-object";
+import { StringObject, toStringObject } from "../util/to-string-object";
 import { useLocalStorage } from "usehooks-ts";
 import { ParsedUrlQuery } from "querystring";
 import { useEvent } from "react-use-event-hook"; // XXX: Maybe use the real thing once it's released
@@ -12,8 +12,8 @@ type GameSettings = {
     readonly birthFactor: number;
     readonly tickDuration: number;
     readonly cellSize: number;
-    readonly view: GridViewType,
-    readonly type: GridType,
+    readonly view: GridViewType;
+    readonly type: GridType;
 }
 
 // Game Settings as query parameters are the same as game settings, but any
@@ -34,7 +34,9 @@ type GameSettingsAction = {
 } | {
     type: "changeCellSize";
     value: "increment" | "decrement";
-};
+} | {
+    type: "reset";
+}
 
 type GameSettingsNumberAction = (GameSettingsAction & { value: number })["type"]
 type NumberGameSetting = keyof {
@@ -43,8 +45,8 @@ type NumberGameSetting = keyof {
 
 // Default settings, not stored in localStorage
 const globalDefaultSettings: GameSettings = {
-    height: 10,
-    width: 10,
+    height: 50,
+    width: 50,
     birthFactor: 0.2,
     tickDuration: 1000,
     cellSize: 3,
@@ -177,6 +179,11 @@ function useSettings(
                         break;
                     }
                 }
+            }
+            case "reset": {
+                nextQueryParams = toStringObject(defaultSettings);
+                setStoredSettings(defaultSettings);
+                break;
             }
         }
         router.push({ pathname: "/game", query: nextQueryParams });

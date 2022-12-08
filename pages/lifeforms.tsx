@@ -10,6 +10,7 @@ import { getTheme, Theme } from "../src/util/get-theme";
 import classNames from "classnames";
 import DarkModeSelector from "../src/components/settings/DarkModeSelector";
 import ScrollContainer from "react-indiana-drag-scroll";
+import { usePerformanceTracker } from "../src/hooks/use-performance-tracker";
 
 
 // TODO: Make this responsive
@@ -214,11 +215,12 @@ const Lifeforms = () => {
     const grids = createGrids();
     const { isDarkMode } = useDarkMode();
     const theme = useMemo(() => getTheme(isDarkMode), [isDarkMode]);
+    const performanceTracker = usePerformanceTracker();
 
     useInterval(() => {
         Object.values(grids).forEach((gridType) => {
             Object.values(gridType).forEach((grid) => {
-                grid.tick();
+                grid.tick(performanceTracker.recordTick);
             });
         });
     }, 1000);

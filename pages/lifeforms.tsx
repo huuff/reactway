@@ -13,6 +13,7 @@ import ScrollContainer from "react-indiana-drag-scroll";
 import { usePerformanceTracker } from "../src/hooks/use-performance-tracker";
 
 // TODO: Make this responsive
+// TODO: Add the slow indicator to this page too!
 const INITIAL_GRIDS = {
     "Still Life": {
         "Block": gridFromAscii`

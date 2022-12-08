@@ -42,7 +42,18 @@ const SlowIndicator = ({ tracker, resetSettings }: SlowIndicatorProps) => {
                 "rounded-lg",
                 "text-xs",
             )}>
-                {/*<p className="mb-1">Some features have been disabled</p> */}
+                {
+                    (tracker.disabledFeatures.length) !== 0 && (
+                        <div className="mb-2">
+                            Some features have been disabled
+                            <ul>
+                                { tracker.disabledFeatures.map((f) => (
+                                    <li key={f.name} className="ml-1">&#8211; {f.description}</li>
+                                )) }
+                            </ul>
+                        </div>
+                    )
+                }
                 <p className="font-bold cursor-pointer" onClick={resetSettings}>Click here to restore settings</p>
             </div>
         </div>)

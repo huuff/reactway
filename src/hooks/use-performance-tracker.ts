@@ -7,10 +7,24 @@ type TickRecord = {
     timeOfRecord: Date;
 }
 
+type Feature = {
+    name: "hover";
+    expectedSavedMs: number;
+    description: string;
+}
+
+const hoverFeature: Feature = {
+    name: "hover",
+    expectedSavedMs: 25,
+    description: "Visual effect on hovered cells",
+}
+
 type PerformanceTracker = {
     isSlow: boolean;
     averageTickDuration: number;
     recordTick: (timeSpentMs: TickRecord["timeSpentMs"], timeOfRecord: TickRecord["timeOfRecord"]) => void;
+    disabledFeatures: Feature[];
+    isDisabled: (feature: Feature["name"]) => boolean;
 }
 
 /**
@@ -71,9 +85,21 @@ function usePerformanceTracker(): PerformanceTracker {
         ) / tickTimeBatches.length;
     }, [records]);
 
+    const disabledFeatures = useMemo(() => {
+        if (averageTickDuration > (MAX_EXPECTED_TICK_DURATION_MS + hoverFeature.expectedSavedMs*2)) {
+            return [hoverFeature];
+        } else {
+            return [];
+        }
+    }, [averageTickDuration])
+
+    const isDisabled = useCallback((feature: Feature["name"]) => {
+        return disabledFeatures.some((f) => f.name === feature);
+    }, [disabledFeatures]);
+
     const isSlow = useMemo(() => averageTickDuration > MAX_EXPECTED_TICK_DURATION_MS, [records]);
 
-    return { isSlow, averageTickDuration, recordTick };
+    return { isSlow, averageTickDuration, disabledFeatures, isDisabled, recordTick };
 }
 
 export { usePerformanceTracker };

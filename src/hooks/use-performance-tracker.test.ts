@@ -38,14 +38,15 @@ describe("usePerformanceTracker", () => {
         expect(result.current.isSlow).toBe(true);
     });
 
-    test.skip("doesn't detect normal tick speeds as slow", () => {
+    test("doesn't detect normal tick speeds as slow", () => {
         // ARRANGE
         const { result } = renderHook(() => usePerformanceTracker());
 
         // ACT
+        // ACT
         act(() => {
-            for (const i in range(0, 10)) {
-                result.current.recordTick(25, new Date("2022-12-08T00:00:00"));
+            for (const i of range(0, 10)) {
+                result.current.recordTick(50, new Date(i * 10000));
             }
         })
 

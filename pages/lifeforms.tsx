@@ -11,6 +11,8 @@ import classNames from "classnames";
 import DarkModeSelector from "../src/components/settings/DarkModeSelector";
 import ScrollContainer from "react-indiana-drag-scroll";
 
+
+// TODO: Make this responsive
 const INITIAL_GRIDS = {
     "Still Life": {
         "Block": gridFromAscii`

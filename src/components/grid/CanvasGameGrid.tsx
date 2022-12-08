@@ -5,7 +5,7 @@ import { useDarkMode, useDebounce } from "usehooks-ts";
 import { Box2D } from "../../util/box-2d";
 import tuple from "immutable-tuple";
 import { useIsDragging } from "../../util/use-is-dragging";
-import { getTheme } from "../../util/get-theme";
+import { getTheme, LiveStatusDependent, ClassAndColor } from "../../util/get-theme";
 
 const CELL_SIZE_MULTIPLIER = 8;
 
@@ -22,17 +22,17 @@ function drawCell(
     canvasContext: CanvasRenderingContext2D,
     coordinates: Coordinates,
     isAlive: boolean,
-    isDarkMode: boolean,
     cellSizePixels: number,
+    colors: LiveStatusDependent<ClassAndColor>,
     drawInsideOnly = false, // Only draw in the inside of the cell, not the whole of it
 ) {
     const rectSizePixels = drawInsideOnly ? cellSizePixels - 1 : cellSizePixels;
 
     const [x, y] = coordinates;
     if (isAlive) {
-        canvasContext.fillStyle = getTheme(isDarkMode).cell.alive.color;
+        canvasContext.fillStyle = colors.alive.color
     } else {
-        canvasContext.fillStyle = getTheme(isDarkMode).cell.dead.color;
+        canvasContext.fillStyle = colors.dead.color;
         canvasContext.strokeRect(x * cellSizePixels, y * cellSizePixels, rectSizePixels, rectSizePixels);
     }
     canvasContext.fillRect(x * cellSizePixels, y * cellSizePixels, rectSizePixels, rectSizePixels);
@@ -181,7 +181,7 @@ function useDrawCanvasEffect(
 
         const ctx = canvas.getContext("2d")!;
         for (const { coordinates, isAlive } of grid.boundedIterator(visibleCellBounds)) {
-            drawCell(ctx, coordinates, isAlive, isDarkMode, cellSizePixels);
+            drawCell(ctx, coordinates, isAlive, cellSizePixels, getTheme(isDarkMode).cell);
         };
     }, [grid, cellSizePixels, visibleCellBounds, isDarkMode])
 }
@@ -223,7 +223,7 @@ function useDrawHighlightedCellEffect({
         // First, cleanup the previously hovered cell
         if (previousHoveredCell) {
             const isPreviousAlive = grid.get(previousHoveredCell);
-            drawCell(ctx, previousHoveredCell, isPreviousAlive, isDarkMode, cellSizePixels, true);
+            drawCell(ctx, previousHoveredCell, isPreviousAlive, cellSizePixels, getTheme(isDarkMode).cell, true);
         }
 
         if (!isMouseWithinGrid) {
@@ -234,14 +234,8 @@ function useDrawHighlightedCellEffect({
         // Then, we paint the currently hovered cell
         const isAlive = grid.get(hoveredCell);
         const [x, y] = hoveredCell;
-
-        // TODO: Merge this with the drawcell function?
-        if (isAlive) {
-            ctx.fillStyle = getTheme(isDarkMode).cell.hovered.alive.color;
-        } else {
-            ctx.fillStyle = getTheme(isDarkMode).cell.hovered.dead.color;
-        }
-        ctx.fillRect(x * cellSizePixels, y * cellSizePixels, cellSizePixels-1, cellSizePixels-1);
+        
+        drawCell(ctx, hoveredCell, isAlive, cellSizePixels, getTheme(isDarkMode).cell.hovered, true);
 
     }, [hoveredCell, previousHoveredCell, grid, isMouseWithinGrid, isDarkMode, isDragging])
 }

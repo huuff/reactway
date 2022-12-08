@@ -33,7 +33,6 @@ function drawCell(
         canvasContext.fillStyle = getTheme(isDarkMode).cell.alive.color;
     } else {
         canvasContext.fillStyle = getTheme(isDarkMode).cell.dead.color;
-        canvasContext.strokeStyle
         canvasContext.strokeRect(x * cellSizePixels, y * cellSizePixels, rectSizePixels, rectSizePixels);
     }
     canvasContext.fillRect(x * cellSizePixels, y * cellSizePixels, rectSizePixels, rectSizePixels);

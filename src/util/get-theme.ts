@@ -5,20 +5,20 @@ type ClassAndColor = {
     color: string;
 }
 
+type LiveStatusDependent<T> = {
+    alive: T,
+    dead: T,
+}
+
 type Theme = {
-    cell: {
-        alive: ClassAndColor;
-        dead: ClassAndColor;
-        hovered: {
-            alive: ClassAndColor;
-            dead: ClassAndColor;
-        }
-    },
-    windowBackground: ClassAndColor,
-    text: ClassAndColor,
-    input: ClassAndColor,
+    cell: LiveStatusDependent<ClassAndColor> & {
+        hovered: LiveStatusDependent<ClassAndColor>
+    };
+    windowBackground: ClassAndColor;
+    text: ClassAndColor;
+    input: ClassAndColor;
     button: {
-        hover: ClassAndColor,
+        hover: ClassAndColor;
     }
 }
 
@@ -27,4 +27,4 @@ function getTheme(darkMode: boolean): Theme {
 }
 
 export { getTheme };
-export type { Theme };
+export type { Theme, LiveStatusDependent, ClassAndColor };

@@ -18,4 +18,19 @@ describe("usePerformanceTracker", () => {
         // ASSERT
         expect(result.current.isSlow).toBe(true);
     });
+
+    test("doesn't detect normal tick speeds as slow", () => {
+        // ARRANGE
+        const { result } = renderHook(() => usePerformanceTracker());
+
+        // ACT
+        act(() => {
+            for (const i in range(0, 10)) {
+                result.current.recordTick(25, new Date("2022-12-08T00:00:00"));
+            }
+        })
+
+        // ASSERT
+        expect(result.current.isSlow).toBe(false);
+    });
 })

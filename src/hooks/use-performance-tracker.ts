@@ -37,7 +37,6 @@ function getUnixTimestampMs(date: Date): number {
     return Math.floor(date.getTime() / 100);
 }
 
-// TODO: Test
 function usePerformanceTracker(): PerformanceTracker {
     const [ records, setRecords ] = useState<TickRecord[]>([]);
 

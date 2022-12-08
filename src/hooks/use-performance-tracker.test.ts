@@ -23,14 +23,14 @@ describe("usePerformanceTracker", () => {
         expect(result.current.averageTickDuration).toBe(100);
     });
 
-    test.skip("correctly detects slow performance", () => {
+    test("correctly detects slow performance", () => {
         // ARRANGE
         const { result } = renderHook(() => usePerformanceTracker());
 
         // ACT
         act(() => {
-            for (const i in range(0, 10)) {
-                result.current.recordTick(150, new Date("2022-12-08T00:00:00"));
+            for (const i of range(0, 10)) {
+                result.current.recordTick(150, new Date(i * 10000));
             }
         })
 

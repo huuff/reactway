@@ -9,7 +9,6 @@ type Playback = {
     pause: () => void;
 }
 
-// TODO: Maybe even put the ticking here?
 function usePlayback(initialState: PlaybackMode = "play"): Playback {
     const [playbackMode, setPlaybackMode] = useState<PlaybackMode>(initialState);
 

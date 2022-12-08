@@ -3,6 +3,8 @@ import { Coordinates, Grid } from "../grid/grid";
 import { getGridFactory } from "../grid/grid-factory";
 import { trimArray } from "../util/trim-array";
 import tuple from "immutable-tuple";
+import { PerformanceTracker } from "../hooks/use-performance-tracker";
+import { benchmark } from "../util/benchmark-function";
 
 const MAX_HISTORY_LENGTH = 15;
 
@@ -19,6 +21,7 @@ type HistoryAction = {
     value: Grid,
 } | {
     type: "tick",
+    recordTick?: PerformanceTracker["recordTick"], 
 } | {
     type: "setPosition",
     value: number,
@@ -67,7 +70,8 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
             if (previous.position === previous.length - 1) {
                 // It's at the end of the history, and thus the next tick should give
                 // a new history
-                const nextGrid = previous.grid.tick(previous.conwayStrategy);
+                const { result: nextGrid, elapsedMs } = benchmark(() => previous.grid.tick(previous.conwayStrategy));
+                action.recordTick && action.recordTick(elapsedMs, new Date());
                 const {
                     array: newContents,
                     newLength,

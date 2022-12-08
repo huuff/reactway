@@ -17,6 +17,7 @@ import ScrollContainer from "react-indiana-drag-scroll";
 import DarkModeSelector from "../src/components/settings/DarkModeSelector";
 import { getTheme } from "../src/util/get-theme";
 import classNames from "classnames";
+import { usePerformanceTracker } from "../src/hooks/use-performance-tracker";
 
 type GameProps = {
     readonly seed: string;
@@ -38,6 +39,8 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
         }
     }, [dispatchSettings], 20);
 
+    const performanceTracker = usePerformanceTracker();
+
     const {
         grid,
         historyPosition,
@@ -58,7 +61,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     // from the time it takes for the next tick (likely with setTimeout or useTimeout)
     useInterval(() => {
         if (playback.isPlaying) {
-            tick();
+            tick(performanceTracker.recordTick);
         }
     }, tickDuration);
 

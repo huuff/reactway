@@ -62,7 +62,7 @@ const CanvasGameGrid = ({
 
     useDrawCanvasEffect(gridCanvasRef, grid, cellSizePixels, visibleCellBounds, isDarkMode);
 
-    const hoveredCell = useDebounce(useHoveredCell(grid.width, grid.height, gridCanvasRef, cellSizePixels), 5);
+    const hoveredCell = useDebounce(useHoveredCell(grid, gridCanvasRef, cellSizePixels), 5);
     const previousHoveredCell = usePreviousValue(hoveredCell);
     const isMouseWithinGrid = useIsMouseWithinGrid(gridCanvasRef);
 
@@ -139,8 +139,7 @@ function useVisibleBounds(
  * Returns the cell (in the grid data structure) that the cursor is hovering
  */
 const useHoveredCell = (
-    gridWidth: number,
-    gridHeight: number,
+    gridSize: Size,
     gridCanvasRef: RefObject<HTMLCanvasElement>,
     cellSizePixels: number
 ): Coordinates => {
@@ -152,8 +151,8 @@ const useHoveredCell = (
     const mouseY = Math.max(0, clientY - topDisplacement)
 
     const result = tuple(
-        Math.min(Math.floor((mouseX - (mouseX % cellSizePixels)) / cellSizePixels), gridWidth - 1),
-        Math.min(Math.floor((mouseY - (mouseY % cellSizePixels)) / cellSizePixels), gridHeight - 1),
+        Math.min(Math.floor((mouseX - (mouseX % cellSizePixels)) / cellSizePixels), gridSize.width - 1),
+        Math.min(Math.floor((mouseY - (mouseY % cellSizePixels)) / cellSizePixels), gridSize.height - 1),
     );
 
     return result;

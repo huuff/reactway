@@ -162,7 +162,6 @@ const useHoveredCell = (
     return result;
 }
 
-// TODO: I broke this! I'm sure it's because of the dragging
 function useClickToggleHandler(
     ref: RefObject<HTMLCanvasElement>,
     mouseCell: Coordinates | null,

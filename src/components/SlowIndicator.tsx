@@ -1,15 +1,17 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { PerformanceTracker } from "../hooks/use-performance-tracker"
+import { PerformanceTrackerContext } from "../hooks/use-performance-tracker"
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
+import { useContext } from "react";
 
 type SlowIndicatorProps = {
-    tracker: PerformanceTracker;
     resetSettings: () => void;
 }
 
 // TODO: Test
-const SlowIndicator = ({ tracker, resetSettings }: SlowIndicatorProps) => {
+const SlowIndicator = ({ resetSettings }: SlowIndicatorProps) => {
+    const tracker = useContext(PerformanceTrackerContext);
+
     if (!tracker.isSlow) {
         return null;
     }

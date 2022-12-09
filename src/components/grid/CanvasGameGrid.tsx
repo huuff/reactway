@@ -1,4 +1,4 @@
-import { MouseEventHandler, RefObject, useCallback, useEffect, useMemo, useRef } from "react";
+import { MouseEventHandler, RefObject, useCallback, useContext, useEffect, useMemo, useRef } from "react";
 import { Coordinates, GameGridProps, Grid } from "../../grid/grid";
 import { useMouseState, usePreviousValue, useViewportState } from "beautiful-react-hooks";
 import { useDarkMode, useDebounce } from "usehooks-ts";
@@ -6,6 +6,7 @@ import { Box2D } from "../../util/box-2d";
 import tuple from "immutable-tuple";
 import { useIsDragging } from "../../hooks/use-is-dragging";
 import { getTheme, LiveStatusDependent, ClassAndColor } from "../../util/get-theme";
+import { PerformanceTracker, PerformanceTrackerContext } from "../../hooks/use-performance-tracker";
 
 const CELL_SIZE_MULTIPLIER = 8;
 
@@ -65,8 +66,9 @@ const CanvasGameGrid = ({
     const previousHoveredCell = usePreviousValue(hoveredCell);
     const isMouseWithinGrid = useIsMouseWithinGrid(gridCanvasRef);
 
+    const performanceTracker = useContext(PerformanceTrackerContext);
     const isDragging = useIsDragging();
-    useDrawHighlightedCellEffect({
+    useDrawHighlightedCellEffect({ // XXX: Maybe this is too many arguments?
         grid,
         gridCanvasRef,
         hoveredCell,
@@ -75,6 +77,7 @@ const CanvasGameGrid = ({
         isDarkMode,
         isMouseWithinGrid,
         isDragging,
+        performanceTracker,
     });
 
     const onMouseUp = useClickToggleHandler(gridCanvasRef, hoveredCell, grid, toggleCell);
@@ -196,11 +199,11 @@ type HighlightedCellEffectParams = {
     cellSizePixels: number,
     isMouseWithinGrid: boolean,
     isDragging: boolean,
+    performanceTracker: PerformanceTracker,
 }
 // XXX: This still leaves a trail of cells with a stroke that looks thicker than the rest...
 // but that's much nicer than what I had before, so I'm leaving it so for now.
 
-// TODO: Disable when ticking is getting slow
 function useDrawHighlightedCellEffect({
     grid,
     gridCanvasRef,
@@ -210,11 +213,17 @@ function useDrawHighlightedCellEffect({
     cellSizePixels,
     isMouseWithinGrid,
     isDragging,
+    performanceTracker,
 }: HighlightedCellEffectParams) {
     useEffect(() => {
         if (isDragging) {
             // We don't want this effect to run when dragging (i.e. when moving the grid)
             // because that's already slow enoug for large grids, and besides, it doesn't really add much there
+            return;
+        }
+
+        // Not working when ticking is slow
+        if (performanceTracker.isDisabled("hover")) {
             return;
         }
 

@@ -1,5 +1,5 @@
 import { sum } from "lodash";
-import { useCallback, useMemo, useState } from "react";
+import { createContext, useCallback, useMemo, useState } from "react";
 import { trimArray } from "../util/trim-array";
 
 type TickRecord = {
@@ -105,5 +105,15 @@ function usePerformanceTracker(): PerformanceTracker {
     return { isSlow, averageTickDuration, disabledFeatures, isDisabled, recordTick, reset };
 }
 
-export { usePerformanceTracker };
+// A fake performance tracker as a default
+const PerformanceTrackerContext = createContext<PerformanceTracker>({
+    isSlow: false,
+    averageTickDuration: 0,
+    recordTick: (x, y) => {},
+    disabledFeatures: [],
+    isDisabled: (f) => false,
+    reset: () => {},
+});
+
+export { usePerformanceTracker, PerformanceTrackerContext };
 export type { PerformanceTracker };

@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useMemo, useRef, WheelEvent } from "react";
+import { useContext, useEffect, useMemo, WheelEvent } from "react";
 import GameSettingsView from "../src/components/settings/GameSettingsView";
 import { defaultSettings, useSettings } from "../src/settings/settings";
 import { useDarkMode, useElementSize, useInterval, useWindowSize } from "usehooks-ts";
@@ -12,12 +12,12 @@ import PlayBar from "../src/components/settings/PlayBar";
 import { useGrid } from "../src/game/use-grid";
 import { usePlayback } from "../src/settings/use-playback";
 import GameGridView from "../src/components/grid/GameGridView";
-import { useThrottledCallback, useWindowScroll } from "beautiful-react-hooks";
+import { useThrottledCallback } from "beautiful-react-hooks";
 import ScrollContainer from "react-indiana-drag-scroll";
 import DarkModeSelector from "../src/components/settings/DarkModeSelector";
 import { getTheme } from "../src/util/get-theme";
 import classNames from "classnames";
-import { usePerformanceTracker } from "../src/hooks/use-performance-tracker";
+import { PerformanceTrackerContext } from "../src/hooks/use-performance-tracker";
 import SlowIndicator from "../src/components/SlowIndicator";
 
 type GameProps = {
@@ -40,7 +40,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
         }
     }, [dispatchSettings], 20);
 
-    const performanceTracker = usePerformanceTracker();
+    const performanceTracker = useContext(PerformanceTrackerContext);
 
     const {
         grid,
@@ -97,9 +97,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
             </ScrollContainer>
 
             <DarkModeSelector />
-            <SlowIndicator 
-                tracker={performanceTracker} 
-                resetSettings={() => dispatchSettings({type: "reset"})}/>
+            <SlowIndicator resetSettings={() => dispatchSettings({type: "reset"})}/>
             <div className={`
                 fixed
                 bottom-0 

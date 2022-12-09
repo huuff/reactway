@@ -63,19 +63,18 @@ const CanvasGameGrid = ({
     useDrawCanvasEffect(gridCanvasRef, grid, cellSizePixels, visibleCellBounds, isDarkMode);
 
     const isDragging = useIsDragging();
-    const hoveredCell = useDebounce(useHoveredCell(grid, gridCanvasRef, cellSizePixels, isDragging), 5);
-    const previousHoveredCell = usePreviousValue(hoveredCell);
     const isMouseWithinGrid = useIsMouseWithinGrid(gridCanvasRef);
+    const hoveredCell = useDebounce(useHoveredCell(grid, gridCanvasRef, cellSizePixels, isMouseWithinGrid, isDragging), 5);
+    const previousHoveredCell = usePreviousValue(hoveredCell);
 
     const performanceTracker = useContext(PerformanceTrackerContext);
-    useDrawHighlightedCellEffect({ // XXX: Maybe this is too many arguments?
+    useDrawHighlightedCellEffect({ 
         grid,
         gridCanvasRef,
         hoveredCell,
         previousHoveredCell,
         cellSizePixels,
         isDarkMode,
-        isMouseWithinGrid,
         performanceTracker,
     });
 
@@ -141,11 +140,12 @@ const useHoveredCell = (
     gridSize: Size,
     gridCanvasRef: RefObject<HTMLCanvasElement>,
     cellSizePixels: number,
+    isMouseWithinGrid: boolean,
     isDragging: boolean,
 ): Coordinates | null => {
     const { clientX, clientY } = useMouseState();
 
-    if (isDragging) {
+    if (isDragging || !isMouseWithinGrid) {
         return null;
     }
 
@@ -199,7 +199,6 @@ type HighlightedCellEffectParams = {
     previousHoveredCell: Coordinates | null,
     isDarkMode: boolean,
     cellSizePixels: number,
-    isMouseWithinGrid: boolean,
     performanceTracker: PerformanceTracker,
 }
 // XXX: This still leaves a trail of cells with a stroke that looks thicker than the rest...
@@ -212,7 +211,6 @@ function useDrawHighlightedCellEffect({
     previousHoveredCell,
     isDarkMode,
     cellSizePixels,
-    isMouseWithinGrid,
     performanceTracker,
 }: HighlightedCellEffectParams) {
     useEffect(() => {
@@ -230,11 +228,6 @@ function useDrawHighlightedCellEffect({
             drawCell(ctx, previousHoveredCell, isPreviousAlive, cellSizePixels, getTheme(isDarkMode).cell, true);
         }
 
-        if (!isMouseWithinGrid) {
-            // The mouse is outside the grid, so it doesn't make sense to paint any hovered cell
-            return;
-        }
-
         // Then, we paint the currently hovered cell
         if (hoveredCell) {
             const isAlive = grid.get(hoveredCell);
@@ -242,7 +235,7 @@ function useDrawHighlightedCellEffect({
             drawCell(ctx, hoveredCell, isAlive, cellSizePixels, getTheme(isDarkMode).cell.hovered, true);
         }
 
-    }, [hoveredCell, previousHoveredCell, grid, isMouseWithinGrid, isDarkMode])
+    }, [hoveredCell, previousHoveredCell, grid, isDarkMode])
 }
 
 export default CanvasGameGrid;

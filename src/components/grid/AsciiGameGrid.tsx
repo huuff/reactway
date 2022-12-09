@@ -38,9 +38,9 @@ const AsciiGameGrid = ({ grid, className, toggleCell, cellSize, innerRef }: Game
                             const coordinate = tuple(x, y)
                             const coordinateString = coordinatesToString(coordinate);
                             const isAlive = grid.get(tuple(x, y));
-                            // TODO: I could just use the alive one since the letter indicates wether it's alive
-                            // or dead already!
-                            const hoverClass = `hover:bg-${theme.cell.hovered[isAlive ? "alive" : "dead"].className}`;
+                            // XXX: Using only the color for alive cells because the letter (X or O) already
+                            // indicates wether it's alive or dead
+                            const hoverClass = `hover:bg-${theme.cell.hovered.alive.className}`;
                             return (
                                 <span
                                     key={coordinateString}

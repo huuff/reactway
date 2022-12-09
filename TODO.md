@@ -1,4 +1,7 @@
 # Tasks
+* I've disabled hover when ticking is slow for the canvas grid, but the rest should follow
+* Maybe reduce the visible area when ticking is slow?
+* Put the performance indicator in the `App`?
 * Show population somewhere?
 * Make a page showing some guns like Gosper's Glider Gun
 * Try to make it so I don't need that `NoSsr` stuff... I think it comes from using `LocalStorage`?

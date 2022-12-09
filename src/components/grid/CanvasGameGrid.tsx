@@ -62,12 +62,12 @@ const CanvasGameGrid = ({
 
     useDrawCanvasEffect(gridCanvasRef, grid, cellSizePixels, visibleCellBounds, isDarkMode);
 
-    const hoveredCell = useDebounce(useHoveredCell(grid, gridCanvasRef, cellSizePixels), 5);
+    const isDragging = useIsDragging();
+    const hoveredCell = useDebounce(useHoveredCell(grid, gridCanvasRef, cellSizePixels, isDragging), 5);
     const previousHoveredCell = usePreviousValue(hoveredCell);
     const isMouseWithinGrid = useIsMouseWithinGrid(gridCanvasRef);
 
     const performanceTracker = useContext(PerformanceTrackerContext);
-    const isDragging = useIsDragging();
     useDrawHighlightedCellEffect({ // XXX: Maybe this is too many arguments?
         grid,
         gridCanvasRef,
@@ -76,7 +76,6 @@ const CanvasGameGrid = ({
         cellSizePixels,
         isDarkMode,
         isMouseWithinGrid,
-        isDragging,
         performanceTracker,
     });
 
@@ -141,9 +140,14 @@ function useVisibleBounds(
 const useHoveredCell = (
     gridSize: Size,
     gridCanvasRef: RefObject<HTMLCanvasElement>,
-    cellSizePixels: number
-): Coordinates => {
+    cellSizePixels: number,
+    isDragging: boolean,
+): Coordinates | null => {
     const { clientX, clientY } = useMouseState();
+
+    if (isDragging) {
+        return null;
+    }
 
     const { left: leftDisplacement, top: topDisplacement, } = getBoundingRectOrZeros(gridCanvasRef);
 
@@ -160,12 +164,12 @@ const useHoveredCell = (
 
 function useClickToggleHandler(
     ref: RefObject<HTMLCanvasElement>,
-    mouseCell: Coordinates,
+    mouseCell: Coordinates | null,
     grid: Grid,
     toggleCell: (coordinates: Coordinates) => void,
 ): MouseEventHandler<HTMLElement> {
     return useCallback((event) => {
-        if (grid.contains(mouseCell)) {
+        if (mouseCell && grid.contains(mouseCell)) {
             toggleCell(mouseCell);
         }
     }, [ref, mouseCell, grid, toggleCell]);
@@ -191,12 +195,11 @@ function useDrawCanvasEffect(
 type HighlightedCellEffectParams = {
     grid: Grid,
     gridCanvasRef: RefObject<HTMLCanvasElement>,
-    hoveredCell: Coordinates,
-    previousHoveredCell: Coordinates,
+    hoveredCell: Coordinates | null,
+    previousHoveredCell: Coordinates | null,
     isDarkMode: boolean,
     cellSizePixels: number,
     isMouseWithinGrid: boolean,
-    isDragging: boolean,
     performanceTracker: PerformanceTracker,
 }
 // XXX: This still leaves a trail of cells with a stroke that looks thicker than the rest...
@@ -210,16 +213,9 @@ function useDrawHighlightedCellEffect({
     isDarkMode,
     cellSizePixels,
     isMouseWithinGrid,
-    isDragging,
     performanceTracker,
 }: HighlightedCellEffectParams) {
     useEffect(() => {
-        if (isDragging) {
-            // We don't want this effect to run when dragging (i.e. when moving the grid)
-            // because that's already slow enoug for large grids, and besides, it doesn't really add much there
-            return;
-        }
-
         // Not working when ticking is slow
         if (performanceTracker.isDisabled("hover")) {
             return;
@@ -240,11 +236,13 @@ function useDrawHighlightedCellEffect({
         }
 
         // Then, we paint the currently hovered cell
-        const isAlive = grid.get(hoveredCell);
+        if (hoveredCell) {
+            const isAlive = grid.get(hoveredCell);
         
-        drawCell(ctx, hoveredCell, isAlive, cellSizePixels, getTheme(isDarkMode).cell.hovered, true);
+            drawCell(ctx, hoveredCell, isAlive, cellSizePixels, getTheme(isDarkMode).cell.hovered, true);
+        }
 
-    }, [hoveredCell, previousHoveredCell, grid, isMouseWithinGrid, isDarkMode, isDragging])
+    }, [hoveredCell, previousHoveredCell, grid, isMouseWithinGrid, isDarkMode])
 }
 
 export default CanvasGameGrid;

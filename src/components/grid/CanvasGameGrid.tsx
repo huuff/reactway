@@ -51,14 +51,14 @@ const CanvasGameGrid = ({
     const cellSizePixels = useMemo(() => CELL_SIZE_MULTIPLIER * cellSize, [cellSize]);
     const gridCanvasRef = useRef<HTMLCanvasElement>(null);
 
-    const { width: windowWidth, height: windowHeight } = useViewportState();
+    const windowSize = useViewportState();
 
     const gridSizePixels = useMemo(() => ({
         width: grid.width * cellSizePixels,
         height: grid.height * cellSizePixels,
     }), [grid.height, grid.width, cellSizePixels]);
 
-    const visibleCellBounds = useVisibleBounds(gridCanvasRef, windowWidth, windowHeight, gridSizePixels, cellSizePixels)
+    const visibleCellBounds = useVisibleBounds(gridCanvasRef, windowSize, gridSizePixels, cellSizePixels)
 
     useDrawCanvasEffect(gridCanvasRef, grid, cellSizePixels, visibleCellBounds, isDarkMode);
 
@@ -112,22 +112,21 @@ function useIsMouseWithinGrid(gridCanvasRef: RefObject<HTMLCanvasElement>): bool
  */
 function useVisibleBounds(
     gridCanvasRef: RefObject<HTMLCanvasElement>,
-    windowWidth: number,
-    windowHeight: number,
+    windowSize: Size,
     gridSizePixels: Size,
     cellSizePixels: number
 ): Box2D {
     const { top, left } = getBoundingRectOrZeros(gridCanvasRef);
     const visibleBounds = useDebounce(useMemo<Box2D>(() => new Box2D(
         tuple(
-            Math.max(-left - (windowWidth / 2), 0),
-            Math.max(-top - (windowHeight / 2), 0)
+            Math.max(-left - (windowSize.width / 2), 0),
+            Math.max(-top - (windowSize.height / 2), 0)
         ),
         tuple(
-            Math.min(-left + (windowWidth * 1.5), gridSizePixels.width),
-            Math.min(-top + (windowHeight * 1.5), gridSizePixels.height),
+            Math.min(-left + (windowSize.width * 1.5), gridSizePixels.width),
+            Math.min(-top + (windowSize.height * 1.5), gridSizePixels.height),
         ),
-    ), [windowHeight, windowWidth, top, left, gridSizePixels]), 250);
+    ), [windowSize.height, windowSize.width, top, left, gridSizePixels]), 250);
     const visibleCellBounds = useMemo<Box2D>(
         () => visibleBounds.divide(cellSizePixels),
         [visibleBounds, cellSizePixels]
@@ -243,7 +242,6 @@ function useDrawHighlightedCellEffect({
 
         // Then, we paint the currently hovered cell
         const isAlive = grid.get(hoveredCell);
-        const [x, y] = hoveredCell;
         
         drawCell(ctx, hoveredCell, isAlive, cellSizePixels, getTheme(isDarkMode).cell.hovered, true);
 

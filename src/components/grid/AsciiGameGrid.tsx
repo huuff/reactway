@@ -1,11 +1,12 @@
 
 import { GameGridProps } from "../../grid/grid";
-import { Fragment, useMemo } from "react";
+import { Fragment, useContext, useMemo } from "react";
 import { coordinatesToString } from "../../util/coordinates-to-string";
 import tuple from "immutable-tuple";
 import { useDarkMode } from "usehooks-ts";
 import classNames from "classnames";
 import { getTheme } from "../../util/get-theme";
+import { PerformanceTrackerContext } from "../../hooks/use-performance-tracker";
 
 const AsciiGameGrid = ({ grid, className, toggleCell, cellSize, innerRef }: GameGridProps) => {
     const { isDarkMode } = useDarkMode();
@@ -13,7 +14,7 @@ const AsciiGameGrid = ({ grid, className, toggleCell, cellSize, innerRef }: Game
 
     const sizeClass = useMemo(() => {
         switch (cellSize) {
-            case 1: 
+            case 1:
                 return "text-xs";
             case 2:
                 return "text-sm";
@@ -26,6 +27,8 @@ const AsciiGameGrid = ({ grid, className, toggleCell, cellSize, innerRef }: Game
         }
     }, [cellSize]);
 
+    const performanceTracker = useContext(PerformanceTrackerContext);
+
     return (
         <div className={`${className || ""} font-mono leading-none ${sizeClass}`} ref={innerRef}>
             {[...Array(grid.height)].map((_, y) => (
@@ -35,6 +38,9 @@ const AsciiGameGrid = ({ grid, className, toggleCell, cellSize, innerRef }: Game
                             const coordinate = tuple(x, y)
                             const coordinateString = coordinatesToString(coordinate);
                             const isAlive = grid.get(tuple(x, y));
+                            // TODO: I could just use the alive one since the letter indicates wether it's alive
+                            // or dead already!
+                            const hoverClass = `hover:bg-${theme.cell.hovered[isAlive ? "alive" : "dead"].className}`;
                             return (
                                 <span
                                     key={coordinateString}
@@ -42,7 +48,7 @@ const AsciiGameGrid = ({ grid, className, toggleCell, cellSize, innerRef }: Game
                                     className={
                                         classNames(
                                             "mx-1",
-                                            `hover:bg-${theme.cell.hovered[isAlive ? "alive" : "dead"].className}`,
+                                            { [hoverClass]: !performanceTracker.isDisabled("hover") },
                                             `text-${theme.text.className}`,
                                         )
                                     }

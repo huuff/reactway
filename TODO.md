@@ -1,4 +1,5 @@
 # Tasks
+* The settings view looks pretty bad on google chrome
 * Seems like it's pretty hard to change settings when the tick rate is low enough
 * Show population somewhere?
 * Make a page showing some guns like Gosper's Glider Gun

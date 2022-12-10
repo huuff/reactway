@@ -68,9 +68,7 @@ class ArrayGrid extends Grid {
     tick = (strategy: ConwayStrategy): ArrayGrid => {
         const newInternalGrid = this.internalGrid.map((_, y) =>
             this.internalGrid[y].map((_, x) => {
-                if (x === 0 || y === 0) {
-                    return false;
-                } else if (x === this.width + 1 || y === this.height + 1) {
+                if (x === 0 || y === 0 || x === this.width + 1 || y === this.height + 1) {
                     return false;
                 } else {
                     return strategy(this, tuple(x - 1, y - 1));

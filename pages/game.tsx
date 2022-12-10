@@ -42,6 +42,8 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
 
     const performanceTracker = useContext(PerformanceTrackerContext);
 
+    const initialGrid = useMemo(() => getGridFactory(type)({ ...settings, seed }), []);
+
     const {
         grid,
         historyPosition,
@@ -52,7 +54,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
         tick,
         clear,
         toggleCell,
-    } = useGrid(getGridFactory(type)({ ...settings, seed }));
+    } = useGrid(initialGrid);
 
     useEffect(() => {
         restart(getGridFactory(type)({ height, width, birthFactor, seed }));

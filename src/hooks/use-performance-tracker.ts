@@ -92,6 +92,9 @@ function usePerformanceTracker(updateBatchesInInterval: boolean = true): Perform
     }, [setRecordBatches, records])
 
     if (updateBatchesInInterval) {
+        // XXX: updateBatchesInInterval should NEVER change in runtime (it's akin to a compile-time constant)
+        // it should only be false for testing
+        // eslint-disable-next-line react-hooks/rules-of-hooks
         useInterval(() => {
             updateBatches();
         }, BATCH_SLICE_DURATION);

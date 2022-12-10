@@ -1,6 +1,6 @@
 
 import { ChangeEvent, useCallback, useEffect, useMemo } from "react";
-import { useDarkMode, useDebounce, useToggle } from "usehooks-ts";
+import { useDarkMode, useDebounce } from "usehooks-ts";
 import { GridType } from "../../grid/grid";
 import { GameSettings, GameSettingsAction, GridViewType, NumberGameSetting } from "../../settings/settings";
 import { typedCapitalize } from "../../util/typesafe-capitalize";
@@ -9,12 +9,12 @@ import { faPlus, faMinus, faChevronDown, faChevronUp } from '@fortawesome/free-s
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getTheme } from "../../util/get-theme";
 import classNames from "classnames";
-import { CSSTransition } from "react-transition-group";
-import "animate.css";
 
 type GameSettingsViewProps = {
-    settings: GameSettings,
-    dispatchSettings: React.Dispatch<GameSettingsAction>
+    settings: GameSettings;
+    dispatchSettings: React.Dispatch<GameSettingsAction>;
+    isVisible: boolean;
+    toggleVisible: () => void;
 }
 
 const DEBOUNCE_DELAY = 500;
@@ -42,8 +42,6 @@ function useNumberSetting<T extends Exclude<NumberGameSetting, "cellSize">>(
 
 // TODO: Test it?
 const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps) => {
-    const [isVisible, toggleVisible] = useToggle(true);
-
     const { isDarkMode } = useDarkMode();
     const theme = useMemo(() => getTheme(isDarkMode), [isDarkMode]);
 
@@ -68,149 +66,123 @@ const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps)
         dispatchSettings({ type: "changeCellSize", value: "decrement" });
     }, [dispatchSettings]);
 
-    // TODO: The playbar moves too snappy when the drawer comes in/out
     return (
         <>
-            <CSSTransition in={isVisible} classNames={{
-                enterActive: 'animate__slideInUp',
-                exitActive: 'animate__slideOutDown',
-                exitDone: "hidden",
-            }} className={`
-            animate__animated
-            border 
-            rounded-lg 
-            drop-shadow-lg 
-            bg-white
-            bg-${theme.windowBackground.className}
-            text-${theme.text.className}
-            p-2
-            opacity-90
-            `} timeout={500}>
-                <div >
-                    <div className="flex justify-between">
-                        <label htmlFor="view" className="w-1/2 mr-2">View:</label>
-                        <select
-                            className={`w-1/4 bg-${theme.input.className}`}
-                            name="view"
-                            onChange={handleViewSettingsChange}
-                            value={settings.view}
-                        >
-                            <option value="ascii">ascii</option>
-                            <option value="table">table</option>
-                            <option value="canvas">canvas</option>
-                        </select>
-                    </div>
 
-                    <div className="flex justify-between">
-                        <label htmlFor="type" className="w-1/2 mr-2">Type:</label>
-                        <select
-                            className={`w-1/4 bg-${theme.input.className}`}
-                            name="type"
-                            onChange={handleTypeSettingsChange}
-                            value={settings.type}
-                        >
-                            <option value="array">array</option>
-                            <option value="set">set</option>
-                            <option value="map">map</option>
-                        </select>
-                    </div>
+            <div className={`
+                    animate__animated
+                    border 
+                    rounded-lg 
+                    drop-shadow-lg 
+                    bg-white
+                    bg-${theme.windowBackground.className}
+                    text-${theme.text.className}
+                    p-2
+                    opacity-90
+                `} >
+                <div className="flex justify-between">
+                    <label htmlFor="view" className="w-1/2 mr-2">View:</label>
+                    <select
+                        className={`w-1/4 bg-${theme.input.className}`}
+                        name="view"
+                        onChange={handleViewSettingsChange}
+                        value={settings.view}
+                    >
+                        <option value="ascii">ascii</option>
+                        <option value="table">table</option>
+                        <option value="canvas">canvas</option>
+                    </select>
+                </div>
 
-                    <div className="flex justify-between">
-                        <label htmlFor="height" className="w-1/2 mr-2">Height:</label>
-                        <input
-                            className={`w-1/4 bg-${theme.input.className}`}
-                            type="number"
-                            name="height"
-                            min="5"
-                            max="500"
-                            value={heightInput.value || ""}
-                            onChange={heightInput.onChange}
+                <div className="flex justify-between">
+                    <label htmlFor="type" className="w-1/2 mr-2">Type:</label>
+                    <select
+                        className={`w-1/4 bg-${theme.input.className}`}
+                        name="type"
+                        onChange={handleTypeSettingsChange}
+                        value={settings.type}
+                    >
+                        <option value="array">array</option>
+                        <option value="set">set</option>
+                        <option value="map">map</option>
+                    </select>
+                </div>
+
+                <div className="flex justify-between">
+                    <label htmlFor="height" className="w-1/2 mr-2">Height:</label>
+                    <input
+                        className={`w-1/4 bg-${theme.input.className}`}
+                        type="number"
+                        name="height"
+                        min="5"
+                        max="500"
+                        value={heightInput.value || ""}
+                        onChange={heightInput.onChange}
+                    />
+                </div>
+
+                <div className="flex justify-between">
+                    <label htmlFor="width" className="w-1/2 mr-2">Width:</label>
+                    <input
+                        className={`w-1/4 bg-${theme.input.className}`}
+                        type="number"
+                        name="width"
+                        min="5"
+                        max="500"
+                        value={widthInput.value || ""}
+                        onChange={widthInput.onChange}
+                    />
+                </div>
+
+
+                <div className="flex justify-between">
+                    <label htmlFor="birth-factor" className="w-1/2 mr-2">Birth factor:</label>
+                    <input
+                        className={`w-1/4 bg-${theme.input.className}`}
+                        type="number"
+                        name="birth-factor"
+                        step="0.05"
+                        min="0"
+                        max="1"
+                        value={birthFactorInput.value || ""}
+                        onChange={birthFactorInput.onChange}
+                    />
+                </div>
+
+                <div className="flex justify-between">
+                    <label htmlFor="birth-factor" className="w-1/2 mr-2">Tick duration (ms):</label>
+                    <input
+                        className={`w-1/4 bg-${theme.input.className}`}
+                        type="number"
+                        name="tick-duration"
+                        step="100"
+                        min="100"
+                        max="10000"
+                        value={tickDurationInput.value || ""}
+                        onChange={tickDurationInput.onChange}
+                    />
+                </div>
+
+                <div className="flex justify-around">
+                    <div
+                        onClick={dispatchDecreaseCellSize}
+                        className={`w-1/4 hover:bg-${theme.button.hover.className} pt-1 rounded-md`}>
+                        <FontAwesomeIcon
+                            icon={faMinus}
+                            className="h-4 mx-auto"
                         />
                     </div>
-
-                    <div className="flex justify-between">
-                        <label htmlFor="width" className="w-1/2 mr-2">Width:</label>
-                        <input
-                            className={`w-1/4 bg-${theme.input.className}`}
-                            type="number"
-                            name="width"
-                            min="5"
-                            max="500"
-                            value={widthInput.value || ""}
-                            onChange={widthInput.onChange}
+                    <p className="w-1/2 text-center">Cell size: {settings.cellSize}</p>
+                    <div
+                        onClick={dispatchIncreaseCellSize}
+                        className={`w-1/4 hover:bg-${theme.button.hover.className} pt-1 rounded-md`}>
+                        <FontAwesomeIcon
+                            icon={faPlus}
+                            className="h-4 mx-auto"
                         />
-                    </div>
-
-
-                    <div className="flex justify-between">
-                        <label htmlFor="birth-factor" className="w-1/2 mr-2">Birth factor:</label>
-                        <input
-                            className={`w-1/4 bg-${theme.input.className}`}
-                            type="number"
-                            name="birth-factor"
-                            step="0.05"
-                            min="0"
-                            max="1"
-                            value={birthFactorInput.value || ""}
-                            onChange={birthFactorInput.onChange}
-                        />
-                    </div>
-
-                    <div className="flex justify-between">
-                        <label htmlFor="birth-factor" className="w-1/2 mr-2">Tick duration (ms):</label>
-                        <input
-                            className={`w-1/4 bg-${theme.input.className}`}
-                            type="number"
-                            name="tick-duration"
-                            step="100"
-                            min="100"
-                            max="10000"
-                            value={tickDurationInput.value || ""}
-                            onChange={tickDurationInput.onChange}
-                        />
-                    </div>
-
-                    <div className="flex justify-around">
-                        <div
-                            onClick={dispatchDecreaseCellSize}
-                            className={`w-1/4 hover:bg-${theme.button.hover.className} pt-1 rounded-md`}>
-                            <FontAwesomeIcon
-                                icon={faMinus}
-                                className="h-4 mx-auto"
-                            />
-                        </div>
-                        <p className="w-1/2 text-center">Cell size: {settings.cellSize}</p>
-                        <div
-                            onClick={dispatchIncreaseCellSize}
-                            className={`w-1/4 hover:bg-${theme.button.hover.className} pt-1 rounded-md`}>
-                            <FontAwesomeIcon
-                                icon={faPlus}
-                                className="h-4 mx-auto"
-                            />
-                        </div>
                     </div>
                 </div>
-            </CSSTransition>
-
-            <button className={classNames(
-                    "border",
-                    "rounded-sm",
-                    "drop-shadow-lg" ,
-                    `bg-${theme.windowBackground.className}`,
-                    "opacity-90",
-                    "px-2",
-                    "w-1/4",
-                    "mx-auto",
-                    { ["-mt-2"]: isVisible },
-                    { ["-mb-2"]: !isVisible },
-                    `w-1/4 hover:bg-${theme.button.hover.className}`,
-                    "cursor-pointer",
-                    "block",
-                    )}
-                    onClick={toggleVisible}>
-                { isVisible && <FontAwesomeIcon icon={faChevronDown} className="w-6 h-3 mx-auto" /> }
-                { !isVisible && <FontAwesomeIcon icon={faChevronUp} className="w-6 h-3 mx-auto" /> }
-            </button>
+            </div>
         </>
     )
 }

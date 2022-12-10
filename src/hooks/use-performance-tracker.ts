@@ -9,7 +9,7 @@ type TickRecord = {
 }
 
 type Feature = {
-    name: "hover";
+    name: "hover" | "visible";
     expectedSavedMs: number;
     description: string;
 }
@@ -18,7 +18,15 @@ const hoverFeature: Feature = {
     name: "hover",
     expectedSavedMs: 25,
     description: "Visual effect on hovered cells",
-}
+};
+
+const visibleAreaFeature: Feature = {
+    name: "visible",
+    expectedSavedMs: 10,
+    description: "Rendered area might have been reduced",
+};
+
+const allFeatures = [visibleAreaFeature, hoverFeature];
 
 type PerformanceTracker = {
     isSlow: boolean;
@@ -108,11 +116,17 @@ function usePerformanceTracker(updateBatchesInInterval: boolean = true): Perform
     }, [recordBatches]);
 
     const disabledFeatures = useMemo(() => {
-        if (averageTickDuration > (MAX_EXPECTED_TICK_DURATION_MS + hoverFeature.expectedSavedMs*2)) {
-            return [hoverFeature];
-        } else {
-            return [];
+        let expectedTickDuration = averageTickDuration;
+        let result: Feature[] = [];
+
+        for (const feature of allFeatures) {
+            if (expectedTickDuration > MAX_EXPECTED_TICK_DURATION_MS + feature.expectedSavedMs*2) {
+                expectedTickDuration - feature.expectedSavedMs;
+                result.push(feature);
+            }
         }
+
+        return result;
     }, [averageTickDuration])
 
     const isDisabled = useCallback((feature: Feature["name"]) => {

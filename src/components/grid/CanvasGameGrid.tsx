@@ -57,8 +57,22 @@ const CanvasGameGrid = ({
         width: grid.width * cellSizePixels,
         height: grid.height * cellSizePixels,
     }), [grid.height, grid.width, cellSizePixels]);
+    const performanceTracker = useContext(PerformanceTrackerContext);
 
-    const visibleCellBounds = useVisibleBounds(gridCanvasRef, windowSize, gridSizePixels, cellSizePixels)
+    const visibleAreaMultiplier = useMemo(() => {
+        if (!performanceTracker.isDisabled("visible")) {
+            return 2;
+        } else {
+            return 1;
+        }
+    }, [performanceTracker]);
+    const visibleCellBounds = useVisibleBounds(
+            gridCanvasRef,
+            windowSize, 
+            gridSizePixels, 
+            cellSizePixels, 
+            visibleAreaMultiplier
+    );
 
     useDrawCanvasEffect(gridCanvasRef, grid, cellSizePixels, visibleCellBounds, isDarkMode);
 
@@ -67,7 +81,6 @@ const CanvasGameGrid = ({
     const hoveredCell = useDebounce(useHoveredCell(grid, gridCanvasRef, cellSizePixels, isMouseWithinGrid, isDragging), 5);
     const previousHoveredCell = usePreviousValue(hoveredCell);
 
-    const performanceTracker = useContext(PerformanceTrackerContext);
     useDrawHighlightedCellEffect({ 
         grid,
         gridCanvasRef,
@@ -112,19 +125,20 @@ function useVisibleBounds(
     gridCanvasRef: RefObject<HTMLCanvasElement>,
     windowSize: Size,
     gridSizePixels: Size,
-    cellSizePixels: number
+    cellSizePixels: number,
+    visibleAreaMultiplier: number,
 ): Box2D {
     const { top, left } = getBoundingRectOrZeros(gridCanvasRef);
     const visibleBounds = useDebounce(useMemo<Box2D>(() => new Box2D(
         tuple(
-            Math.max(-left - (windowSize.width / 2), 0),
-            Math.max(-top - (windowSize.height / 2), 0)
+            Math.max(-left - (windowSize.width * visibleAreaMultiplier), 0),
+            Math.max(-top - (windowSize.height * visibleAreaMultiplier), 0)
         ),
         tuple(
-            Math.min(-left + (windowSize.width * 1.5), gridSizePixels.width),
-            Math.min(-top + (windowSize.height * 1.5), gridSizePixels.height),
+            Math.min(-left + (windowSize.width * visibleAreaMultiplier), gridSizePixels.width),
+            Math.min(-top + (windowSize.height * visibleAreaMultiplier), gridSizePixels.height),
         ),
-    ), [windowSize.height, windowSize.width, top, left, gridSizePixels]), 250);
+    ), [windowSize.height, windowSize.width, top, left, gridSizePixels, visibleAreaMultiplier]), 250);
     const visibleCellBounds = useMemo<Box2D>(
         () => visibleBounds.divide(cellSizePixels),
         [visibleBounds, cellSizePixels]

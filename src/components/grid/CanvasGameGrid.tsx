@@ -188,7 +188,7 @@ function useDrawCanvasEffect(
         for (const { coordinates, isAlive } of grid.boundedIterator(visibleCellBounds)) {
             drawCell(ctx, coordinates, isAlive, cellSizePixels, getTheme(isDarkMode).cell);
         };
-    }, [grid, cellSizePixels, visibleCellBounds, isDarkMode])
+    }, [ref, grid, cellSizePixels, visibleCellBounds, isDarkMode])
 }
 
 type HighlightedCellEffectParams = {
@@ -234,7 +234,7 @@ function useDrawHighlightedCellEffect({
             drawCell(ctx, hoveredCell, isAlive, cellSizePixels, getTheme(isDarkMode).cell.hovered, true);
         }
 
-    }, [hoveredCell, previousHoveredCell, grid, isDarkMode])
+    }, [cellSizePixels, gridCanvasRef, performanceTracker, hoveredCell, previousHoveredCell, grid, isDarkMode])
 }
 
 export default CanvasGameGrid;

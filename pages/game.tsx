@@ -104,7 +104,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                 inset-x-0 
                 mx-auto 
                 w-96
-                mb-5
+                mb-2
                 z-20
                 `}>
                 <PlayBar
@@ -125,14 +125,6 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                     clearGrid={clear}
                 />
                 <GameSettingsView
-                    className={`
-                    border 
-                    rounded-lg 
-                    drop-shadow-lg 
-                    bg-${theme.windowBackground.className}
-                    p-2
-                    opacity-90
-                    `}
                     settings={settings}
                     dispatchSettings={dispatchSettings}
                 />

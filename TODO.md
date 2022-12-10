@@ -1,4 +1,5 @@
 # Tasks
+* Tracking performance should take into account more stuff than ticking, such as rendering
 * The settings view looks pretty bad on google chrome
 * Seems like it's pretty hard to change settings when the tick rate is low enough
 * Show population somewhere?

@@ -3,7 +3,7 @@ import { sum } from "lodash";
 import { createContext, useCallback, useMemo, useState } from "react";
 import { trimArray } from "../util/trim-array";
 
-type TickRecord = {
+type EventRecord = {
     timeSpentMs: number;
     timeOfRecord: Date;
 }
@@ -30,8 +30,8 @@ const allFeatures = [visibleAreaFeature, hoverFeature];
 
 type PerformanceTracker = {
     isSlow: boolean;
-    averageTickDuration: number;
-    recordTick: (timeSpentMs: TickRecord["timeSpentMs"], timeOfRecord: TickRecord["timeOfRecord"]) => void;
+    averageOverhead: number;
+    recordEvent: (timeSpentMs: EventRecord["timeSpentMs"], timeOfRecord: EventRecord["timeOfRecord"]) => void;
     disabledFeatures: Feature[];
     isDisabled: (feature: Feature["name"]) => boolean;
     updateBatches: () => void;
@@ -39,23 +39,15 @@ type PerformanceTracker = {
 }
 
 /**
- * All ticks within this amount of milliseconds will be grouped into a single one.
- * This is useful to calculate whether the game is going slow when there are many grids, as they all are (supposedly)
- * ticking together, we can just do any calculatons with the sum of all tick times.
+ * All time-tracked elements will be grouped into batches of this size to calculate
+ * an average time spent doing calculations, renders, etc.
  */
-const MAX_TICK_DURATION_MS = 90;
+const BATCH_SLICE_DURATION = 1000;
 
 /**
- * When ticks' duration start to exceed this parameter, performance degrades and dragging becomes sluggish
+ * When the average load starts to exceed this much, performance is considered to be degraded.
  */
-const MAX_EXPECTED_TICK_DURATION_MS = 90;
-
-/**
- * Time to wait before updating all ticks into batches. It's not a fast algorithm and updating it
- * on every tick might be too much (especially when there are many grids or the tick rate is too slow)
- * 
- */
-const SLICE_OF_BATCHES_CALCULATION = 1000;
+const MAX_EXPECTED_AVERAGE_OVERHEAD = 250;
 
 /**
  * Creates a performance tracker.
@@ -67,10 +59,10 @@ const SLICE_OF_BATCHES_CALCULATION = 1000;
  * @returns The PerformanceTracker
  */
 function usePerformanceTracker(updateBatchesInInterval: boolean = true): PerformanceTracker {
-    const [ records, setRecords ] = useState<TickRecord[]>([]);
+    const [ records, setRecords ] = useState<EventRecord[]>([]);
     const [ recordBatches, setRecordBatches ] = useState<number[][]>([]);
 
-    const recordTick = useCallback<PerformanceTracker["recordTick"]>((timeSpentMs, timeOfRecord) => {
+    const recordEvent = useCallback<PerformanceTracker["recordEvent"]>((timeSpentMs, timeOfRecord) => {
         setRecords((previousRecords) => trimArray([...previousRecords, { timeSpentMs, timeOfRecord }], 20).array)
     }, [setRecords])
 
@@ -84,7 +76,7 @@ function usePerformanceTracker(updateBatchesInInterval: boolean = true): Perform
         let currentBatch: number[] = [];
         let currentBatchStartTime = records[0].timeOfRecord.getTime();
         for (const record of records) {
-            if (record.timeOfRecord.getTime() > currentBatchStartTime + MAX_TICK_DURATION_MS) {
+            if (record.timeOfRecord.getTime() > currentBatchStartTime + BATCH_SLICE_DURATION) {
                 tickTimeBatches.push(currentBatch);
                 currentBatch = [record.timeSpentMs];
                 currentBatchStartTime = record.timeOfRecord.getTime();
@@ -102,10 +94,10 @@ function usePerformanceTracker(updateBatchesInInterval: boolean = true): Perform
     if (updateBatchesInInterval) {
         useInterval(() => {
             updateBatches();
-        }, SLICE_OF_BATCHES_CALCULATION);
+        }, BATCH_SLICE_DURATION);
     }
 
-    const averageTickDuration = useMemo(() => {
+    const averageOverhead = useMemo(() => {
         if (recordBatches.length === 0) {
             return 0;
         }
@@ -116,35 +108,43 @@ function usePerformanceTracker(updateBatchesInInterval: boolean = true): Perform
     }, [recordBatches]);
 
     const disabledFeatures = useMemo(() => {
-        let expectedTickDuration = averageTickDuration;
+        let expectedOverhead = averageOverhead;
         let result: Feature[] = [];
 
         for (const feature of allFeatures) {
-            if (expectedTickDuration > MAX_EXPECTED_TICK_DURATION_MS + feature.expectedSavedMs*2) {
-                expectedTickDuration - feature.expectedSavedMs;
+            if (expectedOverhead > MAX_EXPECTED_AVERAGE_OVERHEAD + feature.expectedSavedMs*2) {
+                expectedOverhead - feature.expectedSavedMs;
                 result.push(feature);
             }
         }
 
         return result;
-    }, [averageTickDuration])
+    }, [averageOverhead])
 
     const isDisabled = useCallback((feature: Feature["name"]) => {
         return disabledFeatures.some((f) => f.name === feature);
     }, [disabledFeatures]);
 
-    const isSlow = useMemo(() => averageTickDuration > MAX_EXPECTED_TICK_DURATION_MS, [averageTickDuration]);
+    const isSlow = useMemo(() => averageOverhead > MAX_EXPECTED_AVERAGE_OVERHEAD, [averageOverhead]);
 
     const reset = useCallback(() => setRecords([]), [setRecords]);
 
-    return { isSlow, averageTickDuration, disabledFeatures, isDisabled, updateBatches, recordTick, reset };
+    return { 
+        isSlow, 
+        averageOverhead,
+        disabledFeatures,
+        isDisabled, 
+        updateBatches, 
+        recordEvent, 
+        reset 
+    };
 }
 
 // A fake performance tracker as a default
 const PerformanceTrackerContext = createContext<PerformanceTracker>({
     isSlow: false,
-    averageTickDuration: 0,
-    recordTick: (x, y) => {},
+    averageOverhead: 0,
+    recordEvent: (x, y) => {},
     disabledFeatures: [],
     isDisabled: (f) => false,
     updateBatches: () => {},

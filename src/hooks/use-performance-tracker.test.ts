@@ -15,7 +15,7 @@ describe("usePerformanceTracker", () => {
         // ACT
         act(() => {
             for (const i of range(0, 10)) {
-                result.current.recordTick(100, new Date(i * 10000));
+                result.current.recordEvent(100, new Date(i * 10000));
             }
         });
 
@@ -24,7 +24,7 @@ describe("usePerformanceTracker", () => {
         });
 
         // ASSERT
-        expect(result.current.averageTickDuration).toBe(100);
+        expect(result.current.averageOverhead).toBe(100);
     });
 
     test("correctly batches ticks", () => {
@@ -35,7 +35,7 @@ describe("usePerformanceTracker", () => {
         act(() => {
             let nextTickTime = 0;
             for (const i of range(1, 10)) {
-                result.current.recordTick(50, new Date(nextTickTime));
+                result.current.recordEvent(50, new Date(nextTickTime));
                 // Tries to send ticks in batches of three, so every thirdtick, sets the next one to
                 // have a time 100 seconds in the future
                 if (i % 3 === 0) {
@@ -52,7 +52,7 @@ describe("usePerformanceTracker", () => {
 
         // ASSERT
         // 150 is the total duration of each batch
-        expect(result.current.averageTickDuration).toBe(150);
+        expect(result.current.averageOverhead).toBe(150);
     });
 
     test("correctly detects slow performance", () => {
@@ -62,7 +62,7 @@ describe("usePerformanceTracker", () => {
         // ACT
         act(() => {
             for (const i of range(0, 10)) {
-                result.current.recordTick(150, new Date(i * 10000));
+                result.current.recordEvent(500, new Date(i * 10000));
             }
         });
 
@@ -82,7 +82,7 @@ describe("usePerformanceTracker", () => {
         // ACT
         act(() => {
             for (const i of range(0, 10)) {
-                result.current.recordTick(50, new Date(i * 10000));
+                result.current.recordEvent(50, new Date(i * 10000));
             }
         });
 
@@ -91,7 +91,7 @@ describe("usePerformanceTracker", () => {
         });
 
         // ASSERT
-        expect(result.current.averageTickDuration).toBe(50);
+        expect(result.current.averageOverhead).toBe(50);
         expect(result.current.isSlow).toBe(false);
     });
 })

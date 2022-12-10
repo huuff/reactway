@@ -26,6 +26,7 @@ type PerformanceTracker = {
     recordTick: (timeSpentMs: TickRecord["timeSpentMs"], timeOfRecord: TickRecord["timeOfRecord"]) => void;
     disabledFeatures: Feature[];
     isDisabled: (feature: Feature["name"]) => boolean;
+    updateBatches: () => void;
     reset: () => void;
 }
 
@@ -46,10 +47,18 @@ const MAX_EXPECTED_TICK_DURATION_MS = 90;
  * on every tick might be too much (especially when there are many grids or the tick rate is too slow)
  * 
  */
-const SLICE_OF_BATCHES_CALCULATION = 500;
+const SLICE_OF_BATCHES_CALCULATION = 1000;
 
-
-function usePerformanceTracker(): PerformanceTracker {
+/**
+ * Creates a performance tracker.
+ * @param updateBatchesInInterval wether to set an interval that updates batches of tick-times to calculate the
+ *                                performance of the ticking. Please note that this should never be changed or 
+ *                                errors will start to get thrown due to changing the number of called hooks.
+ *                                In fact, this property only exists to aid with testing without having to mock
+ *                                `setInterval`
+ * @returns The PerformanceTracker
+ */
+function usePerformanceTracker(updateBatchesInInterval: boolean = true): PerformanceTracker {
     const [ records, setRecords ] = useState<TickRecord[]>([]);
     const [ recordBatches, setRecordBatches ] = useState<number[][]>([]);
 
@@ -57,7 +66,7 @@ function usePerformanceTracker(): PerformanceTracker {
         setRecords((previousRecords) => trimArray([...previousRecords, { timeSpentMs, timeOfRecord }], 20).array)
     }, [setRecords])
 
-    useInterval(() => {
+    const updateBatches = useCallback(() => {
         if (records.length === 0) {
             return;
         }
@@ -80,7 +89,13 @@ function usePerformanceTracker(): PerformanceTracker {
         }
 
         setRecordBatches(tickTimeBatches);
-    }, SLICE_OF_BATCHES_CALCULATION);
+    }, [setRecordBatches, records])
+
+    if (updateBatchesInInterval) {
+        useInterval(() => {
+            updateBatches();
+        }, SLICE_OF_BATCHES_CALCULATION);
+    }
 
     const averageTickDuration = useMemo(() => {
         if (recordBatches.length === 0) {
@@ -108,7 +123,7 @@ function usePerformanceTracker(): PerformanceTracker {
 
     const reset = useCallback(() => setRecords([]), [setRecords]);
 
-    return { isSlow, averageTickDuration, disabledFeatures, isDisabled, recordTick, reset };
+    return { isSlow, averageTickDuration, disabledFeatures, isDisabled, updateBatches, recordTick, reset };
 }
 
 // A fake performance tracker as a default
@@ -118,6 +133,7 @@ const PerformanceTrackerContext = createContext<PerformanceTracker>({
     recordTick: (x, y) => {},
     disabledFeatures: [],
     isDisabled: (f) => false,
+    updateBatches: () => {},
     reset: () => {},
 });
 

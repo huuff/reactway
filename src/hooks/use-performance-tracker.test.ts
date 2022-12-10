@@ -10,14 +10,18 @@ describe("usePerformanceTracker", () => {
      */
     test("correct duration for spaced ticks", () => {
         // ARRANGE
-        const { result } = renderHook(() => usePerformanceTracker());
+        const { result } = renderHook(() => usePerformanceTracker(false));
 
         // ACT
         act(() => {
             for (const i of range(0, 10)) {
                 result.current.recordTick(100, new Date(i * 10000));
             }
-        })
+        });
+
+        act(() => {
+            result.current.updateBatches();
+        });
 
         // ASSERT
         expect(result.current.averageTickDuration).toBe(100);
@@ -25,7 +29,7 @@ describe("usePerformanceTracker", () => {
 
     test("correctly batches ticks", () => {
         // ARRANGE
-        const { result } = renderHook(() => usePerformanceTracker());
+        const { result } = renderHook(() => usePerformanceTracker(false));
 
         // ACT
         act(() => {
@@ -42,6 +46,10 @@ describe("usePerformanceTracker", () => {
             }
         })
 
+        act(() => {
+            result.current.updateBatches();
+        });
+
         // ASSERT
         // 150 is the total duration of each batch
         expect(result.current.averageTickDuration).toBe(150);
@@ -49,14 +57,18 @@ describe("usePerformanceTracker", () => {
 
     test("correctly detects slow performance", () => {
         // ARRANGE
-        const { result } = renderHook(() => usePerformanceTracker());
+        const { result } = renderHook(() => usePerformanceTracker(false));
 
         // ACT
         act(() => {
             for (const i of range(0, 10)) {
                 result.current.recordTick(150, new Date(i * 10000));
             }
-        })
+        });
+
+        act(() => {
+            result.current.updateBatches();
+        });
 
         // ASSERT
         expect(result.current.isSlow).toBe(true);
@@ -64,7 +76,7 @@ describe("usePerformanceTracker", () => {
 
     test("doesn't detect normal tick speeds as slow", () => {
         // ARRANGE
-        const { result } = renderHook(() => usePerformanceTracker());
+        const { result } = renderHook(() => usePerformanceTracker(false));
 
         // ACT
         // ACT
@@ -72,9 +84,14 @@ describe("usePerformanceTracker", () => {
             for (const i of range(0, 10)) {
                 result.current.recordTick(50, new Date(i * 10000));
             }
-        })
+        });
+
+        act(() => {
+            result.current.updateBatches();
+        });
 
         // ASSERT
+        expect(result.current.averageTickDuration).toBe(50);
         expect(result.current.isSlow).toBe(false);
     });
 })

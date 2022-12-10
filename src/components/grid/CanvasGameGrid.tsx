@@ -78,7 +78,7 @@ const CanvasGameGrid = ({
         performanceTracker,
     });
 
-    const onMouseUp = useClickToggleHandler(gridCanvasRef, hoveredCell, grid, toggleCell);
+    const onMouseUp = useClickToggleHandler(hoveredCell, grid, toggleCell);
 
     return (
         <div onMouseUp={onMouseUp} className={className} ref={innerRef}>
@@ -163,7 +163,6 @@ const useHoveredCell = (
 }
 
 function useClickToggleHandler(
-    ref: RefObject<HTMLCanvasElement>,
     mouseCell: Coordinates | null,
     grid: Grid,
     toggleCell: (coordinates: Coordinates) => void,
@@ -172,7 +171,7 @@ function useClickToggleHandler(
         if (mouseCell && grid.contains(mouseCell)) {
             toggleCell(mouseCell);
         }
-    }, [ref, mouseCell, grid, toggleCell, ref]);
+    }, [mouseCell, grid, toggleCell]);
 }
 
 function useDrawCanvasEffect(

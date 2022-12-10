@@ -14,6 +14,7 @@ type TickHistory = {
     readonly position: number;
     readonly grid: Grid;
     readonly conwayStrategy: ConwayStrategy;
+    readonly lastTickDurationMs?: number;
 }
 
 type HistoryAction = {
@@ -21,7 +22,6 @@ type HistoryAction = {
     value: Grid,
 } | {
     type: "tick",
-    recordTick?: PerformanceTracker["recordTick"], 
 } | {
     type: "setPosition",
     value: number,
@@ -44,6 +44,7 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
                 position: 0,
                 grid: action.value,
                 conwayStrategy: previous.conwayStrategy,
+                lastTickDurationMs: previous.lastTickDurationMs,
             };
         }
         case "clear": {
@@ -64,6 +65,7 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
                 position: newLength - 1,
                 grid: emptyGrid,
                 conwayStrategy: previous.conwayStrategy,
+                lastTickDurationMs: previous.lastTickDurationMs,
             }
         }
         case "tick": {
@@ -71,7 +73,6 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
                 // It's at the end of the history, and thus the next tick should give
                 // a new history
                 const { result: nextGrid, elapsedMs } = benchmark(() => previous.grid.tick(previous.conwayStrategy));
-                action.recordTick && action.recordTick(elapsedMs, new Date());
                 const {
                     array: newContents,
                     newLength,
@@ -83,6 +84,7 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
                         position: newLength - 1,
                         grid: nextGrid,
                         conwayStrategy: previous.conwayStrategy,
+                        lastTickDurationMs: elapsedMs,
                     }
                 } else {
                     return previous;
@@ -130,6 +132,7 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
                 position: newLength - 1,
                 grid: nextGrid,
                 conwayStrategy: previous.conwayStrategy,
+                lastTickDurationMs: previous.lastTickDurationMs,
             }
         }
     }

@@ -62,7 +62,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     // from the time it takes for the next tick (likely with setTimeout or useTimeout)
     useInterval(() => {
         if (playback.isPlaying) {
-            tick(performanceTracker.recordTick);
+            tick();
         }
     }, tickDuration);
 

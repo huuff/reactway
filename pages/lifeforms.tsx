@@ -215,12 +215,11 @@ const Lifeforms = () => {
     const grids = createGrids();
     const { isDarkMode } = useDarkMode();
     const theme = useMemo(() => getTheme(isDarkMode), [isDarkMode]);
-    const performanceTracker = useContext(PerformanceTrackerContext);
 
     useInterval(() => {
         Object.values(grids).forEach((gridType) => {
             Object.values(gridType).forEach((grid) => {
-                grid.tick(performanceTracker.recordTick);
+                grid.tick();
             });
         });
     }, 1000);

@@ -1,15 +1,16 @@
-import { useCallback, useReducer } from "react";
+import { useCallback, useContext, useEffect, useReducer } from "react";
 import { Coordinates, Grid } from "../grid/grid";
-import { PerformanceTracker } from "../hooks/use-performance-tracker";
+import { PerformanceTrackerContext } from "../hooks/use-performance-tracker";
 import { historyReducer, newDefaultTickHistory } from "./tick-history";
 
 type GridStateWrapper = {
     grid: Grid;
     historyPosition: number;
     historyLength: number;
+    lastTickDurationMs?: number;
     
     clear: () => void;
-    tick: (recordTick?: PerformanceTracker["recordTick"]) => void;
+    tick: () => void;
 
     restart: (newGrid: Grid) => void;
 
@@ -23,12 +24,19 @@ function useGrid(initialGrid: Grid): GridStateWrapper {
         dispatchTickHistory
     ] = useReducer(historyReducer, newDefaultTickHistory(initialGrid));
 
+    const performanceTracker = useContext(PerformanceTrackerContext);
+
+    useEffect(() => {
+        tickHistory.lastTickDurationMs && performanceTracker.recordTick(tickHistory.lastTickDurationMs, new Date());
+    }, [tickHistory])
+
     return {
         grid: tickHistory.grid,
         historyPosition: tickHistory.position,
         historyLength: tickHistory.length,
+        lastTickDurationMs: tickHistory.lastTickDurationMs,
 
-        tick: useCallback((recordTick) => dispatchTickHistory({ type: "tick", recordTick } ), [dispatchTickHistory]),
+        tick: useCallback(() => dispatchTickHistory({ type: "tick" } ), [dispatchTickHistory]),
         clear: useCallback(() => dispatchTickHistory({ type: "clear"} ), [dispatchTickHistory]),
         restart: useCallback((newGrid: Grid) => {
             dispatchTickHistory({ type: "reset", value: newGrid}), [dispatchTickHistory]

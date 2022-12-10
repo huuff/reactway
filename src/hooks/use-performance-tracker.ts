@@ -1,3 +1,4 @@
+import { useInterval } from "beautiful-react-hooks";
 import { sum } from "lodash";
 import { createContext, useCallback, useMemo, useState } from "react";
 import { trimArray } from "../util/trim-array";
@@ -41,27 +42,24 @@ const MAX_TICK_DURATION_MS = 90;
 const MAX_EXPECTED_TICK_DURATION_MS = 90;
 
 /**
- * Time to wait before updating whether the game is being slow. It's not a fast algorithm and updating it
+ * Time to wait before updating all ticks into batches. It's not a fast algorithm and updating it
  * on every tick might be too much (especially when there are many grids or the tick rate is too slow)
  * 
- * TODO: I'm not using this yet! Maybe when I write a custom hook to prevent re-running the isSlow until a specific
- * mount of time passes, I can use this again.
  */
-const SLICE_OF_SLOW_CALCULATION = 500;
+const SLICE_OF_BATCHES_CALCULATION = 500;
 
 
 function usePerformanceTracker(): PerformanceTracker {
     const [ records, setRecords ] = useState<TickRecord[]>([]);
+    const [ recordBatches, setRecordBatches ] = useState<number[][]>([]);
 
     const recordTick = useCallback<PerformanceTracker["recordTick"]>((timeSpentMs, timeOfRecord) => {
         setRecords((previousRecords) => trimArray([...previousRecords, { timeSpentMs, timeOfRecord }], 20).array)
     }, [setRecords])
 
-    // TODO: This seems pretty slow! I should make a custom hook that only calls this function every certain number
-    // of milliseconds
-    const averageTickDuration = useMemo(() => {
+    useInterval(() => {
         if (records.length === 0) {
-            return 0;
+            return;
         }
 
         const tickTimeBatches: number[][] = [];
@@ -80,11 +78,19 @@ function usePerformanceTracker(): PerformanceTracker {
         if (currentBatch.length !== 0) {
             tickTimeBatches.push(currentBatch);
         }
+
+        setRecordBatches(tickTimeBatches);
+    }, SLICE_OF_BATCHES_CALCULATION);
+
+    const averageTickDuration = useMemo(() => {
+        if (recordBatches.length === 0) {
+            return 0;
+        }
         
-        return sum(tickTimeBatches.map(
+        return sum(recordBatches.map(
             (batchRecords) => sum(batchRecords))
-        ) / tickTimeBatches.length;
-    }, [records]);
+        ) / recordBatches.length;
+    }, [recordBatches]);
 
     const disabledFeatures = useMemo(() => {
         if (averageTickDuration > (MAX_EXPECTED_TICK_DURATION_MS + hoverFeature.expectedSavedMs*2)) {

@@ -103,8 +103,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                 bottom-0 
                 inset-x-0 
                 mx-auto 
-                w-fit
-                v-1/4
+                w-96
                 mb-5
                 z-20
                 `}>

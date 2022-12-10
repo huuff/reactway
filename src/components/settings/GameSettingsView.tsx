@@ -8,13 +8,10 @@ import { useNumberInput } from "../../hooks/use-number-input";
 import { faPlus, faMinus, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getTheme } from "../../util/get-theme";
-import classNames from "classnames";
 
 type GameSettingsViewProps = {
     settings: GameSettings;
     dispatchSettings: React.Dispatch<GameSettingsAction>;
-    isVisible: boolean;
-    toggleVisible: () => void;
 }
 
 const DEBOUNCE_DELAY = 500;
@@ -68,7 +65,6 @@ const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps)
 
     return (
         <>
-
             <div className={`
                     animate__animated
                     border 
@@ -133,7 +129,6 @@ const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps)
                         onChange={widthInput.onChange}
                     />
                 </div>
-
 
                 <div className="flex justify-between">
                     <label htmlFor="birth-factor" className="w-1/2 mr-2">Birth factor:</label>

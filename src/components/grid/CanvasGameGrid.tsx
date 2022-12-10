@@ -172,7 +172,7 @@ function useClickToggleHandler(
         if (mouseCell && grid.contains(mouseCell)) {
             toggleCell(mouseCell);
         }
-    }, [ref, mouseCell, grid, toggleCell]);
+    }, [ref, mouseCell, grid, toggleCell, ref]);
 }
 
 function useDrawCanvasEffect(

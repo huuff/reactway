@@ -64,6 +64,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
         if (playback.isPlaying) {
             tick();
         }
+        console.log(`Average tick speed: ${performanceTracker.averageTickDuration}`)
     }, tickDuration);
 
     const router = useRouter();

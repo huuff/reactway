@@ -1,5 +1,5 @@
 
-import { ChangeEvent, useCallback, useEffect, useMemo } from "react";
+import { ChangeEvent, useCallback, useEffect, useMemo, useRef } from "react";
 import { useDarkMode, useDebounce, useToggle } from "usehooks-ts";
 import { GridType } from "../../grid/grid";
 import { GameSettings, GameSettingsAction, GridViewType, NumberGameSetting } from "../../settings/settings";
@@ -9,6 +9,8 @@ import { faPlus, faMinus, faChevronDown, faChevronUp } from '@fortawesome/free-s
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getTheme } from "../../util/get-theme";
 import classNames from "classnames";
+import { CSSTransition } from "react-transition-group";
+import "animate.css";
 
 type GameSettingsViewProps = {
     settings: GameSettings,
@@ -66,18 +68,25 @@ const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps)
         dispatchSettings({ type: "changeCellSize", value: "decrement" });
     }, [dispatchSettings]);
 
+    // TODO: The playbar moves too snappy when the drawer comes in/out
     return (
         <>
-            {isVisible && (
-                <div className={`
-                    border 
-                    rounded-lg 
-                    drop-shadow-lg 
-                    bg-${theme.windowBackground.className}
-                    text-${theme.text.className}
-                    p-2
-                    opacity-90
-                    `}>
+            <CSSTransition in={isVisible} classNames={{
+                enterActive: 'animate__slideInUp',
+                exitActive: 'animate__slideOutDown',
+                exitDone: "hidden",
+            }} className={`
+            animate__animated
+            border 
+            rounded-lg 
+            drop-shadow-lg 
+            bg-white
+            bg-${theme.windowBackground.className}
+            text-${theme.text.className}
+            p-2
+            opacity-90
+            `} timeout={500}>
+                <div >
                     <div className="flex justify-between">
                         <label htmlFor="view" className="w-1/2 mr-2">View:</label>
                         <select
@@ -181,7 +190,7 @@ const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps)
                         </div>
                     </div>
                 </div>
-            )}
+            </CSSTransition>
 
             <button className={classNames(
                     "border",

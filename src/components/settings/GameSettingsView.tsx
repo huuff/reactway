@@ -1,5 +1,5 @@
 
-import { ChangeEvent, useCallback, useEffect, useMemo, useRef } from "react";
+import { ChangeEvent, useCallback, useEffect, useMemo } from "react";
 import { useDarkMode, useDebounce, useToggle } from "usehooks-ts";
 import { GridType } from "../../grid/grid";
 import { GameSettings, GameSettingsAction, GridViewType, NumberGameSetting } from "../../settings/settings";

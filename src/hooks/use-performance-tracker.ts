@@ -98,7 +98,7 @@ function usePerformanceTracker(): PerformanceTracker {
         return disabledFeatures.some((f) => f.name === feature);
     }, [disabledFeatures]);
 
-    const isSlow = useMemo(() => averageTickDuration > MAX_EXPECTED_TICK_DURATION_MS, [records]);
+    const isSlow = useMemo(() => averageTickDuration > MAX_EXPECTED_TICK_DURATION_MS, [averageTickDuration]);
 
     const reset = useCallback(() => setRecords([]), [setRecords]);
 

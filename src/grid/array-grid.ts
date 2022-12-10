@@ -1,4 +1,4 @@
-import { ConwayStrategy } from "../game/conway-strategy";
+import { ConwayStrategy, defaultConwayStrategy } from "../game/conway-strategy";
 import { Grid, GridCreationSettings, CreateGrid, Coordinates } from "./grid";
 import seedrandom from "seedrandom";
 import { shouldBeBornAlive } from "../util/birth-function";
@@ -66,17 +66,50 @@ class ArrayGrid extends Grid {
     }
 
     tick = (strategy: ConwayStrategy): ArrayGrid => {
-        const newInternalGrid = this.internalGrid.map((_, y) =>
+        if (strategy !== defaultConwayStrategy) {
+            const newInternalGrid = this.internalGrid.map((_, y) =>
+                this.internalGrid[y].map((_, x) => {
+                    if (x === 0 || y === 0 || x === this.width + 1 || y === this.height + 1) {
+                        return false;
+                    } else {
+                        return strategy(this, tuple(x - 1, y - 1));
+                    }
+                })
+            )
+
+            return new ArrayGrid(newInternalGrid, this.width, this.height);
+        } else { 
+            // If the strategy is the default (which is always, unless it's a test)
+            // rather than following it, use an optimized version that takes advantage
+            // of local, private state to be faster
+            const newInternalGrid = this.internalGrid.map((_, y) =>
             this.internalGrid[y].map((_, x) => {
                 if (x === 0 || y === 0 || x === this.width + 1 || y === this.height + 1) {
                     return false;
                 } else {
-                    return strategy(this, tuple(x - 1, y - 1));
+                    const isAlive = this.internalGrid[y][x];
+
+                    let liveNeighbours = 0;
+                    if (this.internalGrid[y - 1][x - 1]) liveNeighbours++;
+                    if (this.internalGrid[y - 1][x]) liveNeighbours++;
+                    if (this.internalGrid[y - 1][x + 1]) liveNeighbours++;
+                    if (this.internalGrid[y][x - 1]) liveNeighbours++;
+                    if (this.internalGrid[y][x + 1]) liveNeighbours++;
+                    if (this.internalGrid[y + 1][x - 1]) liveNeighbours++;
+                    if (this.internalGrid[y + 1][x]) liveNeighbours++;
+                    if (this.internalGrid[y + 1][x + 1]) liveNeighbours++;
+                    
+                    if (isAlive) {
+                        return liveNeighbours === 2 || liveNeighbours === 3;
+                    } else { // Cell is dead
+                        return liveNeighbours === 3;
+                    }
                 }
             })
         )
 
-        return new ArrayGrid(newInternalGrid, this.width, this.height);
+        return new ArrayGrid(newInternalGrid, this.width, this.height);   
+        }
     };
 
     toggle = ([x, y]: Coordinates): ArrayGrid => {

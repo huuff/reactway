@@ -10,7 +10,6 @@
 
 ## Performance
 (Some ideas to improve ArrayGrid's performance)
-* Just inline the conway strategy in `tick` (ignore strategy or throw an exception if some non-default is passed in, since I don't even think I'll use any other) (or maybe just simulate it if the default is passed, and use another one otherwise?)
 * Remove tuples from the grid's `get` signature... this will help avoid creating that many objects.
 * Store integers instead of booleans in the grid, and just go adding them instead of just doing `result++` (Is that faster? Well, I guess so, because of branching)
 * Store the whole grid on a single array, just adding the appropriate offsets to every access.

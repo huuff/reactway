@@ -4,6 +4,7 @@ import seedrandom from "seedrandom";
 import { shouldBeBornAlive } from "../util/birth-function";
 import { ReadonlyDeep } from "type-fest";
 import tuple from "immutable-tuple";
+import range from "lodash/range";
 
 type InternalGrid = boolean[][];
 
@@ -15,25 +16,48 @@ class ArrayGrid extends Grid {
     public readonly height: number;
     public readonly width: number;
 
+    public readonly population: number;
 
-    private constructor(internalGrid: InternalGrid, width: number, height: number) {
+
+    private constructor(
+        internalGrid: InternalGrid,
+        width: number,
+        height: number,
+        population?: number,
+    ) {
         super();
         this.internalGrid = internalGrid;
         this.height = height;
         this.width = width;
+        this.population = population ?? (() => {
+            let result = 0;
+            for (const y of range(0, internalGrid.length)) {
+                for (const x of range(0, internalGrid[y].length)) {
+                    if (internalGrid[y][x]) {
+                        result++;
+                    }
+                }
+            }
+            return result;
+        })();
     }
 
     static create: CreateGrid = (settings: GridCreationSettings): ArrayGrid => {
         const random = seedrandom(settings.seed);
+        let population = 0;
         return new ArrayGrid([...Array(settings.height + 2)].map((_, y) =>
             [...Array(settings.width + 2)].map((_, x) => {
                 if (x === 0 || x === settings.width + 1 || y === 0 || y === settings.height + 1) {
                     return false;
                 } else {
-                    return shouldBeBornAlive(random, settings.birthFactor);
+                    const alive = shouldBeBornAlive(random, settings.birthFactor);
+                    if (alive) {
+                        population++;
+                    }
+                    return alive;
                 }
             })
-        ), settings.width, settings.height);
+        ), settings.width, settings.height, population);
     };
 
 

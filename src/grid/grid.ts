@@ -29,9 +29,30 @@ abstract class Grid {
     abstract readonly type: GridType;
     abstract readonly height: number;
     abstract readonly width: number;
+        /**
+     * Gives the number of cells that are currently alive
+     */
+    abstract readonly population: number;
 
+    /**
+     * Returns the state of the cell at the passed-in coordinates:
+     * - true: alive
+     * - false: dead
+     * @param coordinates 
+     */
     abstract get(coordinates: Coordinates): boolean;
+
+    /**
+     * Returns the next iteration of the game of life according to the given strategy
+     * @param strategy 
+     */
     abstract tick(strategy: ConwayStrategy): Grid;
+
+    /**
+     * Switches the state of the cell at the given coordinates: from alive to dead and
+     * from dead to alive
+     * @param coordinates 
+     */
     abstract toggle(coordinates: Coordinates): Grid;
 
     contains = ([x, y]: Coordinates): boolean => {

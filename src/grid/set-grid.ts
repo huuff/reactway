@@ -13,13 +13,15 @@ class SetGrid extends Grid {
     public readonly type: GridType = "set";
     public readonly height: number;
     public readonly width: number;
+    public readonly population: number;
 
-    constructor(tuples: Set<Coordinates>, height?: number, width?: number)
-    constructor(tuples: Coordinates[], height?: number, width?: number)
+    constructor(tuples: Set<Coordinates>, height?: number, width?: number, population?: number)
+    constructor(tuples: Coordinates[], height?: number, width?: number, population?: number)
     constructor(
         tuples: Coordinates[] | Set<Coordinates>,
         height?: number,
         width?: number,
+        population?: number,
     ) {
         super();
         let actualTuples: Coordinates[];
@@ -31,6 +33,7 @@ class SetGrid extends Grid {
         this.height = height ?? (max(actualTuples.map(([_, y]) => y)) ?? 0) + 1;
         this.width = width ?? (max(actualTuples.map(([x, _]) => x)) ?? 0) + 1;
         this.set = new Set(actualTuples);
+        this.population = population ?? actualTuples.length;
     }
 
     static create: CreateGrid = ({
@@ -65,7 +68,7 @@ class SetGrid extends Grid {
             }
         });
 
-        return new SetGrid(nextTuples, this.height, this.width);
+        return new SetGrid(nextTuples, this.height, this.width, nextTuples.length);
     }
     toggle(coordinates: Coordinates): SetGrid {
         const newSet = new Set(this.set);

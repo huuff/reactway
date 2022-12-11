@@ -26,7 +26,8 @@ describe("MapGrid", () => {
         });
 
         // ACT
-        const nextStepGrid = grid.tick(fakeConwayStrategy([tuple(2, 3), tuple(2, 1), tuple(3, 2), tuple(3,3), tuple(4, 2)]));
+        const nextAliveCells = fakeConwayStrategy([tuple(2, 3), tuple(2, 1), tuple(3, 2), tuple(3,3), tuple(4, 2)]);
+        const nextStepGrid = grid.tick(nextAliveCells);
 
         // ASSERT
         expect(nextStepGrid.get(tuple(2, 2))).toBe(false);

@@ -3,7 +3,7 @@ import { sum } from "lodash";
 import { createContext, useCallback, useMemo, useState } from "react";
 import { trimArray } from "../util/trim-array";
 
-type EventRecord = {
+type SampleRecord = {
     timeSpentMs: number;
     timeOfRecord: Date;
 }
@@ -31,7 +31,7 @@ const allFeatures = [visibleAreaFeature, hoverFeature];
 type PerformanceTracker = {
     isSlow: boolean;
     averageOverhead: number;
-    recordEvent: (timeSpentMs: EventRecord["timeSpentMs"], timeOfRecord: EventRecord["timeOfRecord"]) => void;
+    recordSample: (timeSpentMs: SampleRecord["timeSpentMs"], timeOfRecord: SampleRecord["timeOfRecord"]) => void;
     disabledFeatures: Feature[];
     isDisabled: (feature: Feature["name"]) => boolean;
     updateBatches: () => void;
@@ -59,10 +59,10 @@ const MAX_EXPECTED_AVERAGE_OVERHEAD = 250;
  * @returns The PerformanceTracker
  */
 function usePerformanceTracker(updateBatchesInInterval: boolean = true): PerformanceTracker {
-    const [ records, setRecords ] = useState<EventRecord[]>([]);
+    const [ records, setRecords ] = useState<SampleRecord[]>([]);
     const [ recordBatches, setRecordBatches ] = useState<number[][]>([]);
 
-    const recordEvent = useCallback<PerformanceTracker["recordEvent"]>((timeSpentMs, timeOfRecord) => {
+    const recordSample = useCallback<PerformanceTracker["recordSample"]>((timeSpentMs, timeOfRecord) => {
         setRecords((previousRecords) => trimArray([...previousRecords, { timeSpentMs, timeOfRecord }], 20).array)
     }, [setRecords])
 
@@ -138,7 +138,7 @@ function usePerformanceTracker(updateBatchesInInterval: boolean = true): Perform
         disabledFeatures,
         isDisabled, 
         updateBatches, 
-        recordEvent, 
+        recordSample, 
         reset 
     };
 }
@@ -147,7 +147,7 @@ function usePerformanceTracker(updateBatchesInInterval: boolean = true): Perform
 const PerformanceTrackerContext = createContext<PerformanceTracker>({
     isSlow: false,
     averageOverhead: 0,
-    recordEvent: (x, y) => {},
+    recordSample: (x, y) => {},
     disabledFeatures: [],
     isDisabled: (f) => false,
     updateBatches: () => {},

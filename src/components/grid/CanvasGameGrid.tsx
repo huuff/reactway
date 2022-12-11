@@ -40,7 +40,6 @@ function drawCell(
     canvasContext.fillRect(x * cellSizePixels, y * cellSizePixels, rectSizePixels, rectSizePixels);
 }
 
-// TODO: Test it? Can I?
 // MAYBE: Maybe splitting this into several files would make it much more testable
 const CanvasGameGrid = ({
     grid,

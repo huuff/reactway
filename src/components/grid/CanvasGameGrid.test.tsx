@@ -34,6 +34,21 @@ Object.defineProperty(window, 'matchMedia', {
     })),
   });
 
+// XXX: Otherwise, js-dom is not able to provide a working definition of it
+function fakeBoundingRect(element: HTMLCanvasElement) {
+    element.getBoundingClientRect = jest.fn(() => ({
+        left: 0,
+        top: 0,
+        right: 1000,
+        bottom: 1000,
+        height: 1000,
+        width: 1000,
+        x: 0,
+        y: 0,
+        toJSON: jest.fn(),
+    }));
+}
+
 const liveCells: Coordinates[] = [tuple(2, 3), tuple(2, 1), tuple(3, 2), tuple(3,3), tuple(4, 2)];
 describe("CanvasGameGrid", () => {
     const cellSize = 3;
@@ -80,6 +95,40 @@ describe("CanvasGameGrid", () => {
         }
     });
 
+    test("hovering over a cell paints it as hovered", () => {
+        // ARRANGE
+        render(<CanvasGameGrid grid={new SetGrid(liveCells)} toggleCell={jest.fn()} cellSize={cellSize}/>);
+        const targetCell = tuple(2, 2);
+
+        // ACT
+        const canvas: HTMLCanvasElement = screen.getByTestId("canvas");
+        fakeBoundingRect(canvas);
+        fireEvent.mouseMove(canvas, {
+            clientX: targetCell[0] * cellSizePixels,
+            clientY: targetCell[1] * cellSizePixels,
+        });
+
+        // ASSERT
+        const events = canvas.getContext("2d")!.__getEvents();
+        const paintTargetCellEventIndex = events.findIndex((e) => {
+            return e.props.x === targetCell[0] * cellSizePixels
+                 && e.props.y === targetCell[1] * cellSizePixels
+                 && e.props.width === cellSizePixels-1
+                 && e.props.height === cellSizePixels-1
+                 && e.type === "fillRect"
+                 ;
+        });
+        const paintTargetCellEvent = events[paintTargetCellEventIndex];
+        // Second to last element before it, because there's a strokeRect before to paint the borders of the
+        // cell
+        const paintTargetCellColorEvent = events[paintTargetCellEventIndex-2];
+
+        console.log(JSON.stringify(events.slice(paintTargetCellEventIndex-3, paintTargetCellEventIndex+1)));
+        expect(paintTargetCellEvent.type).toBe("fillRect"); // Kind of unnecessary
+        expect(paintTargetCellColorEvent.type).toBe("fillStyle");
+        expect(paintTargetCellColorEvent.props).toEqual({ value: theme.light.cell.hovered.dead.color.toLowerCase() });
+    });
+
     test("clicking on a cell toggles it", () => {
         // ARRANGE
         const toggleCell = jest.fn();
@@ -88,17 +137,7 @@ describe("CanvasGameGrid", () => {
 
         // ACT
         const canvas: HTMLCanvasElement = screen.getByTestId("canvas");
-        canvas.getBoundingClientRect = jest.fn(() => ({
-            left: 0,
-            top: 0,
-            right: 1000,
-            bottom: 1000,
-            height: 1000,
-            width: 1000,
-            x: 0,
-            y: 0,
-            toJSON: jest.fn(),
-        }));
+        fakeBoundingRect(canvas);
         fireEvent.mouseMove(canvas, {
             clientX: targetCell[0] * cellSizePixels,
             clientY: targetCell[1] * cellSizePixels,
@@ -111,8 +150,6 @@ describe("CanvasGameGrid", () => {
         // ASSERT
         expect(toggleCell).toHaveBeenCalledWith(targetCell);
     });
-
-    // TODO: Test hover
 
     test("snapshot", () => {
         expect(renderer.create(

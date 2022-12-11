@@ -6,6 +6,7 @@ import tuple from "immutable-tuple";
 import { render, screen } from "@testing-library/react";
 import "jest-canvas-mock";
 import * as beautifulReactHooks from "beautiful-react-hooks";
+import theme from "../../../theme";
 
 // Ensure the whole grid is visible
 jest.spyOn(beautifulReactHooks, "useViewportState").mockImplementation(() => ({
@@ -34,9 +35,8 @@ const liveCells: Coordinates[] = [tuple(2, 3), tuple(2, 1), tuple(3, 2), tuple(3
 describe("CanvasGameGrid", () => {
     const cellSize = 3;
     const cellSizePixels = cellSize * 8;
-    // TODO: Get these from the theme
-    const aliveColor = "#000000";
-    const deadColor = "#F0F0F0";
+    const aliveColor = theme.light.cell.alive.color;
+    const deadColor = theme.light.cell.dead.color;
 
     test("live cells are colored as alive", () => {
         // ARRANGE & ACT
@@ -53,7 +53,6 @@ describe("CanvasGameGrid", () => {
             expect(fillRectEvent.type).toBe("fillRect");
             expect(fillStyleEvent.type).toBe("fillStyle");
             expect(fillStyleEvent.props).toEqual({ value: aliveColor} );
-
         }
     });
 

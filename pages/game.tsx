@@ -40,6 +40,9 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
         }
     }, [dispatchSettings], 20);
 
+    // XXX: We only want this to run on first render, otherwise, this is too expensive to run on
+    // every render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const initialGrid = useMemo(() => getGridFactory(type)({ ...settings, seed }), []);
 
     const {

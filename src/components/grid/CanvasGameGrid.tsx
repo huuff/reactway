@@ -58,15 +58,17 @@ const CanvasGameGrid = ({
         width: grid.width * cellSizePixels,
         height: grid.height * cellSizePixels,
     }), [grid.height, grid.width, cellSizePixels]);
+    
     const performanceTracker = useContext(PerformanceTrackerContext);
+    const { recordSample, isDisabled: isFeatureDisabled } = performanceTracker;
 
     const visibleAreaMultiplier = useMemo(() => {
-        if (!performanceTracker.isDisabled("visible")) {
+        if (!isFeatureDisabled("visible")) {
             return 2;
         } else {
             return 1;
         }
-    }, [performanceTracker]);
+    }, [isFeatureDisabled]);
     const visibleCellBounds = useVisibleBounds(
             gridCanvasRef,
             windowSize, 
@@ -75,7 +77,7 @@ const CanvasGameGrid = ({
             visibleAreaMultiplier
     );
 
-    useDrawCanvasEffect(gridCanvasRef, grid, cellSizePixels, visibleCellBounds, isDarkMode, performanceTracker);
+    useDrawCanvasEffect(gridCanvasRef, grid, cellSizePixels, visibleCellBounds, isDarkMode, recordSample);
 
     const isDragging = useIsDragging();
     const isMouseWithinGrid = useIsMouseWithinGrid(gridCanvasRef);
@@ -89,7 +91,7 @@ const CanvasGameGrid = ({
         previousHoveredCell,
         cellSizePixels,
         isDarkMode,
-        performanceTracker,
+        isFeatureDisabled,
     });
 
     const onMouseUp = useClickToggleHandler(hoveredCell, grid, toggleCell);
@@ -195,7 +197,7 @@ function useDrawCanvasEffect(
     cellSizePixels: number,
     visibleCellBounds: Box2D,
     isDarkMode: boolean,
-    performanceTracker: PerformanceTracker,
+    recordSample: PerformanceTracker["recordSample"],
 ) {
     useEffect(() => {
         const { elapsedMs } = benchmark(() => {
@@ -207,8 +209,8 @@ function useDrawCanvasEffect(
             };
         })
         
-        performanceTracker.recordSample(elapsedMs);
-    }, [ref, grid, cellSizePixels, visibleCellBounds, isDarkMode])
+        recordSample(elapsedMs);
+    }, [ref, grid, cellSizePixels, visibleCellBounds, isDarkMode, recordSample])
 }
 
 type HighlightedCellEffectParams = {
@@ -218,7 +220,7 @@ type HighlightedCellEffectParams = {
     previousHoveredCell: Coordinates | null,
     isDarkMode: boolean,
     cellSizePixels: number,
-    performanceTracker: PerformanceTracker,
+    isFeatureDisabled: PerformanceTracker["isDisabled"],
 }
 // XXX: This still leaves a trail of cells with a stroke that looks thicker than the rest...
 // but that's much nicer than what I had before, so I'm leaving it so for now.
@@ -230,11 +232,11 @@ function useDrawHighlightedCellEffect({
     previousHoveredCell,
     isDarkMode,
     cellSizePixels,
-    performanceTracker,
+    isFeatureDisabled,
 }: HighlightedCellEffectParams) {
     useEffect(() => {
         // Not working when ticking is slow
-        if (performanceTracker.isDisabled("hover")) {
+        if (isFeatureDisabled("hover")) {
             return;
         }
 
@@ -254,7 +256,7 @@ function useDrawHighlightedCellEffect({
             drawCell(ctx, hoveredCell, isAlive, cellSizePixels, getTheme(isDarkMode).cell.hovered, true);
         }
 
-    }, [cellSizePixels, gridCanvasRef, performanceTracker, hoveredCell, previousHoveredCell, grid, isDarkMode])
+    }, [cellSizePixels, gridCanvasRef, isFeatureDisabled, hoveredCell, previousHoveredCell, grid, isDarkMode])
 }
 
 export default CanvasGameGrid;

@@ -13,6 +13,7 @@ jest.mock("usehooks-ts", () => ({
     }))
   }));
 
+// TODO: Test toggling?
 const liveCells: Coordinates[] = [tuple(2, 3), tuple(2, 1), tuple(3, 2), tuple(3,3), tuple(4, 2)];
 describe("AsciiGameGrid", () => {
     test("live cells are X", () => {

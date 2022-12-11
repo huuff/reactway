@@ -6,6 +6,7 @@ exports[`CanvasGameGrid snapshot 1`] = `
 >
   <canvas
     className="mx-auto"
+    data-testid="canvas"
     height={96}
     id="grid-canvas"
     width={120}

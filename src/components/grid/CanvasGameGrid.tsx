@@ -41,6 +41,7 @@ function drawCell(
 }
 
 // TODO: Test it? Can I?
+// MAYBE: Maybe splitting this into several files would make it much more testable
 const CanvasGameGrid = ({
     grid,
     className,
@@ -102,6 +103,7 @@ const CanvasGameGrid = ({
                 ref={gridCanvasRef}
                 className="mx-auto"
                 id="grid-canvas"
+                data-testid="canvas"
                 height={gridSizePixels.height}
                 width={gridSizePixels.width}
             ></canvas>
@@ -191,6 +193,7 @@ function useClickToggleHandler(
     }, [mouseCell, grid, toggleCell]);
 }
 
+// TODO: Should likely name it "useDrawGridEffect"
 function useDrawCanvasEffect(
     ref: RefObject<HTMLCanvasElement>,
     grid: Grid,

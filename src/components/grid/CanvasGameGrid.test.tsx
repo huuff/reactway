@@ -123,7 +123,6 @@ describe("CanvasGameGrid", () => {
         // cell
         const paintTargetCellColorEvent = events[paintTargetCellEventIndex-2];
 
-        console.log(JSON.stringify(events.slice(paintTargetCellEventIndex-3, paintTargetCellEventIndex+1)));
         expect(paintTargetCellEvent.type).toBe("fillRect"); // Kind of unnecessary
         expect(paintTargetCellColorEvent.type).toBe("fillStyle");
         expect(paintTargetCellColorEvent.props).toEqual({ value: theme.light.cell.hovered.dead.color.toLowerCase() });

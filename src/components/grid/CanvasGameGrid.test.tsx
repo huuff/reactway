@@ -56,7 +56,26 @@ describe("CanvasGameGrid", () => {
         }
     });
 
-    // TODO: Test dead cells
+    test("dead cells are colored as dead", () => {
+        // ARRANGE & ACT
+        const grid = new SetGrid(liveCells);
+        render(<CanvasGameGrid grid={grid} toggleCell={jest.fn()} cellSize={cellSize}/>);
+
+        // ASSERT
+        const canvas: HTMLCanvasElement = screen.getByTestId("canvas");
+        const events = canvas.getContext("2d")!.__getEvents();
+
+        for (const { coordinates: [x,y], isAlive} of grid) {
+            if (!isAlive) {
+                const strokeRectEventIndex = events.findIndex(({props}) => props.x === x * cellSizePixels && props.y === y * cellSizePixels);
+                const strokeRectEvent = events[strokeRectEventIndex];
+                const fillStyleEvent = events[strokeRectEventIndex - 1];
+                expect(strokeRectEvent.type).toBe("strokeRect");
+                expect(fillStyleEvent.type).toBe("fillStyle");
+                expect(fillStyleEvent.props).toEqual({ value: deadColor.toLowerCase()} );
+            }
+        }
+    });
     // TODO: Test hover
     // TODO: Test toggle
 

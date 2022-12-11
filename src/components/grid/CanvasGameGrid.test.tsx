@@ -46,11 +46,15 @@ describe("CanvasGameGrid", () => {
         const canvas: HTMLCanvasElement = screen.getByTestId("canvas");
         const events = canvas.getContext("2d")!.__getEvents();
         
-        // TODO: Heavily improve this to test all live cells in a loop! And make it look nicer
-        const fillCellEvent = events.findIndex(({props}) => props.x === 2 * cellSizePixels && props.y === 3 * cellSizePixels);
-        expect(events[fillCellEvent].type).toBe("fillRect");
-        expect(events[fillCellEvent-1].type).toBe("fillStyle");
-        expect(events[fillCellEvent-1].props).toEqual({ value: aliveColor } );
+        for (const [x, y] of liveCells) {
+            const fillRectEventIndex = events.findIndex(({props}) => props.x === x * cellSizePixels && props.y === y * cellSizePixels);
+            const fillRectEvent = events[fillRectEventIndex];
+            const fillStyleEvent = events[fillRectEventIndex - 1];
+            expect(fillRectEvent.type).toBe("fillRect");
+            expect(fillStyleEvent.type).toBe("fillStyle");
+            expect(fillStyleEvent.props).toEqual({ value: aliveColor} );
+
+        }
     });
 
     // TODO: Test dead cells

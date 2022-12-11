@@ -1,5 +1,5 @@
 import tuple from "immutable-tuple";
-import { range } from "lodash";
+import range from "lodash/range";
 import { Coordinates } from "../grid/grid";
 
 function iterateCoordinates(

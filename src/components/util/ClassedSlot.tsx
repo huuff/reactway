@@ -1,4 +1,4 @@
-import { isArray } from "lodash";
+import isArray from "lodash/isArray";
 import { Children, cloneElement, ReactElement } from "react";
 
 type ClassedSlotProps = {

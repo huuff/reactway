@@ -4,7 +4,7 @@ import classNames from "classnames";
 import { coordinatesToString } from "../../util/coordinates-to-string";
 import { useContext, useMemo } from "react";
 import tuple from "immutable-tuple";
-import { useDarkMode } from "usehooks-ts";
+import { useDarkMode }  from "usehooks-ts";
 import { getTheme } from "../../util/get-theme";
 import { PerformanceTrackerContext } from "../../hooks/use-performance-tracker";
 

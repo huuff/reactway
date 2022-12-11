@@ -1,10 +1,9 @@
-import { range } from "lodash";
+import range from "lodash/range";
 import { ConwayStrategy } from "../game/conway-strategy";
 import { iterateCoordinates } from "../util/iterate-coordinates";
 import { GridStateWrapper } from "../game/use-grid";
 import { Box2D } from "../util/box-2d";
 import tuple, {Tuple} from "immutable-tuple";
-import { RefObject } from "react";
 
 type GameGridProps = {
     grid: Grid,

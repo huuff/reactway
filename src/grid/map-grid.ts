@@ -1,9 +1,8 @@
 import seedrandom from "seedrandom";
 import { ConwayStrategy } from "../game/conway-strategy";
 import { Grid, GridCreationSettings, CreateGrid, Coordinates } from "./grid";
-import { range } from "lodash";
+import range from "lodash/range";
 import { shouldBeBornAlive } from "../util/birth-function";
-import wu from "wu";
 import tuple from "immutable-tuple";
 
 
@@ -32,12 +31,12 @@ class MapGrid extends Grid {
     private constructor(internalGrid: Map<Coordinates, boolean>) {
         super();
         this.internalGrid = internalGrid;
-        this.height = wu(internalGrid.keys())
+        this.height = Array.from(internalGrid.keys())
             .map(([_, y]) => y)
-            .reduce(Math.max, 0) + 1;
-        this.width = wu(internalGrid.keys())
+            .reduce((acc, n) => Math.max(acc, n), 0) + 1;
+        this.width = Array.from(internalGrid.keys())
             .map(([x, _]) => x)
-            .reduce(Math.max, 0) + 1;
+            .reduce((acc, n) => Math.max(acc, n), 0) + 1;
     }
 
     static create: CreateGrid = (settings: GridCreationSettings): MapGrid => {

@@ -1,6 +1,5 @@
-import _ from "lodash";
+import max from "lodash/max";
 import seedrandom from "seedrandom";
-import wu from "wu";
 import { ConwayStrategy } from "../game/conway-strategy";
 import { shouldBeBornAlive } from "../util/birth-function";
 import { Coordinates, CreateGrid, Grid, GridCreationSettings, GridType } from "./grid";
@@ -25,12 +24,12 @@ class SetGrid extends Grid {
         super()
         let actualTuples: Coordinates[];
         if (tuples instanceof Set) {
-            actualTuples = wu(tuples.values()).toArray();
+            actualTuples = Array.from(tuples.values());
         } else {
             actualTuples = tuples;
         }
-        this.height = height ?? (_(actualTuples).map(([_, y]) => y).max() ?? 0) + 1;
-        this.width = width ?? (_(actualTuples).map(([x, _]) => x).max() ?? 0) + 1;
+        this.height = height ?? (max(actualTuples.map(([_, y]) => y)) ?? 0) + 1;
+        this.width = width ?? (max(actualTuples.map(([x, _]) => x)) ?? 0) + 1;
         this.set = new Set(actualTuples);
     }
 

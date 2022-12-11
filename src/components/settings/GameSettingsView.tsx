@@ -5,7 +5,7 @@ import { GridType } from "../../grid/grid";
 import { GameSettings, GameSettingsAction, GridViewType, NumberGameSetting } from "../../settings/settings";
 import { typedCapitalize } from "../../util/typesafe-capitalize";
 import { useNumberInput } from "../../hooks/use-number-input";
-import { faPlus, faMinus, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getTheme } from "../../util/get-theme";
 

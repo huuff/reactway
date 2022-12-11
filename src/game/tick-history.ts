@@ -3,7 +3,6 @@ import { Coordinates, Grid } from "../grid/grid";
 import { getGridFactory } from "../grid/grid-factory";
 import { trimArray } from "../util/trim-array";
 import tuple from "immutable-tuple";
-import { PerformanceTracker } from "../hooks/use-performance-tracker";
 import { benchmark } from "../util/benchmark-function";
 
 const MAX_HISTORY_LENGTH = 15;

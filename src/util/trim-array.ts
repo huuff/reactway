@@ -1,4 +1,4 @@
-import { takeRight } from "lodash";
+import takeRight from "lodash/takeRight";
 
 type TrimArrayReturnType<T> = {
     readonly array: T[],

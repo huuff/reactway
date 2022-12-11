@@ -47,7 +47,7 @@ const BATCH_SLICE_DURATION = 1000;
 /**
  * When the average load starts to exceed this much, performance is considered to be degraded.
  */
-const MAX_EXPECTED_AVERAGE_OVERHEAD = 100;
+const MAX_EXPECTED_AVERAGE_OVERHEAD = 200;
 
 /**
  * Creates a performance tracker.

@@ -83,6 +83,7 @@ const CanvasGameGrid = ({
     const isDragging = useIsDragging();
     const isMouseWithinGrid = useIsMouseWithinGrid(gridCanvasRef);
     const hoveredCell = useDebounce(useHoveredCell(grid, gridCanvasRef, cellSizePixels, isMouseWithinGrid, isDragging), 5);
+    //const hoveredCell = useHoveredCell(grid, gridCanvasRef, cellSizePixels, isMouseWithinGrid, isDragging);
     const previousHoveredCell = usePreviousValue(hoveredCell);
 
     useDrawHighlightedCellEffect({ 

@@ -29,9 +29,10 @@ abstract class Grid {
     abstract readonly type: GridType;
     abstract readonly height: number;
     abstract readonly width: number;
-        /**
+    /**
      * Gives the number of cells that are currently alive
      */
+    // TODO: Test it
     abstract readonly population: number;
 
     /**

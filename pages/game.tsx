@@ -115,7 +115,9 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                 playback={playback}
                 startNewGame={startNewGame}
             />
-            <PopulationCounter population={grid.population} />
+            <NoSsr>
+                <PopulationCounter population={grid.population} />
+            </NoSsr>
         </div>
     );
 };

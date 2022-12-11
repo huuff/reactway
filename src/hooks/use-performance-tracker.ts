@@ -16,13 +16,13 @@ type Feature = {
 
 const hoverFeature: Feature = {
     name: "hover",
-    expectedSavedMs: 25,
+    expectedSavedMs: 50,
     description: "Visual effect on hovered cells",
 };
 
 const visibleAreaFeature: Feature = {
     name: "visible",
-    expectedSavedMs: 10,
+    expectedSavedMs: 25,
     description: "Rendered area might have been reduced",
 };
 
@@ -47,7 +47,7 @@ const BATCH_SLICE_DURATION = 1000;
 /**
  * When the average load starts to exceed this much, performance is considered to be degraded.
  */
-const MAX_EXPECTED_AVERAGE_OVERHEAD = 200;
+const MAX_EXPECTED_AVERAGE_OVERHEAD = 150;
 
 /**
  * Creates a performance tracker.

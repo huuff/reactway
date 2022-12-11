@@ -16,7 +16,7 @@ type GridStateWrapper = {
 
     setHistoryPosition: (newPosition: number) => void;
     toggleCell: (coordinates: Coordinates) => void;
-}
+};
 
 function useGrid(initialGrid: Grid): GridStateWrapper {
     const [ 
@@ -28,7 +28,7 @@ function useGrid(initialGrid: Grid): GridStateWrapper {
 
     useEffect(() => {
         tickHistory.lastTickDurationMs && recordTick(tickHistory.lastTickDurationMs, new Date());
-    }, [tickHistory, recordTick])
+    }, [tickHistory, recordTick]);
 
     return {
         grid: tickHistory.grid,
@@ -39,15 +39,15 @@ function useGrid(initialGrid: Grid): GridStateWrapper {
         tick: useCallback(() => dispatchTickHistory({ type: "tick" } ), [dispatchTickHistory]),
         clear: useCallback(() => dispatchTickHistory({ type: "clear"} ), [dispatchTickHistory]),
         restart: useCallback((newGrid: Grid) => {
-            dispatchTickHistory({ type: "reset", value: newGrid}), [dispatchTickHistory]
+            dispatchTickHistory({ type: "reset", value: newGrid}), [dispatchTickHistory];
         }, [dispatchTickHistory]),
         setHistoryPosition: useCallback((newPosition: number) => {
-            dispatchTickHistory({ type: "setPosition", value: newPosition})
+            dispatchTickHistory({ type: "setPosition", value: newPosition});
         }, [ dispatchTickHistory]),
         toggleCell: useCallback((coordinates: Coordinates) => {
-            dispatchTickHistory({type: "toggle", value: coordinates})
+            dispatchTickHistory({type: "toggle", value: coordinates});
         }, [ dispatchTickHistory]),
-    }
+    };
 }
 
 export type { GridStateWrapper };

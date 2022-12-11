@@ -47,7 +47,7 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
             };
         }
         case "clear": {
-            const createGrid = getGridFactory(previous.grid.type)
+            const createGrid = getGridFactory(previous.grid.type);
             const emptyGrid = createGrid({
                 height: previous.grid.height,
                 width: previous.grid.width,
@@ -65,7 +65,7 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
                 grid: emptyGrid,
                 conwayStrategy: previous.conwayStrategy,
                 lastTickDurationMs: previous.lastTickDurationMs,
-            }
+            };
         }
         case "tick": {
             if (previous.position === previous.length - 1) {
@@ -84,7 +84,7 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
                         grid: nextGrid,
                         conwayStrategy: previous.conwayStrategy,
                         lastTickDurationMs: elapsedMs,
-                    }
+                    };
                 } else {
                     return previous;
                 }
@@ -96,7 +96,7 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
                     ...previous,
                     position: nextPosition,
                     grid: previous.contents[nextPosition],
-                }
+                };
 
             }
         }
@@ -116,7 +116,7 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
             return {
                 ...previous,
                 conwayStrategy: action.value,
-            }
+            };
         }
         case "toggle": {
             const [targetX, targetY] = action.value;
@@ -124,7 +124,7 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
             const {
                 array: newContents,
                 newLength
-            } = trimArray([...previous.contents, nextGrid], MAX_HISTORY_LENGTH)
+            } = trimArray([...previous.contents, nextGrid], MAX_HISTORY_LENGTH);
             return {
                 contents: newContents,
                 length: newLength,
@@ -132,7 +132,7 @@ function historyReducer(previous: TickHistory, action: HistoryAction): TickHisto
                 grid: nextGrid,
                 conwayStrategy: previous.conwayStrategy,
                 lastTickDurationMs: previous.lastTickDurationMs,
-            }
+            };
         }
     }
 }
@@ -144,7 +144,7 @@ function newDefaultTickHistory(initialGrid: Grid): TickHistory {
         length: 1,
         grid: initialGrid,
         conwayStrategy: defaultConwayStrategy,
-    }
+    };
 }
 
 export type { HistoryAction };

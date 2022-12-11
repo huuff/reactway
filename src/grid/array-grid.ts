@@ -63,7 +63,7 @@ class ArrayGrid extends Grid {
         if (this.internalGrid[actualY + 1][actualX]) result++;
         if (this.internalGrid[actualY + 1][actualX + 1]) result++;
         return result;
-    }
+    };
 
     tick = (strategy: ConwayStrategy): ArrayGrid => {
         let newInternalGrid: boolean[][];
@@ -76,7 +76,7 @@ class ArrayGrid extends Grid {
                         return strategy(this, tuple(x - 1, y - 1));
                     }
                 })
-            )
+            );
         } else {
             // If the strategy is the default (which is always, unless it's a test)
             // rather than following it, use an optimized version that takes advantage
@@ -105,7 +105,7 @@ class ArrayGrid extends Grid {
                         }
                     }
                 })
-            )
+            );
         }
         return new ArrayGrid(newInternalGrid, this.width, this.height);
     };
@@ -117,7 +117,7 @@ class ArrayGrid extends Grid {
                 ? this.internalGrid[y_2][x_2]
                 : !this.internalGrid[y_2][x_2]
             )
-        )
+        );
 
         return new ArrayGrid(newInternalGrid, this.width, this.height);
     };

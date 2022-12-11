@@ -14,10 +14,10 @@ function useIsDragging(thresholdMs: number = 100) {
     onMouseDown(() => {
         if (!timeoutId) {
             setTimeoutId(setTimeout(() => {
-                setIsMouseHeld(true)
+                setIsMouseHeld(true);
              }, thresholdMs));
         }
-    })
+    });
 
     onMouseUp(() => {
         setIsMouseHeld(false);
@@ -25,7 +25,7 @@ function useIsDragging(thresholdMs: number = 100) {
             clearInterval(timeoutId);
             setTimeoutId(null);
         }
-    })
+    });
 
     return isMouseHeld;
 }

@@ -1,7 +1,7 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
-import Head from 'next/head'
-import { PerformanceTrackerContext, usePerformanceTracker } from '../src/hooks/use-performance-tracker'
+import '../styles/globals.css';
+import type { AppProps } from 'next/app';
+import Head from 'next/head';
+import { PerformanceTrackerContext, usePerformanceTracker } from '../src/hooks/use-performance-tracker';
 
 export default function App({ Component, pageProps }: AppProps) {
   const performanceTracker = usePerformanceTracker();
@@ -16,5 +16,5 @@ export default function App({ Component, pageProps }: AppProps) {
         <Component {...pageProps} />
       </PerformanceTrackerContext.Provider>
     </>
-  )
+  );
 }

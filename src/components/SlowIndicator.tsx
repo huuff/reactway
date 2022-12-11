@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { PerformanceTrackerContext } from "../hooks/use-performance-tracker"
+import { PerformanceTrackerContext } from "../hooks/use-performance-tracker";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
 import { useContext } from "react";
@@ -56,11 +56,11 @@ const SlowIndicator = ({ resetSettings }: SlowIndicatorProps) => {
                         </div>
                     )
                 }
-                <p className="font-bold cursor-pointer" onClick={() => { resetSettings(); tracker.reset()}}>
+                <p className="font-bold cursor-pointer" onClick={() => { resetSettings(); tracker.reset(); }}>
                     Click here to restore settings
                 </p>
             </div>
-        </div>)
+        </div>);
 };
 
 export default SlowIndicator;

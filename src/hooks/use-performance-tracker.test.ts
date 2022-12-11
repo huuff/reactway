@@ -39,12 +39,12 @@ describe("usePerformanceTracker", () => {
                 // Tries to send ticks in batches of three, so every thirdtick, sets the next one to
                 // have a time 100 seconds in the future
                 if (i % 3 === 0) {
-                    nextTickTime += 100_000
+                    nextTickTime += 100_000;
                 } else {
-                    nextTickTime += 10
+                    nextTickTime += 10;
                 }
             }
-        })
+        });
 
         act(() => {
             result.current.updateBatches();
@@ -94,4 +94,4 @@ describe("usePerformanceTracker", () => {
         expect(result.current.averageOverhead).toBe(50);
         expect(result.current.isSlow).toBe(false);
     });
-})
+});

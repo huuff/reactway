@@ -21,8 +21,8 @@ const ClassedSlot = ({ children, className }: ClassedSlotProps) => {
                     : withClassName(children, className)
             }
         </>
-    )
-}
+    );
+};
 
 
 export default ClassedSlot;

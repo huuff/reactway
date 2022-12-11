@@ -13,7 +13,7 @@ const Index = () => {
         seed: randomSeed(),
       }
     });
-  }, [router])
-}
+  }, [router]);
+};
 
 export default Index;

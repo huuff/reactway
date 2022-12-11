@@ -1,7 +1,7 @@
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
-import { useDarkMode, useToggle } from "usehooks-ts"
+import { useDarkMode, useToggle } from "usehooks-ts";
 import { CSSTransition } from "react-transition-group";
 import PlayBar from "./PlayBar";
 import { Playback } from "../../settings/use-playback";
@@ -98,7 +98,7 @@ const SettingsDrawer = ({
                 <FontAwesomeIcon icon={drawerIcon} className="w-6 h-3 mx-auto" />
             </button>
         </>
-    )
-}
+    );
+};
 
 export default SettingsDrawer;

@@ -19,7 +19,7 @@ function useNumberInput(initialValue: number): NumberInputHookType {
                 setValue(undefined);
             }
         },
-    }
+    };
 }
 
 export { useNumberInput };

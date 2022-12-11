@@ -29,7 +29,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     const theme = useMemo(() => getTheme(isDarkMode), [isDarkMode]);
 
     const [settings, dispatchSettings] = useSettings(defaultSettings);
-    const { height, width, birthFactor, tickDuration, view, type, cellSize } = settings
+    const { height, width, birthFactor, tickDuration, view, type, cellSize } = settings;
     const playback = usePlayback();
 
     const wheelHandler = useThrottledCallback((e: WheelEvent<HTMLDivElement>) => {
@@ -78,8 +78,8 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                 seed: randomSeed(),
                 ...(toStringObject(settings))
             }
-        })
-    }
+        });
+    };
 
     const [gridRef, isGridBiggerThanViewport] = useIsGridBiggerThanViewport();
 
@@ -115,8 +115,8 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                 startNewGame={startNewGame}
             />
         </div>
-    )
-}
+    );
+};
 
 Game.getInitialProps = async ({ query }) => {
     if (typeof query.seed === "string") {
@@ -124,7 +124,7 @@ Game.getInitialProps = async ({ query }) => {
     } else {
         return { seed: "fixed seed" };
     }
-}
+};
 
 function useIsGridBiggerThanViewport(): [((node: HTMLDivElement | null) => void), boolean] {
     const { width: windowWidth, height: windowHeight } = useWindowSize();
@@ -133,7 +133,7 @@ function useIsGridBiggerThanViewport(): [((node: HTMLDivElement | null) => void)
     return [
         ref,
         gridWidth > windowWidth || gridHeight > windowHeight,
-    ]
+    ];
 }
 
 export default Game;

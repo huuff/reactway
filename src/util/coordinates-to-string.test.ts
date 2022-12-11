@@ -4,7 +4,7 @@ import { coordinatesToString, stringToCoordinates } from "./coordinates-to-strin
 describe("coordinates <-> string conversions", () => {
     test("coordinatesToString", () => {
         expect(coordinatesToString(tuple(2, 2))).toBe("(2,2)");
-    })
+    });
 
     test("stringToCoordinates", () => {
         const [x, y] = stringToCoordinates("(2,2)");

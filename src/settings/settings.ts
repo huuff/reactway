@@ -88,7 +88,7 @@ const MINIMUMS: SettingsLimits = {
     birthFactor: 0,
     tickDuration: 100,
     cellSize: 1,
-}
+};
 
 const MAXIMUMS: SettingsLimits = {
     height: 500,
@@ -96,7 +96,7 @@ const MAXIMUMS: SettingsLimits = {
     birthFactor: 1,
     tickDuration: 10000,
     cellSize: 10,
-}
+};
 
 // Returns the value if it fits the bounds, or the bound (minimum or maximum) otherwise
 function coerceWithinBounds(setting: keyof SettingsLimits, value: number): number {
@@ -169,13 +169,13 @@ function useSettings(
                     case "increment": {
                         const nextValue = coerceWithinBounds("cellSize", settings.cellSize + 1);
                         nextQueryParams = { ...router.query, cellSize: nextValue.toString()};
-                        setStoredSettings({ ...settings, ...storedSettings, cellSize: nextValue})
+                        setStoredSettings({ ...settings, ...storedSettings, cellSize: nextValue});
                         break;
                     }
                     case "decrement": {
                         const nextValue = coerceWithinBounds("cellSize", settings.cellSize - 1);
                         nextQueryParams = { ...router.query, cellSize: nextValue.toString()};
-                        setStoredSettings({ ...settings, ...storedSettings, cellSize: nextValue})
+                        setStoredSettings({ ...settings, ...storedSettings, cellSize: nextValue});
                         break;
                     }
                 }
@@ -202,4 +202,4 @@ export type {
     GameSettingsNumberAction,
     NumberGameSetting,
 };
-export { useSettings, globalDefaultSettings as defaultSettings, }
+export { useSettings, globalDefaultSettings as defaultSettings, };

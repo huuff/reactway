@@ -21,7 +21,7 @@ class SetGrid extends Grid {
         height?: number,
         width?: number,
     ) {
-        super()
+        super();
         let actualTuples: Coordinates[];
         if (tuples instanceof Set) {
             actualTuples = Array.from(tuples.values());
@@ -46,10 +46,10 @@ class SetGrid extends Grid {
             if (shouldBeBornAlive(random, birthFactor)) {
                 tuples.push(tuple(x, y));
             }
-        })
+        });
 
         return new SetGrid(tuples, height, width );
-    }
+    };
 
     get(coordinates: Coordinates): boolean {
         const result = this.set.has(coordinates);
@@ -61,9 +61,9 @@ class SetGrid extends Grid {
 
         this.iterateCoordinates((coordinates) => {
             if (strategy(this, coordinates)) {
-                nextTuples.push(coordinates)
+                nextTuples.push(coordinates);
             }
-        })
+        });
 
         return new SetGrid(nextTuples, this.height, this.width);
     }
@@ -79,7 +79,7 @@ class SetGrid extends Grid {
             newSet,
             this.height,
             this.width,
-        )
+        );
     }
 }
 

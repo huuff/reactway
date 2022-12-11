@@ -16,7 +16,7 @@ function usePlayback(initialState: PlaybackMode = "play"): Playback {
         isPlaying: playbackMode === "play",
         start: () => setPlaybackMode("play"),
         pause: () => setPlaybackMode("pause"),
-    }
+    };
 }
 
 export type { PlaybackMode, Playback };

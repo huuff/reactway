@@ -12,8 +12,8 @@ describe("ArrayGrid", () => {
             seed: "SEED",
         });
 
-        expect(grid.height).toBe(5)
-        expect(grid.width).toBe(5)
+        expect(grid.height).toBe(5);
+        expect(grid.width).toBe(5);
     });
 
     test("correctly ticks and gets", () => {
@@ -24,7 +24,7 @@ describe("ArrayGrid", () => {
             width: 5,
             birthFactor: 0,
             seed: "SEED",
-        })
+        });
 
         // ACT
         const nextStepGrid = grid.tick(conwayStrategy);
@@ -63,4 +63,4 @@ describe("ArrayGrid", () => {
         
     });
 
-})
+});

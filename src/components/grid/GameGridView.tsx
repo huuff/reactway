@@ -11,12 +11,12 @@ type GameGridViewProps = GameGridProps & {
 const GameGridView = (props: GameGridViewProps) => {
     switch (props.view) {
         case "table":
-            return <TableGameGrid {...props} className="mx-auto" />
+            return <TableGameGrid {...props} className="mx-auto" />;
         case "ascii":
-            return <AsciiGameGrid {...props} className="text-center" />
+            return <AsciiGameGrid {...props} className="text-center" />;
         case "canvas":
-            return <CanvasGameGrid {...props} className="mx-auto" />
+            return <CanvasGameGrid {...props} className="mx-auto" />;
     }
-}
+};
 
 export default GameGridView;

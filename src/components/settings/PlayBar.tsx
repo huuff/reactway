@@ -10,7 +10,7 @@ type PlayBarProps = {
     setHistoryPosition: (newPosition: number) => void,
     startNewGame: () => void,
     clearGrid: () => void,
-} & { className?: string }
+} & { className?: string };
 
 // TODO: A settings context?
 const PlayBar = ({
@@ -51,8 +51,8 @@ const PlayBar = ({
                     onClick={startNewGame} />
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default PlayBar;
 export type { PlayBarProps };

@@ -10,12 +10,12 @@ function trimArray<T>(array: T[], length: number): TrimArrayReturnType<T> {
         return {
             array: takeRight(array, length),
             newLength: length,
-        }
+        };
     } else {
         return {
             array,
             newLength: array.length,
-        }
+        };
     }
 }
 

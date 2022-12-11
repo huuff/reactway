@@ -11,7 +11,7 @@ const defaultConwayStrategy: ConwayStrategy = (grid: Grid, coordinates: Coordina
     } else { // Cell is dead
         return liveNeighbours === 3;
     }
-}
+};
 
 export type { ConwayStrategy };
 export { defaultConwayStrategy };

@@ -32,7 +32,7 @@ function drawCell(
 
     const [x, y] = coordinates;
     if (isAlive) {
-        canvasContext.fillStyle = colors.alive.color
+        canvasContext.fillStyle = colors.alive.color;
     } else {
         canvasContext.fillStyle = colors.dead.color;
         canvasContext.strokeRect(x * cellSizePixels, y * cellSizePixels, rectSizePixels, rectSizePixels);
@@ -106,8 +106,8 @@ const CanvasGameGrid = ({
                 width={gridSizePixels.width}
             ></canvas>
         </div>
-    )
-}
+    );
+};
 
 function useIsMouseWithinGrid(gridCanvasRef: RefObject<HTMLCanvasElement>): boolean {
     const { clientX, clientY } = useMouseState();
@@ -168,8 +168,8 @@ const useHoveredCell = (
 
     const { left: leftDisplacement, top: topDisplacement, } = getBoundingRectOrZeros(gridCanvasRef);
 
-    const mouseX = Math.max(0, clientX - leftDisplacement)
-    const mouseY = Math.max(0, clientY - topDisplacement)
+    const mouseX = Math.max(0, clientX - leftDisplacement);
+    const mouseY = Math.max(0, clientY - topDisplacement);
 
     const result = tuple(
         Math.min(Math.floor((mouseX - (mouseX % cellSizePixels)) / cellSizePixels), gridSize.width - 1),
@@ -177,7 +177,7 @@ const useHoveredCell = (
     );
 
     return result;
-}
+};
 
 function useClickToggleHandler(
     mouseCell: Coordinates | null,
@@ -207,10 +207,10 @@ function useDrawCanvasEffect(
             for (const { coordinates, isAlive } of grid.boundedIterator(visibleCellBounds)) {
                 drawCell(ctx, coordinates, isAlive, cellSizePixels, getTheme(isDarkMode).cell);
             };
-        })
+        });
         
         recordSample(elapsedMs);
-    }, [ref, grid, cellSizePixels, visibleCellBounds, isDarkMode, recordSample])
+    }, [ref, grid, cellSizePixels, visibleCellBounds, isDarkMode, recordSample]);
 }
 
 type HighlightedCellEffectParams = {
@@ -256,7 +256,7 @@ function useDrawHighlightedCellEffect({
             drawCell(ctx, hoveredCell, isAlive, cellSizePixels, getTheme(isDarkMode).cell.hovered, true);
         }
 
-    }, [cellSizePixels, gridCanvasRef, isFeatureDisabled, hoveredCell, previousHoveredCell, grid, isDarkMode])
+    }, [cellSizePixels, gridCanvasRef, isFeatureDisabled, hoveredCell, previousHoveredCell, grid, isDarkMode]);
 }
 
 export default CanvasGameGrid;

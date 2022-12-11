@@ -35,4 +35,4 @@ describe("TableGameGrid", () => {
             <TableGameGrid grid={new SetGrid(liveCells)} toggleCell={jest.fn()} cellSize={3}/>
         ).toJSON()).toMatchSnapshot();
     });
-})
+});

@@ -14,7 +14,7 @@ function gridFromAscii(input: TemplateStringsArray): Grid {
         const lineWithoutWhitespace = line.trim();
         for (let x = 0; x < lineWithoutWhitespace.length; x++) {
             if (lineWithoutWhitespace[x] === "#") {
-                aliveCells.add(tuple(x, y))
+                aliveCells.add(tuple(x, y));
             }
         }
     }

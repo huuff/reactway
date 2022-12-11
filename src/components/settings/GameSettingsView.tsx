@@ -179,7 +179,7 @@ const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps)
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
 
 export default GameSettingsView;

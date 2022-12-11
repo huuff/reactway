@@ -71,7 +71,7 @@ abstract class Grid {
                 yield {
                     coordinates: tuple(x, y),
                     isAlive: this.get(tuple(x, y)),
-                }
+                };
             }
         }
     }
@@ -96,5 +96,5 @@ type Cell = {
     readonly isAlive: boolean;
 }
 
-export { Grid }
+export { Grid };
 export type { Coordinates, GridCreationSettings, CreateGrid, GameGridProps, GridType };

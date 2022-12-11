@@ -12,8 +12,8 @@ describe("MapGrid", () => {
             seed: "SEED",
         });
 
-        expect(grid.height).toBe(5)
-        expect(grid.width).toBe(5)
+        expect(grid.height).toBe(5);
+        expect(grid.width).toBe(5);
     });
 
     test("correctly ticks and gets", () => {
@@ -23,7 +23,7 @@ describe("MapGrid", () => {
             width: 5,
             birthFactor: 0,
             seed: "SEED",
-        })
+        });
 
         // ACT
         const nextStepGrid = grid.tick(fakeConwayStrategy([tuple(2, 3), tuple(2, 1), tuple(3, 2), tuple(3,3), tuple(4, 2)]));
@@ -61,4 +61,4 @@ describe("MapGrid", () => {
         
     });
 
-})
+});

@@ -28,7 +28,7 @@ const TableGameGrid = ({ grid, className, toggleCell, cellSize, innerRef }: Game
                         <tr key={`row-${y}`}>
                             {
                                 [...Array(grid.width)].map((_, x) => {
-                                    const coordinates = tuple(x, y)
+                                    const coordinates = tuple(x, y);
                                     const coordinatesString = coordinatesToString(coordinates);
                                     const isAlive = grid.get(coordinates);
                                     const color = theme.cell[isAlive ? "alive" : "dead"].className;
@@ -45,7 +45,7 @@ const TableGameGrid = ({ grid, className, toggleCell, cellSize, innerRef }: Game
                                                 {[hoverClass]: !performanceTracker.isDisabled("hover")},
                                             )}>
                                         </td>
-                                    )
+                                    );
                                 })
                             }
                         </tr>
@@ -53,7 +53,7 @@ const TableGameGrid = ({ grid, className, toggleCell, cellSize, innerRef }: Game
                 </tbody>
             </table>
         </div>
-    )
-}
+    );
+};
 
 export default TableGameGrid;

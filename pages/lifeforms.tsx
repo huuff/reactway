@@ -161,7 +161,7 @@ const INITIAL_GRIDS = {
             OOOOOOOOOOOOOOOOO
         `,
     }
-}
+};
 
 type AssortedGrids = {
     [k in keyof typeof INITIAL_GRIDS]: {
@@ -208,7 +208,7 @@ function renderGrids(grids: AssortedGrids, lifeformType: keyof AssortedGrids, th
 
             </div>
         </section>
-    )
+    );
 }
 
 const Lifeforms = () => {
@@ -244,7 +244,7 @@ const Lifeforms = () => {
                 </main>
             </div>
         </>
-    )
+    );
 };
 
 export default Lifeforms;

@@ -1,5 +1,5 @@
 import { renderHook, act } from "@testing-library/react";
-import { defaultSettings, useSettings } from "./settings"
+import { defaultSettings, useSettings } from "./settings";
 import * as usehooks from "usehooks-ts";
 import mockRouter from "next-router-mock";
 import singletonRouter from "next/router";
@@ -37,7 +37,7 @@ describe("settings", () => {
             () => [defaultSettings, setLocalStorage]
         );
 
-        const { result } = renderHook(() => useSettings())
+        const { result } = renderHook(() => useSettings());
         const [_, dispatchSettings] = result.current;
 
         // ACT
@@ -66,7 +66,7 @@ describe("settings", () => {
             const [, dispatchSettings] = result.current;
 
             // ACT
-            act(() => dispatchSettings({ type: "changeCellSize", value: "increment" }))
+            act(() => dispatchSettings({ type: "changeCellSize", value: "increment" }));
 
             // ASSERT
             const [settings, _] = result.current;
@@ -79,11 +79,11 @@ describe("settings", () => {
             const [, dispatchSettings] = result.current;
 
             // ACT
-            act(() => dispatchSettings({ type: "changeCellSize", value: "decrement" }))
+            act(() => dispatchSettings({ type: "changeCellSize", value: "decrement" }));
 
             // ASSERT
             const [settings, _] = result.current;
             expect(settings.cellSize).toBe(defaultSettings.cellSize - 1);
         });
     });
-})
+});

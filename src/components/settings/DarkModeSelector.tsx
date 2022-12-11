@@ -1,4 +1,4 @@
-import { useDarkMode } from "usehooks-ts"
+import { useDarkMode } from "usehooks-ts";
 import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef } from "react";
@@ -18,7 +18,7 @@ const DarkModeSelector = ({ className }: DarkModeSelectorProps) => {
                 iconRef.current = faMoon;
             else
                 iconRef.current = faSun;
-    }, [isDarkMode])
+    }, [isDarkMode]);
 
     // TODO: Theme for the background
     return (
@@ -40,7 +40,7 @@ const DarkModeSelector = ({ className }: DarkModeSelectorProps) => {
                     className={`w-4 h-4 ${isDarkMode ? "text-yellow-300" : "text-slate-900"}`}
                 />}
         </button>
-    )
-}
+    );
+};
 
 export default DarkModeSelector;

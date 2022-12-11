@@ -21,7 +21,7 @@ function createInternalGrid(settings: GridCreationSettings): Map<Coordinates, bo
 }
 
 class MapGrid extends Grid {
-    private readonly internalGrid: Readonly<Map<Coordinates, boolean>>
+    private readonly internalGrid: Readonly<Map<Coordinates, boolean>>;
 
     public readonly type = "map";
 
@@ -53,10 +53,10 @@ class MapGrid extends Grid {
             width: this.width,
             seed: "",
             birthFactor: 0,
-        })
+        });
 
         for (const coordinates of this.internalGrid.keys()) {
-            newGrid.set(coordinates, strategy(this, coordinates))
+            newGrid.set(coordinates, strategy(this, coordinates));
         }
 
         return new MapGrid(newGrid);
@@ -67,9 +67,9 @@ class MapGrid extends Grid {
 
         for (const coordinates of this.internalGrid.keys()) {
             if (coordinates !== targetCoordinates) {
-                newInternalGrid.set(coordinates, this.internalGrid.get(coordinates)!)
+                newInternalGrid.set(coordinates, this.internalGrid.get(coordinates)!);
             } else {
-                newInternalGrid.set(coordinates, !this.internalGrid.get(coordinates))
+                newInternalGrid.set(coordinates, !this.internalGrid.get(coordinates));
             }
         }
 

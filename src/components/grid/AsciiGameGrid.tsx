@@ -35,7 +35,7 @@ const AsciiGameGrid = ({ grid, className, toggleCell, cellSize, innerRef }: Game
                 <Fragment key={`row-${y}`}>
                     {
                         [...Array(grid.width)].map((_, x) => {
-                            const coordinate = tuple(x, y)
+                            const coordinate = tuple(x, y);
                             const coordinateString = coordinatesToString(coordinate);
                             const isAlive = grid.get(tuple(x, y));
                             // XXX: Using only the color for alive cells because the letter (X or O) already
@@ -64,6 +64,6 @@ const AsciiGameGrid = ({ grid, className, toggleCell, cellSize, innerRef }: Game
             ))}
         </div>
     );
-}
+};
 
 export default AsciiGameGrid;

@@ -16,6 +16,6 @@ const benchmark = <T>(f: () => T, { logToConsole, name }: BenchmarkOptions = {})
 
     logToConsole && console.log(`${name} took ${elapsedMs}ms`);
     return { result, elapsedMs };
-}
+};
 
 export { benchmark };

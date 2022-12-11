@@ -66,7 +66,7 @@ function usePerformanceTracker(updateBatchesInInterval: boolean = true): Perform
         setRecords((previousRecords) => {
             return trimArray([...previousRecords, { timeSpentMs, timeOfRecord: timeOfRecord ?? new Date() }], 20).array;
         });
-    }, [setRecords])
+    }, [setRecords]);
 
     const updateBatches = useCallback(() => {
         if (records.length === 0) {
@@ -91,7 +91,7 @@ function usePerformanceTracker(updateBatchesInInterval: boolean = true): Perform
         }
 
         setRecordBatches(tickTimeBatches);
-    }, [setRecordBatches, records])
+    }, [setRecordBatches, records]);
 
     if (updateBatchesInInterval) {
         // XXX: updateBatchesInInterval should NEVER change at runtime (it's akin to a compile-time constant)
@@ -124,7 +124,7 @@ function usePerformanceTracker(updateBatchesInInterval: boolean = true): Perform
         }
 
         return result;
-    }, [averageOverhead])
+    }, [averageOverhead]);
 
     const isDisabled = useCallback((feature: Feature["name"]) => {
         return disabledFeatures.some((f) => f.name === feature);

@@ -31,7 +31,7 @@ describe("TickHistory", () => {
         act(() => {
             const [, dispatch] = result.current;
             dispatch({ type: "reset", value: nextGrid });
-        })
+        });
 
         // ASSERT
         const [history,] = result.current;
@@ -63,8 +63,8 @@ describe("TickHistory", () => {
         }
         expect(history.length).toBe(2);
         expect(history.position).toBe(1);
-        expect(history.contents[0].equals(initialGrid)).toBe(true)
-        expect(history.contents[1].equals(new SetGrid([], initialGrid.height, initialGrid.width))).toBe(true)
+        expect(history.contents[0].equals(initialGrid)).toBe(true);
+        expect(history.contents[1].equals(new SetGrid([], initialGrid.height, initialGrid.width))).toBe(true);
     });
 
     describe("tick", () => {
@@ -110,7 +110,7 @@ describe("TickHistory", () => {
             act(() => {
                 const [, dispatch] = result.current;
                 dispatch({type: "tick"});
-            })
+            });
 
             // ASSERT
             const [ history, ] = result.current;
@@ -139,7 +139,7 @@ describe("TickHistory", () => {
             act(() => {
                 const [, dispatch] = result.current;
                 dispatch({type: "setPosition", value: 0});
-            })
+            });
 
             // ASSERT
             const [ history, ] = result.current;
@@ -162,7 +162,7 @@ describe("TickHistory", () => {
             act(() => {
                 const [, dispatch] = result.current;
                 dispatch({ type: "toggle", value: tuple(1,1) });
-            })
+            });
     
             // ASSERT
             const [history,] = result.current;

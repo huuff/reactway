@@ -9,7 +9,7 @@ describe("createGridFromAscii", () => {
         const expectedGrid = new SetGrid([
             tuple(1,1), tuple(2,1),
             tuple(1,2), tuple(2,2),
-        ], 4, 4)
+        ], 4, 4);
 
         // ACT
         const grid = gridFromAscii`

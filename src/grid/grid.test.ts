@@ -13,23 +13,23 @@ describe("Grid", () => {
 
     test("false", () => {
       expect(grid.contains(tuple(10, 10))).toBe(false);
-    })
+    });
 
   });
 
   test("liveNeighbours", () => {
     expect(grid.liveNeighbours(tuple(2, 2))).toBe(4);
-  })
+  });
 
   test("equals", () => {
     expect(new SetGrid([tuple(1, 1), tuple(2, 2), tuple(3, 2), tuple(2, 3)])
       .equals(new SetGrid([tuple(1, 1), tuple(2, 2), tuple(3, 2), tuple(2, 3)])))
-      .toBe(true)
+      .toBe(true);
   });
 
   test("iterator", () => {
     // ARRANGE
-    const grid = new SetGrid(new Set<Readonly<Coordinates>>([tuple(0,0), tuple(1,1)]), 2, 2)
+    const grid = new SetGrid(new Set<Readonly<Coordinates>>([tuple(0,0), tuple(1,1)]), 2, 2);
     const iteratedCells: Coordinates[] = [];
 
     // ACT
@@ -44,7 +44,7 @@ describe("Grid", () => {
 
     // ASSERT
     expect(iteratedCells)
-      .toEqual([tuple(0,0), tuple(1,0), tuple(0,1), tuple(1,1)])
+      .toEqual([tuple(0,0), tuple(1,0), tuple(0,1), tuple(1,1)]);
 
   });
 

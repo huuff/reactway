@@ -5,7 +5,7 @@ import { trimArray } from "../util/trim-array";
 import tuple from "immutable-tuple";
 import { benchmark } from "../util/benchmark-function";
 
-const MAX_HISTORY_LENGTH = 15;
+const MAX_HISTORY_LENGTH = 20;
 
 type TickHistory = {
     readonly contents: Grid[];

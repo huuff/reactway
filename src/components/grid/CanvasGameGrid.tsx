@@ -7,6 +7,7 @@ import tuple from "immutable-tuple";
 import { useIsDragging } from "../../hooks/use-is-dragging";
 import { getTheme, LiveStatusDependent, ClassAndColor } from "../../util/get-theme";
 import { PerformanceTracker, PerformanceTrackerContext } from "../../hooks/use-performance-tracker";
+import { benchmark } from "../../util/benchmark-function";
 
 const CELL_SIZE_MULTIPLIER = 8;
 
@@ -74,7 +75,7 @@ const CanvasGameGrid = ({
             visibleAreaMultiplier
     );
 
-    useDrawCanvasEffect(gridCanvasRef, grid, cellSizePixels, visibleCellBounds, isDarkMode);
+    useDrawCanvasEffect(gridCanvasRef, grid, cellSizePixels, visibleCellBounds, isDarkMode, performanceTracker);
 
     const isDragging = useIsDragging();
     const isMouseWithinGrid = useIsMouseWithinGrid(gridCanvasRef);
@@ -193,15 +194,20 @@ function useDrawCanvasEffect(
     grid: Grid,
     cellSizePixels: number,
     visibleCellBounds: Box2D,
-    isDarkMode: boolean
+    isDarkMode: boolean,
+    performanceTracker: PerformanceTracker,
 ) {
     useEffect(() => {
-        const canvas = ref.current!;
+        const { elapsedMs } = benchmark(() => {
+            const canvas = ref.current!;
 
-        const ctx = canvas.getContext("2d")!;
-        for (const { coordinates, isAlive } of grid.boundedIterator(visibleCellBounds)) {
-            drawCell(ctx, coordinates, isAlive, cellSizePixels, getTheme(isDarkMode).cell);
-        };
+            const ctx = canvas.getContext("2d")!;
+            for (const { coordinates, isAlive } of grid.boundedIterator(visibleCellBounds)) {
+                drawCell(ctx, coordinates, isAlive, cellSizePixels, getTheme(isDarkMode).cell);
+            };
+        })
+        
+        performanceTracker.recordSample(elapsedMs, new Date());
     }, [ref, grid, cellSizePixels, visibleCellBounds, isDarkMode])
 }
 

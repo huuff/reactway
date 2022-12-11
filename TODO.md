@@ -1,5 +1,5 @@
 # Tasks
-* Tracking performance should take into account more stuff than ticking, such as rendering
+* eslint rule to force me to put semicolons at the end of all statements
 * Show population somewhere?
 * Make a page showing some guns like Gosper's Glider Gun
 * Try to make it so I don't need that `NoSsr` stuff... I think it comes from using `LocalStorage`?

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, WheelEvent } from "react";
+import { useContext, useEffect, useMemo, WheelEvent } from "react";
 import { defaultSettings, useSettings } from "../src/settings/settings";
 import { useDarkMode, useElementSize, useInterval, useToggle, useWindowSize } from "usehooks-ts";
 import { useRouter } from "next/router";
@@ -18,6 +18,7 @@ import classNames from "classnames";
 import SlowIndicator from "../src/components/SlowIndicator";
 import "animate.css";
 import SettingsDrawer from "../src/components/settings/SettingsDrawer";
+import { PerformanceTrackerContext } from "../src/hooks/use-performance-tracker";
 
 type GameProps = {
     readonly seed: string;
@@ -57,10 +58,14 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
         restart(getGridFactory(type)({ height, width, birthFactor, seed }));
     }, [height, width, birthFactor, seed, type, restart]);
 
+    // XXX. Remember not to remove this even if unused. I periodically use it to log to console
+    // average overhead
+    const performanceTracker = useContext(PerformanceTrackerContext);
     useInterval(() => {
         if (playback.isPlaying) {
             tick();
         }
+        console.log(`Average overhead: ${performanceTracker.averageOverhead}`);
     }, tickDuration);
 
     const router = useRouter();

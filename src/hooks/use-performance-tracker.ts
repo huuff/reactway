@@ -31,6 +31,7 @@ const allFeatures = [visibleAreaFeature, hoverFeature];
 type PerformanceTracker = {
     isSlow: boolean;
     averageOverhead: number;
+    // TODO: Do not take the time of record here, just add it on call
     recordSample: (timeSpentMs: SampleRecord["timeSpentMs"], timeOfRecord: SampleRecord["timeOfRecord"]) => void;
     disabledFeatures: Feature[];
     isDisabled: (feature: Feature["name"]) => boolean;
@@ -47,7 +48,7 @@ const BATCH_SLICE_DURATION = 1000;
 /**
  * When the average load starts to exceed this much, performance is considered to be degraded.
  */
-const MAX_EXPECTED_AVERAGE_OVERHEAD = 250;
+const MAX_EXPECTED_AVERAGE_OVERHEAD = 100;
 
 /**
  * Creates a performance tracker.

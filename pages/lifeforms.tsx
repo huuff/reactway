@@ -1,16 +1,14 @@
 import { useInterval } from "beautiful-react-hooks";
 import CanvasGameGrid from "../src/components/grid/CanvasGameGrid";
 import { useGrid } from "../src/game/use-grid";
-import NoSSR from "../src/components/util/ClientSideOnly";
 import { gridFromAscii } from "../src/util/create-grid-from-ascii";
 import { typesafeKeys } from "../src/util/typesafe-keys";
-import { ReactElement, useContext, useMemo } from "react";
+import { ReactElement, useMemo } from "react";
 import { useDarkMode } from "usehooks-ts";
 import { getTheme, Theme } from "../src/util/get-theme";
 import classNames from "classnames";
 import DarkModeSelector from "../src/components/settings/DarkModeSelector";
 import ScrollContainer from "react-indiana-drag-scroll";
-import { PerformanceTrackerContext } from "../src/hooks/use-performance-tracker";
 import SlowIndicator from "../src/components/SlowIndicator";
 
 // TODO: Make this responsive
@@ -194,7 +192,6 @@ function renderGrids(grids: AssortedGrids, lifeformType: keyof AssortedGrids, th
                 {Object.entries(grids[lifeformType]).map(([lifeformName, lifeform]) => (
                     <div key={lifeformName}>
                         <h3 className={`text-lg text-center mt-2 font-semibold text-${theme.text.className}`}>{lifeformName}</h3>
-                        <NoSSR>
                             { lifeformType === "Spaceships"
                                 ? <ScrollContainer className="w-40 h-25 mx-auto cursor-move">
                                     <CanvasGameGrid grid={lifeform.grid} toggleCell={lifeform.toggleCell} cellSize={2} />
@@ -202,7 +199,6 @@ function renderGrids(grids: AssortedGrids, lifeformType: keyof AssortedGrids, th
                                 : <CanvasGameGrid grid={lifeform.grid} toggleCell={lifeform.toggleCell} cellSize={2} />
                             }
                             
-                        </NoSSR>
                     </div>
                 ))}
 

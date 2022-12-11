@@ -8,6 +8,7 @@ import { useIsDragging } from "../../hooks/use-is-dragging";
 import { getTheme, LiveStatusDependent, ClassAndColor } from "../../util/get-theme";
 import { PerformanceTracker, PerformanceTrackerContext } from "../../hooks/use-performance-tracker";
 import { benchmark } from "../../util/benchmark-function";
+import useClientSideOnly from "../../hooks/use-client-side-only";
 
 const CELL_SIZE_MULTIPLIER = 8;
 
@@ -79,7 +80,7 @@ const CanvasGameGrid = ({
 
     useDrawGridEffect(gridCanvasRef, grid, cellSizePixels, visibleCellBounds, isDarkMode, recordSample);
 
-    const isDragging = useIsDragging();
+    const isDragging = useClientSideOnly(useIsDragging, false);
     const isMouseWithinGrid = useIsMouseWithinGrid(gridCanvasRef);
     const hoveredCell = useDebounce(useHoveredCell(grid, gridCanvasRef, cellSizePixels, isMouseWithinGrid, isDragging), 5);
     const previousHoveredCell = usePreviousValue(hoveredCell);
@@ -111,7 +112,7 @@ const CanvasGameGrid = ({
 };
 
 function useIsMouseWithinGrid(gridCanvasRef: RefObject<HTMLCanvasElement>): boolean {
-    const { clientX, clientY } = useMouseState();
+    const { clientX, clientY } = useClientSideOnly(useMouseState, { clientX: 0, clientY: 0, screenX: 0, screenY: 0});
     const boundingRect = gridCanvasRef.current?.getBoundingClientRect();
     if (!boundingRect) {
         return false;
@@ -161,7 +162,7 @@ const useHoveredCell = (
     isMouseWithinGrid: boolean,
     isDragging: boolean,
 ): Coordinates | null => {
-    const { clientX, clientY } = useMouseState();
+    const { clientX, clientY } = useClientSideOnly(useMouseState, { clientX: 0, clientY: 0, screenX: 0, screenY: 0});
 
     if (isDragging || !isMouseWithinGrid) {
         return null;

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useMemo, WheelEvent } from "react";
 import { defaultSettings, useSettings } from "../src/settings/settings";
-import { useDarkMode, useElementSize, useInterval, useToggle, useWindowSize } from "usehooks-ts";
+import { useDarkMode, useElementSize, useInterval, useWindowSize } from "usehooks-ts";
 import { useRouter } from "next/router";
 import { randomSeed } from "../src/util/birth-function";
 import { NextPage } from "next";

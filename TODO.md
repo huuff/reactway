@@ -1,4 +1,5 @@
 # Tasks
+* Import specific files everywhere rather than destructure imports (e.g. `import sum from "lodash/sum"` rather than `import { sum } from "lodash"`)
 * eslint rule to force me to put semicolons at the end of all statements
 * Show population somewhere?
 * Make a page showing some guns like Gosper's Glider Gun

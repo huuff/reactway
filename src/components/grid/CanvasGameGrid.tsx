@@ -207,7 +207,7 @@ function useDrawCanvasEffect(
             };
         })
         
-        performanceTracker.recordSample(elapsedMs, new Date());
+        performanceTracker.recordSample(elapsedMs);
     }, [ref, grid, cellSizePixels, visibleCellBounds, isDarkMode])
 }
 

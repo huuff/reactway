@@ -1,5 +1,5 @@
-import { useInterval } from "beautiful-react-hooks";
-import { sum } from "lodash";
+import useInterval from "beautiful-react-hooks/useInterval";
+import sum from "lodash/sum";
 import { createContext, useCallback, useMemo, useState } from "react";
 import { trimArray } from "../util/trim-array";
 
@@ -31,8 +31,7 @@ const allFeatures = [visibleAreaFeature, hoverFeature];
 type PerformanceTracker = {
     isSlow: boolean;
     averageOverhead: number;
-    // TODO: Do not take the time of record here, just add it on call
-    recordSample: (timeSpentMs: SampleRecord["timeSpentMs"], timeOfRecord: SampleRecord["timeOfRecord"]) => void;
+    recordSample: (timeSpentMs: SampleRecord["timeSpentMs"], timeOfRecord?: SampleRecord["timeOfRecord"]) => void;
     disabledFeatures: Feature[];
     isDisabled: (feature: Feature["name"]) => boolean;
     updateBatches: () => void;
@@ -60,11 +59,13 @@ const MAX_EXPECTED_AVERAGE_OVERHEAD = 100;
  * @returns The PerformanceTracker
  */
 function usePerformanceTracker(updateBatchesInInterval: boolean = true): PerformanceTracker {
-    const [ records, setRecords ] = useState<SampleRecord[]>([]);
-    const [ recordBatches, setRecordBatches ] = useState<number[][]>([]);
+    const [records, setRecords] = useState<SampleRecord[]>([]);
+    const [recordBatches, setRecordBatches] = useState<number[][]>([]);
 
     const recordSample = useCallback<PerformanceTracker["recordSample"]>((timeSpentMs, timeOfRecord) => {
-        setRecords((previousRecords) => trimArray([...previousRecords, { timeSpentMs, timeOfRecord }], 20).array)
+        setRecords((previousRecords) => {
+            return trimArray([...previousRecords, { timeSpentMs, timeOfRecord: timeOfRecord ?? new Date() }], 20).array;
+        });
     }, [setRecords])
 
     const updateBatches = useCallback(() => {
@@ -105,7 +106,7 @@ function usePerformanceTracker(updateBatchesInInterval: boolean = true): Perform
         if (recordBatches.length === 0) {
             return 0;
         }
-        
+
         return sum(recordBatches.map(
             (batchRecords) => sum(batchRecords))
         ) / recordBatches.length;
@@ -116,7 +117,7 @@ function usePerformanceTracker(updateBatchesInInterval: boolean = true): Perform
         let result: Feature[] = [];
 
         for (const feature of allFeatures) {
-            if (expectedOverhead > MAX_EXPECTED_AVERAGE_OVERHEAD + feature.expectedSavedMs*2) {
+            if (expectedOverhead > MAX_EXPECTED_AVERAGE_OVERHEAD + feature.expectedSavedMs * 2) {
                 expectedOverhead - feature.expectedSavedMs;
                 result.push(feature);
             }
@@ -133,14 +134,14 @@ function usePerformanceTracker(updateBatchesInInterval: boolean = true): Perform
 
     const reset = useCallback(() => setRecords([]), [setRecords]);
 
-    return { 
-        isSlow, 
+    return {
+        isSlow,
         averageOverhead,
         disabledFeatures,
-        isDisabled, 
-        updateBatches, 
-        recordSample, 
-        reset 
+        isDisabled,
+        updateBatches,
+        recordSample,
+        reset
     };
 }
 
@@ -148,11 +149,11 @@ function usePerformanceTracker(updateBatchesInInterval: boolean = true): Perform
 const PerformanceTrackerContext = createContext<PerformanceTracker>({
     isSlow: false,
     averageOverhead: 0,
-    recordSample: (x, y) => {},
+    recordSample: (x) => { },
     disabledFeatures: [],
     isDisabled: (f) => false,
-    updateBatches: () => {},
-    reset: () => {},
+    updateBatches: () => { },
+    reset: () => { },
 });
 
 export { usePerformanceTracker, PerformanceTrackerContext };

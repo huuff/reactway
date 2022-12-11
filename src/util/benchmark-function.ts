@@ -1,10 +1,14 @@
 type BenchmarkResult<T> = {
-    result: T;
-    elapsedMs: number;
+    readonly result: T;
+    readonly elapsedMs: number;
 }
 
-// TODO: Take an options object instead of parameters like logToConsole and name?
-const benchmark = <T>(f: () => T, logToConsole = false, name?: string): BenchmarkResult<T> => {
+type BenchmarkOptions = {
+    readonly logToConsole?: boolean;
+    readonly name?: string;
+}
+
+const benchmark = <T>(f: () => T, { logToConsole, name }: BenchmarkOptions = {}): BenchmarkResult<T> => {
     const startTime = performance.now();
     const result = f();
     const endTime = performance.now();

@@ -19,6 +19,7 @@ import SlowIndicator from "../src/components/SlowIndicator";
 import "animate.css";
 import SettingsDrawer from "../src/components/settings/SettingsDrawer";
 import { PerformanceTrackerContext } from "../src/hooks/use-performance-tracker";
+import PopulationCounter from "../src/components/settings/PopulationCounter";
 
 type GameProps = {
     readonly seed: string;
@@ -114,6 +115,7 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                 playback={playback}
                 startNewGame={startNewGame}
             />
+            <PopulationCounter population={grid.population} />
         </div>
     );
 };

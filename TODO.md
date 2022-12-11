@@ -1,5 +1,4 @@
 # Tasks
-* Show population somewhere?
 * Currently, the calculation of wether the game is being slow and disabling of features is acting weirdly and very rapidly changing.
 * Make a page showing some guns like Gosper's Glider Gun
 * Try to make it so I don't need that `NoSsr` stuff... I think it comes from using `LocalStorage`?

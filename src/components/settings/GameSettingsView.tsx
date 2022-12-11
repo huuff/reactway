@@ -63,6 +63,7 @@ const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps)
         dispatchSettings({ type: "changeCellSize", value: "decrement" });
     }, [dispatchSettings]);
 
+    // TODO: I broke this in dark mode! Set the background to white, which looks terrible
     return (
         <>
             <div className={`

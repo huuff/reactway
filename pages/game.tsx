@@ -6,7 +6,7 @@ import { randomSeed } from "../src/util/birth-function";
 import { NextPage } from "next";
 import { toStringObject } from "../src/util/to-string-object";
 import { getGridFactory } from "../src/grid/grid-factory";
-import NoSsr from "../src/components/util/NoSSR";
+import ClientSideOnly from "../src/components/util/ClientSideOnly";
 import { useGrid } from "../src/game/use-grid";
 import { usePlayback } from "../src/settings/use-playback";
 import GameGridView from "../src/components/grid/GameGridView";
@@ -93,14 +93,14 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                     { "cursor-move": isGridBiggerThanViewport },
                 )}
             >
-                <NoSsr>
+                <ClientSideOnly>
                     <GameGridView grid={grid}
                         view={view}
                         cellSize={cellSize}
                         toggleCell={toggleCell}
                         innerRef={gridRef}
                     />
-                </NoSsr>
+                </ClientSideOnly>
             </ScrollContainer>
 
             <DarkModeSelector />
@@ -115,7 +115,9 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                 playback={playback}
                 startNewGame={startNewGame}
             />
-            <PopulationCounter population={grid.population} />
+            <ClientSideOnly>
+                <PopulationCounter population={grid.population} />
+            </ClientSideOnly>
         </div>
     );
 };

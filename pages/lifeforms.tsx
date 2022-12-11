@@ -1,7 +1,7 @@
 import { useInterval } from "beautiful-react-hooks";
 import CanvasGameGrid from "../src/components/grid/CanvasGameGrid";
 import { useGrid } from "../src/game/use-grid";
-import NoSSR from "../src/components/util/NoSSR";
+import NoSSR from "../src/components/util/ClientSideOnly";
 import { gridFromAscii } from "../src/util/create-grid-from-ascii";
 import { typesafeKeys } from "../src/util/typesafe-keys";
 import { ReactElement, useContext, useMemo } from "react";

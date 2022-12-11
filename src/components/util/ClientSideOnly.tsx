@@ -5,10 +5,10 @@ type NoSsrProps = {
     children: ReactNode
 }
 
-const NoSsr = (props: NoSsrProps) => (
+const ClientSideOnly = (props: NoSsrProps) => (
   <React.Fragment>{props.children}</React.Fragment>
 );
 
-export default dynamic(() => Promise.resolve(NoSsr), {
+export default dynamic(() => Promise.resolve(ClientSideOnly), {
   ssr: false
 });

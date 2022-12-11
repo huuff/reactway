@@ -3,14 +3,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
 import { FC, useMemo } from "react";
 import { useDarkMode } from "usehooks-ts";
-import useClientSide from "../../hooks/use-client-side";
 import { getTheme } from "../../util/get-theme";
 
 const PopulationCounter: FC<{population: number}> = ({population}) => {
     const { isDarkMode } = useDarkMode();
     const theme = useMemo(() => getTheme(isDarkMode), [isDarkMode]);
-
-    const clientSidePopulation = useClientSide(() => population, 0);
 
     return (
         <div className={classNames(
@@ -27,7 +24,7 @@ const PopulationCounter: FC<{population: number}> = ({population}) => {
         )}
         >
             <FontAwesomeIcon icon={faPerson} className="w-3 mr-2"/>
-            <span>{ clientSidePopulation }</span>
+            <span>{ population }</span>
         </div>
     );
 };

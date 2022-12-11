@@ -9,6 +9,7 @@ import { useMemo } from "react";
 import { getTheme } from "../../util/get-theme";
 import { GameSettings, GameSettingsAction } from "../../settings/settings";
 import GameSettingsView from "./GameSettingsView";
+import ClientSideOnly from "../util/ClientSideOnly";
 
 type SettingsDrawerProps = {
     readonly playback: Playback;
@@ -22,14 +23,14 @@ type SettingsDrawerProps = {
 };
 
 const SettingsDrawer = ({
-     playback, 
-     historyLength, 
-     historyPosition, 
-     setHistoryPosition,
-     startNewGame,
-     settings,
-     dispatchSettings,
-     clear,
+    playback,
+    historyLength,
+    historyPosition,
+    setHistoryPosition,
+    startNewGame,
+    settings,
+    dispatchSettings,
+    clear,
 }: SettingsDrawerProps) => {
     const [isVisible, toggleVisible] = useToggle(true);
     const { isDarkMode } = useDarkMode();
@@ -71,10 +72,12 @@ const SettingsDrawer = ({
                         startNewGame={startNewGame}
                         clearGrid={clear}
                     />
-                    <GameSettingsView
-                        settings={settings}
-                        dispatchSettings={dispatchSettings}
-                    />
+                    <ClientSideOnly>
+                        <GameSettingsView
+                            settings={settings}
+                            dispatchSettings={dispatchSettings}
+                        />
+                    </ClientSideOnly>
                 </div>
             </CSSTransition>
             <button className={classNames(

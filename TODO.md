@@ -4,9 +4,3 @@
   * Do it for `TableGrid` too
   * Do it for `AsciiGrid` too
 * `MapGrid` and `ArrayGrid` tests are pretty much the same... can't I do some sort of property testing so I can pass the same parameters and just change the implementation?
-
-## Performance
-(Some ideas to improve ArrayGrid's performance)
-* Remove tuples from the grid's `get` signature... this will help avoid creating that many objects.
-* Store integers instead of booleans in the grid, and just go adding them instead of just doing `result++` (Is that faster? Well, I guess so, because of branching)
-* Store the whole grid on a single array, just adding the appropriate offsets to every access.

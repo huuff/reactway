@@ -1,5 +1,5 @@
 import useInterval from "beautiful-react-hooks/useInterval";
-import { createContext, useCallback, useMemo, useState } from "react";
+import { createContext, useCallback, useEffect, useMemo, useState } from "react";
 import { trimArray } from "../util/trim-array";
 import { SetOptional } from "type-fest";
 import sumBy from "lodash/sumBy";
@@ -129,23 +129,40 @@ function usePerformanceTracker(updateBatchesInInterval: boolean = true): Perform
         ) / recordBatches.length;
     }, [recordBatches]);
 
-    const disabledFeatures = useMemo(() => {
-        let expectedOverhead = averageOverhead;
-        let result: Feature[] = [];
+    const [ disabledFeatures, setDisabledFeatures ] = useState<Feature[]>([]);
 
+    // TODO: Test feature disabling
+    // TODO: This works rather well! But I should add the `disabledFeatures`, however, that causes an infinite
+    // loop
+    useEffect(() => {
+        const nextFeaturesToDisable: Feature[] = [];
+
+        let amortizedMaxOverhead = MAX_EXPECTED_AVERAGE_OVERHEAD;
         for (const feature of allFeatures) {
-            if (expectedOverhead > MAX_EXPECTED_AVERAGE_OVERHEAD + feature.expectedSavedMs * 2) {
-                expectedOverhead - feature.expectedSavedMs;
-                result.push(feature);
+            // If this feature is enabled
+            if (disabledFeatures.some((it) => it.name === feature.name)) {
+                // Then the maximum expected overhead must be lower, due to the savings the
+                // feature must be causing
+                amortizedMaxOverhead -= feature.expectedSavedMs;
+
+                // If the overhead is still higher than that, then we keep the feature disabled
+                if (averageOverhead > amortizedMaxOverhead) {
+                    nextFeaturesToDisable.push(feature);
+                }
+            } else if (averageOverhead > (amortizedMaxOverhead + feature.expectedSavedMs)) {
+                // If the overhead is high enough to warrant sufficient savings, we enable it
+                amortizedMaxOverhead -= feature.expectedSavedMs;
+                nextFeaturesToDisable.push(feature);
             }
         }
 
-        return result;
-    }, [averageOverhead]);
+        setDisabledFeatures(nextFeaturesToDisable);
+    }, [averageOverhead, setDisabledFeatures]);
 
     const isDisabled = useCallback((feature: Feature["name"]) => {
         return disabledFeatures.some((f) => f.name === feature);
     }, [disabledFeatures]);
+
 
     const isSlow = useMemo(() => averageOverhead > MAX_EXPECTED_AVERAGE_OVERHEAD, [averageOverhead]);
 

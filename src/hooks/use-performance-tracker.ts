@@ -41,11 +41,19 @@ type PerformanceTracker = {
     reset: () => void;
 }
 
+const NUMBER_OF_RECORDS_TO_KEEP = 70;
+
 /**
  * All time-tracked elements will be grouped into batches of this size to calculate
  * an average time spent doing calculations, renders, etc.
  */
 const BATCH_SLICE_DURATION = 1000;
+
+/**
+ * Number of batches that will be taken before measuring the average overhead.
+ * This means that the calculation will be done every BATCH_SLICE_DURATION * BATCHES_FOR_OVERHEAD_CALCULATION 
+ */
+const BATCHES_FOR_OVERHEAD_CALCULATION = 10;
 
 /**
  * When the average load starts to exceed this much, performance is considered to be degraded.
@@ -73,7 +81,7 @@ function usePerformanceTracker(updateBatchesInInterval: boolean = true): Perform
                 timeOfRecord: record.timeOfRecord ?? new Date(),
             };
 
-            return trimArray([...previousRecords, fullRecord], 20).array;
+            return trimArray([...previousRecords, fullRecord], NUMBER_OF_RECORDS_TO_KEEP).array;
         });
     }, [setRecords]);
 
@@ -108,7 +116,7 @@ function usePerformanceTracker(updateBatchesInInterval: boolean = true): Perform
         // eslint-disable-next-line react-hooks/rules-of-hooks
         useInterval(() => {
             updateBatches();
-        }, BATCH_SLICE_DURATION);
+        }, BATCH_SLICE_DURATION * BATCHES_FOR_OVERHEAD_CALCULATION);
     }
 
     const averageOverhead = useMemo(() => {

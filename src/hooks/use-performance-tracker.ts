@@ -2,8 +2,10 @@ import useInterval from "beautiful-react-hooks/useInterval";
 import sum from "lodash/sum";
 import { createContext, useCallback, useMemo, useState } from "react";
 import { trimArray } from "../util/trim-array";
+import { SetOptional } from "type-fest";
 
 type SampleRecord = {
+    event?: string;
     timeSpentMs: number;
     timeOfRecord: Date;
 }
@@ -31,7 +33,7 @@ const allFeatures = [visibleAreaFeature, hoverFeature];
 type PerformanceTracker = {
     isSlow: boolean;
     averageOverhead: number;
-    recordSample: (timeSpentMs: SampleRecord["timeSpentMs"], timeOfRecord?: SampleRecord["timeOfRecord"]) => void;
+    recordSample: (record: SetOptional<SampleRecord, "timeOfRecord">) => void;
     disabledFeatures: Feature[];
     isDisabled: (feature: Feature["name"]) => boolean;
     updateBatches: () => void;
@@ -62,9 +64,15 @@ function usePerformanceTracker(updateBatchesInInterval: boolean = true): Perform
     const [records, setRecords] = useState<SampleRecord[]>([]);
     const [recordBatches, setRecordBatches] = useState<number[][]>([]);
 
-    const recordSample = useCallback<PerformanceTracker["recordSample"]>((timeSpentMs, timeOfRecord) => {
+    const recordSample = useCallback<PerformanceTracker["recordSample"]>((record) => {
         setRecords((previousRecords) => {
-            return trimArray([...previousRecords, { timeSpentMs, timeOfRecord: timeOfRecord ?? new Date() }], 20).array;
+            const fullRecord: SampleRecord = {
+                timeSpentMs: record.timeSpentMs,
+                event: record.event,
+                timeOfRecord: record.timeOfRecord ?? new Date(),
+            };
+
+            return trimArray([...previousRecords, fullRecord], 20).array;
         });
     }, [setRecords]);
 

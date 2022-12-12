@@ -211,7 +211,7 @@ function useDrawGridEffect(
             };
         });
         
-        recordSample(elapsedMs);
+        recordSample({timeSpentMs: elapsedMs, event: "render", });
     }, [ref, grid, cellSizePixels, visibleCellBounds, isDarkMode, recordSample]);
 }
 

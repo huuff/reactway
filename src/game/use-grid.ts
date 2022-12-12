@@ -27,7 +27,7 @@ function useGrid(initialGrid: Grid): GridStateWrapper {
     const { recordSample: recordTick } = useContext(PerformanceTrackerContext);
 
     useEffect(() => {
-        tickHistory.lastTickDurationMs && recordTick(tickHistory.lastTickDurationMs, new Date());
+        tickHistory.lastTickDurationMs && recordTick({ timeSpentMs: tickHistory.lastTickDurationMs, timeOfRecord: new Date()});
     }, [tickHistory, recordTick]);
 
     return {

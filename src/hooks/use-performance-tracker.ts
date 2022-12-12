@@ -1,8 +1,9 @@
 import useInterval from "beautiful-react-hooks/useInterval";
-import sum from "lodash/sum";
 import { createContext, useCallback, useMemo, useState } from "react";
 import { trimArray } from "../util/trim-array";
 import { SetOptional } from "type-fest";
+import sumBy from "lodash/sumBy";
+import sum from "lodash/sum";
 
 type SampleRecord = {
     event?: string;
@@ -62,7 +63,7 @@ const MAX_EXPECTED_AVERAGE_OVERHEAD = 150;
  */
 function usePerformanceTracker(updateBatchesInInterval: boolean = true): PerformanceTracker {
     const [records, setRecords] = useState<SampleRecord[]>([]);
-    const [recordBatches, setRecordBatches] = useState<number[][]>([]);
+    const [recordBatches, setRecordBatches] = useState<SampleRecord[][]>([]);
 
     const recordSample = useCallback<PerformanceTracker["recordSample"]>((record) => {
         setRecords((previousRecords) => {
@@ -81,24 +82,24 @@ function usePerformanceTracker(updateBatchesInInterval: boolean = true): Perform
             return;
         }
 
-        const tickTimeBatches: number[][] = [];
+        const sampleBatches: SampleRecord[][] = [];
 
-        let currentBatch: number[] = [];
+        let currentBatch: SampleRecord[] = [];
         let currentBatchStartTime = records[0].timeOfRecord.getTime();
         for (const record of records) {
             if (record.timeOfRecord.getTime() > currentBatchStartTime + BATCH_SLICE_DURATION) {
-                tickTimeBatches.push(currentBatch);
-                currentBatch = [record.timeSpentMs];
+                sampleBatches.push(currentBatch);
+                currentBatch = [record];
                 currentBatchStartTime = record.timeOfRecord.getTime();
             } else {
-                currentBatch.push(record.timeSpentMs);
+                currentBatch.push(record);
             }
         }
         if (currentBatch.length !== 0) {
-            tickTimeBatches.push(currentBatch);
+            sampleBatches.push(currentBatch);
         }
 
-        setRecordBatches(tickTimeBatches);
+        setRecordBatches(sampleBatches);
     }, [setRecordBatches, records]);
 
     if (updateBatchesInInterval) {
@@ -116,7 +117,7 @@ function usePerformanceTracker(updateBatchesInInterval: boolean = true): Perform
         }
 
         return sum(recordBatches.map(
-            (batchRecords) => sum(batchRecords))
+            (batchRecords) => sumBy(batchRecords, (r) => r.timeSpentMs))
         ) / recordBatches.length;
     }, [recordBatches]);
 

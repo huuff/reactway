@@ -24,11 +24,15 @@ function useGrid(initialGrid: Grid): GridStateWrapper {
         dispatchTickHistory
     ] = useReducer(historyReducer, newDefaultTickHistory(initialGrid));
 
-    const { recordSample: recordTick } = useContext(PerformanceTrackerContext);
+    const { recordSample } = useContext(PerformanceTrackerContext);
 
     useEffect(() => {
-        tickHistory.lastTickDurationMs && recordTick({ timeSpentMs: tickHistory.lastTickDurationMs, timeOfRecord: new Date()});
-    }, [tickHistory, recordTick]);
+        tickHistory.lastTickDurationMs && recordSample({ 
+            timeSpentMs: tickHistory.lastTickDurationMs, 
+            timeOfRecord: new Date(),
+            event: "tick",
+        });
+    }, [tickHistory, recordSample]);
 
     return {
         grid: tickHistory.grid,

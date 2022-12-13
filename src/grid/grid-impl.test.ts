@@ -65,8 +65,6 @@ describe.each([
                                   ;
 
         // ACT & ASSERT
-        console.log(`Population: ${resultingGrid.population}`);
-        console.log(`Grid type: ${resultingGrid.type}`);
         expect(resultingGrid.population).toBe(3);
     });
 

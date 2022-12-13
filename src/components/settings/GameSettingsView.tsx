@@ -149,7 +149,7 @@ const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps)
                 </div>
 
                 <div className="flex justify-between">
-                    <label htmlFor="birth-factor" className="w-1/2 mr-2">Tick duration (ms):</label>
+                    <label htmlFor="tick-duration" className="w-1/2 mr-2">Tick duration (ms):</label>
                     <input
                         className={`w-1/4 bg-${theme.input.className}`}
                         type="number"

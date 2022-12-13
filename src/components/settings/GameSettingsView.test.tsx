@@ -32,9 +32,10 @@ describe("GameSettingsView", () => {
     test("it shows all correct settings", () => {
         render(<GameSettingsView settings={testSettings} dispatchSettings={jest.fn()} />);
 
-        expect(screen.getByRole("spinbutton", { name: "Width:" })).toHaveValue(10);
-        expect(screen.getByRole("spinbutton", { name: "Height:"})).toHaveValue(10);
         expect(screen.getByRole("combobox", { name: "View:"} )).toHaveValue("ascii");
         expect(screen.getByRole("combobox", { name: "Type:" })).toHaveValue("map");
+        expect(screen.getByRole("spinbutton", { name: "Width:" })).toHaveValue(10);
+        expect(screen.getByRole("spinbutton", { name: "Height:"})).toHaveValue(10);
+        expect(screen.getByRole("spinbutton", { name: "Birth factor:"})).toHaveValue(0.5);
     });
 });

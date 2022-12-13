@@ -44,23 +44,42 @@ describe("GameSettingsView", () => {
         expect(screen.getByText(/Cell size:/)).toHaveTextContent("3");
     });
 
-    // TODO: Finish this
     test("changing settings", () => {
         const mockDispatch = jest.fn();
         render(<GameSettingsView settings={testSettings} dispatchSettings={mockDispatch} />);
 
         fireEvent.change(screen.getByRole("combobox", { name: /View/ }), { target: { value: "canvas" } });
         expect(mockDispatch).toHaveBeenCalledWith({ type: "setView", value: "canvas" });
+        mockDispatch.mockClear();
+
         fireEvent.change(screen.getByRole("combobox", { name: /Type/}), { target: { value: "array"}} );
         expect(mockDispatch).toHaveBeenCalledWith({type: "setType", value: "array"});
+        mockDispatch.mockClear();
+
         fireEvent.change(screen.getByRole("spinbutton", { name: /Width/}), { target: { value: 50}});
         expect(mockDispatch).toHaveBeenCalledWith({type: "setWidth", value: 50 });
+        mockDispatch.mockClear();
+
         fireEvent.change(screen.getByRole("spinbutton", { name: /Height/}), { target: { value: 25}});
-        expect(mockDispatch).toHaveBeenCalledWith({type: "setHeight", value: 25});
+        expect(mockDispatch).toHaveBeenCalledWith({type: "setHeight", value: 25});        mockDispatch.mockClear();
+        mockDispatch.mockClear();
+
         fireEvent.change(screen.getByRole("spinbutton", { name: /Birth factor/ }), { target: { value: 0.7 }});
         expect(mockDispatch).toHaveBeenCalledWith({type: "setBirthFactor", value: 0.7});
+        mockDispatch.mockClear();
+
         fireEvent.change(screen.getByRole("spinbutton", { name: /Tick duration/}), { target: { value: 2000 }});
         expect(mockDispatch).toHaveBeenCalledWith({type: "setTickDuration", value: 2000});
+        mockDispatch.mockClear();
+
+        fireEvent.click(screen.getByTitle("decrease cell size"), { bubbles: true});
+        expect(mockDispatch).toHaveBeenCalledWith({type: "changeCellSize", value: "decrement"});
+        mockDispatch.mockClear();
+
+        fireEvent.click(screen.getByTitle("increase cell size"), { bubbles: true});
+        expect(mockDispatch).toHaveBeenCalledWith({type: "changeCellSize", value: "increment"});
+        mockDispatch.mockClear();
+
     });
 
 });

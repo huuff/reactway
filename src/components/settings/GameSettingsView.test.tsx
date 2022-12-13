@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { defaultSettings, GameSettings } from "../../settings/settings";
 import GameSettingsView from "./GameSettingsView";
+import * as usehooks from "usehooks-ts";
 
 const testSettings: GameSettings = {
     height: 10,
@@ -27,6 +28,8 @@ Object.defineProperty(window, 'matchMedia', {
     })),
 });
 
+jest.spyOn(usehooks, "useDebounce").mockImplementation((v) => v);
+
 describe("GameSettingsView", () => {
 
     test("it shows all correct settings", () => {
@@ -51,14 +54,11 @@ describe("GameSettingsView", () => {
 
         fireEvent.change(screen.getByRole("combobox", { name: /Type/}), { target: { value: "array"}} );
         expect(mockDispatch).toHaveBeenCalledWith({type: "setType", value: "array"});
-
-        // TODO: These are failing (because of debouncing?)
-        /*
         fireEvent.change(screen.getByRole("spinbutton", { name: /Width/}), { target: { value: 50}});
         expect(mockDispatch).toHaveBeenCalledWith({type: "setWidth", value: 50 });
         fireEvent.change(screen.getByRole("spinbutton", { name: /Height/}), { target: { value: 25}});
         expect(mockDispatch).toHaveBeenCalledWith({type: "setHeight", value: 25});
-        */
+        
     });
 
 });

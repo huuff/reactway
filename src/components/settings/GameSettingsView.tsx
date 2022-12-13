@@ -79,6 +79,7 @@ const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps)
                     <label htmlFor="view" className="w-1/2 mr-2">View:</label>
                     <select
                         className={`w-1/4 bg-${theme.input.className}`}
+                        id="view"
                         name="view"
                         onChange={handleViewSettingsChange}
                         value={settings.view}
@@ -93,6 +94,7 @@ const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps)
                     <label htmlFor="type" className="w-1/2 mr-2">Type:</label>
                     <select
                         className={`w-1/4 bg-${theme.input.className}`}
+                        id="type"
                         name="type"
                         onChange={handleTypeSettingsChange}
                         value={settings.type}
@@ -108,6 +110,7 @@ const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps)
                     <input
                         className={`w-1/4 bg-${theme.input.className}`}
                         type="number"
+                        id="height"
                         name="height"
                         min="5"
                         max="500"
@@ -121,6 +124,7 @@ const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps)
                     <input
                         className={`w-1/4 bg-${theme.input.className}`}
                         type="number"
+                        id="width"
                         name="width"
                         min="5"
                         max="500"
@@ -134,6 +138,7 @@ const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps)
                     <input
                         className={`w-1/4 bg-${theme.input.className}`}
                         type="number"
+                        id="birth-factor"
                         name="birth-factor"
                         step="0.05"
                         min="0"
@@ -148,6 +153,7 @@ const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps)
                     <input
                         className={`w-1/4 bg-${theme.input.className}`}
                         type="number"
+                        id="tick-duration"
                         name="tick-duration"
                         step="100"
                         min="100"

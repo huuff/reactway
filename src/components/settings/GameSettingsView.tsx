@@ -170,6 +170,7 @@ const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps)
                         <FontAwesomeIcon
                             icon={faMinus}
                             className="h-4 mx-auto"
+                            data-fa-title-id="decrease cell size"
                         />
                     </div>
                     <p className="w-1/2 text-center">Cell size: {settings.cellSize}</p>
@@ -179,6 +180,7 @@ const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps)
                         <FontAwesomeIcon
                             icon={faPlus}
                             className="h-4 mx-auto"
+                            data-fa-title-id="increase cell size"
                         />
                     </div>
                 </div>

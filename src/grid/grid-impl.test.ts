@@ -1,33 +1,32 @@
 import tuple from "immutable-tuple";
 import { fakeConwayStrategy } from "../util/testing";
+import { ArrayGrid } from "./array-grid";
 import { MapGrid } from "./map-grid";
+import { SetGrid } from "./set-grid";
 
-describe("MapGrid", () => {
+describe.each([
+    SetGrid.create,
+    ArrayGrid.create,
+    MapGrid.create
+])("Grid implementations", (createGrid) => {
+    const grid = createGrid({
+        height: 5,
+        width: 5,
+        birthFactor: 0,
+        seed: "SEED",
+    });
 
     test("height and width are correct", () => {
-        const grid = MapGrid.create({
-            height: 5,
-            width: 5,
-            birthFactor: 0,
-            seed: "SEED",
-        });
-
         expect(grid.height).toBe(5);
         expect(grid.width).toBe(5);
     });
 
     test("correctly ticks and gets", () => {
         // ARRANGE
-        const grid = MapGrid.create({
-            height: 5,
-            width: 5,
-            birthFactor: 0,
-            seed: "SEED",
-        });
+        const conwayStrategy = fakeConwayStrategy([tuple(2, 3), tuple(2, 1), tuple(3, 2), tuple(3,3), tuple(4, 2)]);
 
         // ACT
-        const nextAliveCells = fakeConwayStrategy([tuple(2, 3), tuple(2, 1), tuple(3, 2), tuple(3,3), tuple(4, 2)]);
-        const nextStepGrid = grid.tick(nextAliveCells);
+        const nextStepGrid = grid.tick(conwayStrategy);
 
         // ASSERT
         expect(nextStepGrid.get(tuple(2, 2))).toBe(false);
@@ -36,27 +35,22 @@ describe("MapGrid", () => {
         expect(nextStepGrid.get(tuple(3, 2))).toBe(true);
     });
 
+
     test("toggle", () => {
         // ARRANGE
         const [toggledX, toggledY] = [2, 2];
-        const initialGrid = MapGrid.create({
-            height: 5,
-            width: 5,
-            birthFactor: 0,
-            seed: "SEED",
-        });
 
         // SANITY CHECK
-        expect(initialGrid.get(tuple(toggledX, toggledY))).toBe(false);
+        expect(grid.get(tuple(toggledX, toggledY))).toBe(false);
 
         // ACT
-        const toggledGrid = initialGrid.toggle(tuple(toggledX, toggledY));
+        const toggledGrid = grid.toggle(tuple(toggledX, toggledY));
 
         // ASSERT
         expect(toggledGrid.get(tuple(toggledX, toggledY))).toBe(true);
         for (const { coordinates: [x, y] } of toggledGrid) {
             if (x !== toggledX || y !== toggledY) {
-                expect(toggledGrid.get(tuple(x, y))).toBe(initialGrid.get(tuple(x, y)));
+                expect(toggledGrid.get(tuple(x, y))).toBe(grid.get(tuple(x, y)));
             }
         }
         

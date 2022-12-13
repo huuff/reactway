@@ -37,5 +37,7 @@ describe("GameSettingsView", () => {
         expect(screen.getByRole("spinbutton", { name: "Width:" })).toHaveValue(10);
         expect(screen.getByRole("spinbutton", { name: "Height:"})).toHaveValue(10);
         expect(screen.getByRole("spinbutton", { name: "Birth factor:"})).toHaveValue(0.5);
+        expect(screen.getByRole("spinbutton", { name: "Tick duration (ms):"})).toHaveValue(1000);
+        expect(screen.getByText(/Cell size:/)).toHaveTextContent("3");
     });
 });

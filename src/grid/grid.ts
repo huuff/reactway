@@ -32,7 +32,6 @@ abstract class Grid {
     /**
      * Gives the number of cells that are currently alive
      */
-    // TODO: Test it
     abstract readonly population: number;
 
     /**

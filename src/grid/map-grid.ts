@@ -54,7 +54,7 @@ class MapGrid extends Grid {
         this.population = population ?? (() => {
             let population = 0;
             for (const isAlive of internalGrid.values()) {
-                population++;
+                isAlive && population++;
             }
             return population;
         })();

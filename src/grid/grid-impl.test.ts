@@ -56,4 +56,18 @@ describe.each([
         
     });
 
+    test("population", () => {
+        // ARRANGE
+        // First, we turn some cells on (so there's some population to speak of)
+        const resultingGrid = grid.toggle(tuple(1, 1))
+                                  .toggle(tuple(1, 0))
+                                  .toggle(tuple(2, 2))
+                                  ;
+
+        // ACT & ASSERT
+        console.log(`Population: ${resultingGrid.population}`);
+        console.log(`Grid type: ${resultingGrid.type}`);
+        expect(resultingGrid.population).toBe(3);
+    });
+
 });

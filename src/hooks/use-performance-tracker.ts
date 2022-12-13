@@ -131,7 +131,6 @@ function usePerformanceTracker(updateBatchesInInterval: boolean = true): Perform
 
     const [ disabledFeatures, setDisabledFeatures ] = useState<Feature[]>([]);
 
-    // TODO: Test feature disabling
     useEffect(() => {
         setDisabledFeatures((currentDisabledFeatures) => {
             const nextFeaturesToDisable: Feature[] = [];

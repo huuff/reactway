@@ -132,31 +132,31 @@ function usePerformanceTracker(updateBatchesInInterval: boolean = true): Perform
     const [ disabledFeatures, setDisabledFeatures ] = useState<Feature[]>([]);
 
     // TODO: Test feature disabling
-    // TODO: This works rather well! But I should add the `disabledFeatures`, however, that causes an infinite
-    // loop
     useEffect(() => {
-        const nextFeaturesToDisable: Feature[] = [];
+        setDisabledFeatures((currentDisabledFeatures) => {
+            const nextFeaturesToDisable: Feature[] = [];
 
-        let amortizedMaxOverhead = MAX_EXPECTED_AVERAGE_OVERHEAD;
-        for (const feature of allFeatures) {
-            // If this feature is enabled
-            if (disabledFeatures.some((it) => it.name === feature.name)) {
-                // Then the maximum expected overhead must be lower, due to the savings the
-                // feature must be causing
-                amortizedMaxOverhead -= feature.expectedSavedMs;
-
-                // If the overhead is still higher than that, then we keep the feature disabled
-                if (averageOverhead > amortizedMaxOverhead) {
+            let amortizedMaxOverhead = MAX_EXPECTED_AVERAGE_OVERHEAD;
+            for (const feature of allFeatures) {
+                // If this feature is enabled
+                if (currentDisabledFeatures.some((it) => it.name === feature.name)) {
+                    // Then the maximum expected overhead must be lower, due to the savings the
+                    // feature must be causing
+                    amortizedMaxOverhead -= feature.expectedSavedMs;
+    
+                    // If the overhead is still higher than that, then we keep the feature disabled
+                    if (averageOverhead > amortizedMaxOverhead) {
+                        nextFeaturesToDisable.push(feature);
+                    }
+                } else if (averageOverhead > (amortizedMaxOverhead + feature.expectedSavedMs)) {
+                    // If the overhead is high enough to warrant sufficient savings, we enable it
+                    amortizedMaxOverhead -= feature.expectedSavedMs;
                     nextFeaturesToDisable.push(feature);
                 }
-            } else if (averageOverhead > (amortizedMaxOverhead + feature.expectedSavedMs)) {
-                // If the overhead is high enough to warrant sufficient savings, we enable it
-                amortizedMaxOverhead -= feature.expectedSavedMs;
-                nextFeaturesToDisable.push(feature);
             }
-        }
 
-        setDisabledFeatures(nextFeaturesToDisable);
+            return nextFeaturesToDisable;
+        });
     }, [averageOverhead, setDisabledFeatures]);
 
     const isDisabled = useCallback((feature: Feature["name"]) => {

@@ -3,6 +3,7 @@ import { PerformanceTrackerContext } from "../hooks/use-performance-tracker";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
 import { useContext } from "react";
+import { isEmpty } from "lodash";
 
 type SlowIndicatorProps = {
     resetSettings: () => void;
@@ -12,7 +13,9 @@ type SlowIndicatorProps = {
 const SlowIndicator = ({ resetSettings }: SlowIndicatorProps) => {
     const tracker = useContext(PerformanceTrackerContext);
 
-    if (!tracker.isSlow) {
+    const isSlow = tracker.isSlow || !isEmpty(tracker.disabledFeatures);
+
+    if (!isSlow) {
         return null;
     }
 

@@ -5,7 +5,7 @@ import GameSettingsView from "./GameSettingsView";
 const testSettings: GameSettings = {
     height: 10,
     width: 10,
-    birthFactor: 0.2,
+    birthFactor: 0.5,
     tickDuration: 1000,
     cellSize: 3,
     view: "ascii",
@@ -32,10 +32,9 @@ describe("GameSettingsView", () => {
     test("it shows all correct settings", () => {
         render(<GameSettingsView settings={testSettings} dispatchSettings={jest.fn()} />);
 
-        expect(
-            (within(
-                screen.getByLabelText("View:"))
-                      .getByRole("option", { name: "ascii" }) as HTMLOptionElement
-        ).selected).toBe(true);
+        expect(screen.getByRole("spinbutton", { name: "Width:" })).toHaveValue(10);
+        expect(screen.getByRole("spinbutton", { name: "Height:"})).toHaveValue(10);
+        expect(screen.getByRole("combobox", { name: "View:"} )).toHaveValue("ascii");
+        expect(screen.getByRole("combobox", { name: "Type:" })).toHaveValue("map");
     });
 });

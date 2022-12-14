@@ -5,6 +5,7 @@ import { StringObject, toStringObject } from "../util/to-string-object";
 import { useLocalStorage } from "usehooks-ts";
 import { ParsedUrlQuery } from "querystring";
 import { useEvent } from "react-use-event-hook"; // XXX: Maybe use the real thing once it's released
+import clamp from "lodash/clamp";
 
 type GameSettings = {
     readonly height: number;
@@ -100,13 +101,7 @@ const MAXIMUMS: SettingsLimits = {
 
 // Returns the value if it fits the bounds, or the bound (minimum or maximum) otherwise
 function coerceWithinBounds(setting: keyof SettingsLimits, value: number): number {
-    if (value < MINIMUMS[setting]) {
-        return MINIMUMS[setting];
-    } else if (value > MAXIMUMS[setting]) {
-        return MAXIMUMS[setting];
-    } else {
-        return value;
-    }
+    return clamp(value, MINIMUMS[setting], MAXIMUMS[setting]);
 }
 
 

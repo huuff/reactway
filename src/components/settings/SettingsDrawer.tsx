@@ -22,6 +22,7 @@ type SettingsDrawerProps = {
     readonly clear: () => void;
 };
 
+// TODO: Maybe test showing and hiding? Maybe with shallow rendering?
 const SettingsDrawer = ({
     playback,
     historyLength,

@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef } from "react";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
-// TODO: Test
 const DarkModeSelector = () => {
     const { isDarkMode, toggle } = useDarkMode();
     const iconRef = useRef<IconProp>();
@@ -30,10 +29,12 @@ const DarkModeSelector = () => {
             -z-100
             ${isDarkMode ? "bg-slate-600" : "bg-slate-100"}
             `} 
+                aria-label="toggle dark mode"
                 onClick={toggle}>
             {iconRef.current && <FontAwesomeIcon 
-                    icon={iconRef.current} 
-                    className={`w-4 h-4 ${isDarkMode ? "text-yellow-300" : "text-slate-900"}`}
+                                        icon={iconRef.current} 
+                                        className={`w-4 h-4 ${isDarkMode ? "text-yellow-300" : "text-slate-900"}`}
+                                        title={isDarkMode ? "moon" : "sun"}
                 />}
         </button>
     );

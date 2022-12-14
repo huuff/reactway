@@ -35,4 +35,16 @@ describe("SlowIndicator", () => {
 
         expect(screen.queryByText("Ticking is slow")).toBeInTheDocument();
     });
+
+    test("no list of disabled features is shown when there are none", () => {
+        const slowTracker = { ...fakePerformanceTracker, isSlow: true, disabledFeatures: [] };
+
+        render(
+            <PerformanceTrackerContext.Provider value={slowTracker}>
+                <SlowIndicator resetSettings={jest.fn()} />
+            </PerformanceTrackerContext.Provider>
+        );
+
+        expect(screen.queryAllByRole("listitem")).toStrictEqual([]);
+    });
 });

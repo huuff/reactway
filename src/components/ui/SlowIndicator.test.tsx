@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { PerformanceTracker, PerformanceTrackerContext } from "../../hooks/use-performance-tracker";
 import SlowIndicator from "./SlowIndicator";
 
@@ -72,9 +72,22 @@ describe("SlowIndicator", () => {
             </PerformanceTrackerContext.Provider>
         );
 
-        screen.debug();
         const items = screen.queryAllByRole("listitem");
         expect(items[0]).toHaveTextContent(trackerWithDisabledFeatures.disabledFeatures[0].description);
         expect(items[1]).toHaveTextContent(trackerWithDisabledFeatures.disabledFeatures[1].description);
+    });
+
+    test("clicking on the reset button resets settings", () => {
+        const slowTracker = { ...fakePerformanceTracker, isSlow: true };
+        const resetSettings = jest.fn();
+
+        render(
+            <PerformanceTrackerContext.Provider value={slowTracker}>
+                <SlowIndicator resetSettings={resetSettings} />
+            </PerformanceTrackerContext.Provider>
+        );
+
+        fireEvent.click(screen.getByText(/Click here/), { bubbles: true });
+        expect(resetSettings).toHaveBeenCalledTimes(1);
     });
 });

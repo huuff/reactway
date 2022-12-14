@@ -22,7 +22,6 @@ type SettingsDrawerProps = {
     readonly clear: () => void;
 };
 
-// TODO: Maybe test showing and hiding? Maybe with shallow rendering?
 const SettingsDrawer = ({
     playback,
     historyLength,
@@ -47,25 +46,27 @@ const SettingsDrawer = ({
                 exitDone: "translate-y-48",
             }} timeout={500}>
                 <div className={`
-            animate__animated
-            fixed
-            bottom-0 
-            inset-x-0 
-            mx-auto 
-            w-96
-            mb-2
-            z-20
-            `}>
+                    animate__animated
+                    fixed
+                    bottom-0 
+                    inset-x-0 
+                    mx-auto 
+                    w-96
+                    mb-2
+                    z-20
+                `}
+                data-testid="drawer"
+                >
                     <PlayBar
                         className={`
-                border
-                rounded-lg 
-                drop-shadow-lg
-                bg-${theme.windowBackground.className}
-                p-2 
-                mb-2 
-                opacity-90 
-                `}
+                            border
+                            rounded-lg 
+                            drop-shadow-lg
+                            bg-${theme.windowBackground.className}
+                            p-2 
+                            mb-2 
+                            opacity-90 
+                        `}
                         playback={playback}
                         historyPosition={historyPosition}
                         setHistoryPosition={setHistoryPosition}
@@ -99,7 +100,7 @@ const SettingsDrawer = ({
                 "block",
             )}
                 onClick={toggleVisible}>
-                <FontAwesomeIcon icon={drawerIcon} className="w-6 h-3 mx-auto" />
+                <FontAwesomeIcon icon={drawerIcon} className="w-6 h-3 mx-auto" title="toggle-drawer" />
             </button>
         </>
     );

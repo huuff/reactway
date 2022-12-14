@@ -73,7 +73,7 @@ const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps)
                     text-${theme.text.className}
                     p-2
                     opacity-90
-                `} >
+                `}>
                 <div className="flex justify-between">
                     <label htmlFor="view" className="w-1/2 mr-2">View:</label>
                     <select

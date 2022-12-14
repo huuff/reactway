@@ -4,12 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef } from "react";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
-type DarkModeSelectorProps = {
-    className?: string;
-}
-
 // TODO: Test
-const DarkModeSelector = ({ className }: DarkModeSelectorProps) => {
+const DarkModeSelector = () => {
     const { isDarkMode, toggle } = useDarkMode();
     const iconRef = useRef<IconProp>();
 

@@ -47,4 +47,34 @@ describe("SlowIndicator", () => {
 
         expect(screen.queryAllByRole("listitem")).toStrictEqual([]);
     });
+
+    test("disabled features are shown", () => {
+        const trackerWithDisabledFeatures: PerformanceTracker = {
+            ...fakePerformanceTracker,
+            isSlow: true,
+            disabledFeatures: [
+                {
+                    name: "hover",
+                    description: "first disabled feature",
+                    expectedSavedMs: 0
+                },
+                {
+                    name: "visible",
+                    description: "second disabled feature",
+                    expectedSavedMs: 0,
+                }
+            ],
+        };
+
+        render(
+            <PerformanceTrackerContext.Provider value={trackerWithDisabledFeatures}>
+                <SlowIndicator resetSettings={jest.fn()} />
+            </PerformanceTrackerContext.Provider>
+        );
+
+        screen.debug();
+        const items = screen.queryAllByRole("listitem");
+        expect(items[0]).toHaveTextContent(trackerWithDisabledFeatures.disabledFeatures[0].description);
+        expect(items[1]).toHaveTextContent(trackerWithDisabledFeatures.disabledFeatures[1].description);
+    });
 });

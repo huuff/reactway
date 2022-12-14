@@ -79,7 +79,5 @@ describe("GameSettingsView", () => {
         fireEvent.click(screen.getByTitle("increase cell size"), { bubbles: true});
         expect(mockDispatch).toHaveBeenCalledWith({type: "changeCellSize", value: "increment"});
         mockDispatch.mockClear();
-
     });
-
 });

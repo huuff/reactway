@@ -37,7 +37,6 @@ function useNumberSetting<T extends Exclude<NumberGameSetting, "cellSize">>(
     return { value, onChange, setValue };
 }
 
-// TODO: Test it?
 const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps) => {
     const { isDarkMode } = useDarkMode();
     const theme = useMemo(() => getTheme(isDarkMode), [isDarkMode]);

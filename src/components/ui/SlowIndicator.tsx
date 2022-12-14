@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { PerformanceTrackerContext } from "../hooks/use-performance-tracker";
+import { PerformanceTrackerContext } from "../../hooks/use-performance-tracker";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
 import { useContext } from "react";

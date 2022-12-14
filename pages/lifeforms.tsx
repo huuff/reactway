@@ -9,7 +9,7 @@ import { getTheme, Theme } from "../src/util/get-theme";
 import classNames from "classnames";
 import DarkModeSelector from "../src/components/settings/DarkModeSelector";
 import ScrollContainer from "react-indiana-drag-scroll";
-import SlowIndicator from "../src/components/SlowIndicator";
+import SlowIndicator from "../src/components/ui/SlowIndicator";
 
 // TODO: Make this responsive
 const INITIAL_GRIDS = {

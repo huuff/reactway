@@ -15,7 +15,7 @@ import ScrollContainer from "react-indiana-drag-scroll";
 import DarkModeSelector from "../src/components/settings/DarkModeSelector";
 import { getTheme } from "../src/util/get-theme";
 import classNames from "classnames";
-import SlowIndicator from "../src/components/SlowIndicator";
+import SlowIndicator from "../src/components/ui/SlowIndicator";
 import "animate.css";
 import SettingsDrawer from "../src/components/settings/SettingsDrawer";
 import { PerformanceTrackerContext } from "../src/hooks/use-performance-tracker";

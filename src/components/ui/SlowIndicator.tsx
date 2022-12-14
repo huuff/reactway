@@ -9,7 +9,6 @@ type SlowIndicatorProps = {
     resetSettings: () => void;
 }
 
-// TODO: Test dismissing
 const SlowIndicator = ({ resetSettings }: SlowIndicatorProps) => {
     const tracker = useContext(PerformanceTrackerContext);
 

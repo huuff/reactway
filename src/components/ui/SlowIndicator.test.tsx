@@ -90,4 +90,21 @@ describe("SlowIndicator", () => {
         fireEvent.click(screen.getByText(/Click here/), { bubbles: true });
         expect(resetSettings).toHaveBeenCalledTimes(1);
     });
+
+    test("dismissing", () => {
+        const slowTracker = { ...fakePerformanceTracker, isSlow: true };
+        
+        render(
+            <PerformanceTrackerContext.Provider value={slowTracker}>
+                <SlowIndicator resetSettings={jest.fn()} />
+            </PerformanceTrackerContext.Provider>
+        );
+
+        // Sanity check: It's initally shown
+        expect(screen.queryByText(/Ticking is slow/)).toBeInTheDocument();
+
+        fireEvent.click(screen.getByRole("close"), { bubbles: true} );
+
+        expect(screen.queryByText(/Ticking is slow/)).not.toBeInTheDocument();
+    });
 });

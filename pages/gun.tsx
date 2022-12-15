@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { ChangeEvent, useCallback, useMemo, useState } from "react";
+import { ChangeEvent, useMemo, useState } from "react";
 import { useDarkMode, useInterval } from "usehooks-ts";
 import CanvasGameGrid from "../src/components/grid/CanvasGameGrid";
 import DarkModeSelector from "../src/components/settings/DarkModeSelector";
@@ -78,7 +78,7 @@ const Gun = () => {
             "text-3xl",
             "font-bold",
             "text-center", 
-            "mb-10",
+            "mb-8",
             `text-${theme.text.className}`,
             )}
         >Gosper glider gun</header>
@@ -91,7 +91,7 @@ const Gun = () => {
             "md:px-48",
             `text-${theme.text.className}`,
             )}>
-            The glider gun creates and releases an endless stream of gliders that wander into the void.
+            The glider gun releases an endless stream of gliders that wander into the void.
             <br/>
             Sit back, relax, and enjoy the beauty of such a device.
         </p>

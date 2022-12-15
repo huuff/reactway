@@ -187,18 +187,18 @@ function renderGrids(grids: AssortedGrids, lifeformType: keyof AssortedGrids, th
                 "px-3",
                 "pb-4",
                 "shadow-lg",
-                )}>
+            )}>
 
                 {Object.entries(grids[lifeformType]).map(([lifeformName, lifeform]) => (
                     <div key={lifeformName}>
                         <h3 className={`text-lg text-center mt-2 font-semibold text-${theme.text.className}`}>{lifeformName}</h3>
-                            { lifeformType === "Spaceships"
-                                ? <ScrollContainer className="w-40 h-25 mx-auto cursor-move">
-                                    <CanvasGameGrid grid={lifeform.grid} toggleCell={lifeform.toggleCell} cellSize={2} />
-                                  </ScrollContainer>
-                                : <CanvasGameGrid grid={lifeform.grid} toggleCell={lifeform.toggleCell} cellSize={2} />
-                            }
-                            
+                        {lifeformType === "Spaceships"
+                            ? <ScrollContainer className="w-40 h-25 mx-auto cursor-move">
+                                <CanvasGameGrid grid={lifeform.grid} toggleCell={lifeform.toggleCell} cellSize={2} />
+                            </ScrollContainer>
+                            : <CanvasGameGrid grid={lifeform.grid} toggleCell={lifeform.toggleCell} cellSize={2} />
+                        }
+
                     </div>
                 ))}
 
@@ -224,15 +224,30 @@ const Lifeforms = () => {
         <>
             <div className={`min-h-screen bg-${theme.windowBackground.className}`}>
                 <DarkModeSelector />
-                <SlowIndicator resetSettings={() => {}}/>
+                <SlowIndicator resetSettings={() => { }} />
                 <header className={classNames(
                     "text-3xl",
                     "font-bold",
-                    "text-center", 
-                    "mb-10",
+                    "text-center",
+                    "mb-5",
                     `text-${theme.text.className}`,
-                    )}
+                )}
                 >Lifeforms</header>
+                <p className={classNames(
+                    "font-light",
+                    "italic",
+                    "text-center",
+                    "mb-5",
+                    "sm:px-24",
+                    "md:px-48",
+                    `text-${theme.text.className}`,
+                )}>
+                    The grid belongs to its inhabitants.
+                    <br />
+                    They possess the power to choose its fate.
+                    <br />
+                    But they prefer to preserve the balance.
+                </p>
                 <main className="flex flex-row justify-evenly">
                     {renderGrids(grids, "Still Life", theme)}
                     {renderGrids(grids, "Oscillators", theme)}

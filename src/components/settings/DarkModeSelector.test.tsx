@@ -23,4 +23,18 @@ describe("DarkModeSelector", () => {
 
         expect(toggle).toHaveBeenCalledTimes(1);
     });
+
+    test("when dark, the icon is a moon", async () => {
+        await preloadAll();
+        jest.spyOn(usehooks, "useDarkMode").mockImplementationOnce(() => ({
+            isDarkMode: true,
+            toggle: jest.fn(),
+            enable: jest.fn(),
+            disable: jest.fn(),
+        }));
+
+        render(<DarkModeSelector />);
+        
+        expect(screen.getByTitle("moon")).toBeInTheDocument();
+    });
 });

@@ -28,8 +28,8 @@ module.exports =  {
       className: "light-text-color",
       color: "#0F172A",
     },
-    input: {
-      className: "light-input-background",
+    panel: {
+      className: "light-panel-background",
       color: "#E2E8F0",
     },
     button: {
@@ -69,8 +69,8 @@ module.exports =  {
       className: "dark-text-color",
       color: "#F1F5F9",
     },
-    input: {
-      className: "dark-input-background",
+    panel: {
+      className: "dark-panel-background",
       color: "#334155",
     },
     button: {

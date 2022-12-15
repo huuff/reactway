@@ -77,7 +77,7 @@ const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps)
                 <div className="flex justify-between">
                     <label htmlFor="view" className="w-1/2 mr-2">View:</label>
                     <select
-                        className={`w-1/4 bg-${theme.input.className}`}
+                        className={`w-1/4 bg-${theme.panel.className}`}
                         id="view"
                         name="view"
                         onChange={handleViewSettingsChange}
@@ -92,7 +92,7 @@ const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps)
                 <div className="flex justify-between">
                     <label htmlFor="type" className="w-1/2 mr-2">Type:</label>
                     <select
-                        className={`w-1/4 bg-${theme.input.className}`}
+                        className={`w-1/4 bg-${theme.panel.className}`}
                         id="type"
                         name="type"
                         onChange={handleTypeSettingsChange}
@@ -107,7 +107,7 @@ const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps)
                 <div className="flex justify-between">
                     <label htmlFor="height" className="w-1/2 mr-2">Height:</label>
                     <input
-                        className={`w-1/4 bg-${theme.input.className}`}
+                        className={`w-1/4 bg-${theme.panel.className}`}
                         type="number"
                         id="height"
                         name="height"
@@ -121,7 +121,7 @@ const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps)
                 <div className="flex justify-between">
                     <label htmlFor="width" className="w-1/2 mr-2">Width:</label>
                     <input
-                        className={`w-1/4 bg-${theme.input.className}`}
+                        className={`w-1/4 bg-${theme.panel.className}`}
                         type="number"
                         id="width"
                         name="width"
@@ -135,7 +135,7 @@ const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps)
                 <div className="flex justify-between">
                     <label htmlFor="birth-factor" className="w-1/2 mr-2">Birth factor:</label>
                     <input
-                        className={`w-1/4 bg-${theme.input.className}`}
+                        className={`w-1/4 bg-${theme.panel.className}`}
                         type="number"
                         id="birth-factor"
                         name="birth-factor"
@@ -150,7 +150,7 @@ const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps)
                 <div className="flex justify-between">
                     <label htmlFor="tick-duration" className="w-1/2 mr-2">Tick duration (ms):</label>
                     <input
-                        className={`w-1/4 bg-${theme.input.className}`}
+                        className={`w-1/4 bg-${theme.panel.className}`}
                         type="number"
                         id="tick-duration"
                         name="tick-duration"

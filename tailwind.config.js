@@ -31,8 +31,8 @@ module.exports = {
     `text-${conwayTheme.light.text.className}`,
     `text-${conwayTheme.dark.text.className}`,
 
-    `bg-${conwayTheme.light.input.className}`,
-    `bg-${conwayTheme.dark.input.className}`,
+    `bg-${conwayTheme.light.panel.className}`,
+    `bg-${conwayTheme.dark.panel.className}`,
 
     `hover:bg-${conwayTheme.light.button.hover.className}`,
     `hover:bg-${conwayTheme.dark.button.hover.className}`,
@@ -56,8 +56,8 @@ module.exports = {
         [conwayTheme.light.text.className]: conwayTheme.light.text.color,
         [conwayTheme.dark.text.className]: conwayTheme.dark.text.color,
 
-        [conwayTheme.light.input.className]: conwayTheme.light.input.color,
-        [conwayTheme.dark.input.className]: conwayTheme.dark.input.color,
+        [conwayTheme.light.panel.className]: conwayTheme.light.panel.color,
+        [conwayTheme.dark.panel.className]: conwayTheme.dark.panel.color,
 
         [conwayTheme.light.button.hover.className]: conwayTheme.light.button.hover.color,
         [conwayTheme.dark.button.hover.className]: conwayTheme.dark.button.hover.color,

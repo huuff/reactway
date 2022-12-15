@@ -181,7 +181,7 @@ function renderGrids(grids: AssortedGrids, lifeformType: keyof AssortedGrids, th
         <section className="basis-1/6">
             <h2 className={`text-xl text-center mb-2 font-semibold text-${theme.text.className}`}>{lifeformType}</h2>
             <div className={classNames(
-                `bg-${theme.input.className}`, // XXX: Not really an input though!!
+                `bg-${theme.panel.className}`, 
                 "rounded-lg",
                 "px-3",
                 "pb-4",

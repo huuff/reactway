@@ -2,12 +2,13 @@ import { useDarkMode } from "usehooks-ts";
 import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ClientSideOnly from "../util/ClientSideOnly";
+import { getTheme } from "../../util/get-theme";
 
 const DarkModeSelector = () => {
     const { isDarkMode, toggle } = useDarkMode();
     const icon = isDarkMode ? faMoon : faSun;
+    const theme = getTheme(isDarkMode);
 
-    // TODO: Theme for the background
     return (
        <ClientSideOnly>
             <button className={`
@@ -20,7 +21,7 @@ const DarkModeSelector = () => {
                 px-2
                 py-1
                 -z-100
-                ${isDarkMode ? "bg-slate-600" : "bg-slate-100"}
+                bg-${theme.button.hover.className}
                 `}
                 aria-label="toggle dark mode"
                 onClick={toggle}>

@@ -247,7 +247,7 @@ const Lifeforms = () => {
                     <br />
                     But they prefer to preserve the balance.
                 </p>
-                <main className="flex sm:flex-col sm:px-32 sm:gap-8 xs:flex-row xs:justify-evenly">
+                <main className="flex sm:flex-col sm:px-32 sm:gap-8 md:flex-row md:justify-evenly">
                     {renderGrids(grids, "Still Life", theme)}
                     {renderGrids(grids, "Oscillators", theme)}
                     {renderGrids(grids, "Spaceships", theme)}

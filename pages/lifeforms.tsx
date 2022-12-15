@@ -11,7 +11,6 @@ import DarkModeSelector from "../src/components/settings/DarkModeSelector";
 import ScrollContainer from "react-indiana-drag-scroll";
 import SlowIndicator from "../src/components/ui/SlowIndicator";
 
-// TODO: Make this responsive
 const INITIAL_GRIDS = {
     "Still Life": {
         "Block": gridFromAscii`
@@ -248,7 +247,7 @@ const Lifeforms = () => {
                     <br />
                     But they prefer to preserve the balance.
                 </p>
-                <main className="flex flex-row justify-evenly">
+                <main className="flex sm:flex-col sm:px-32 sm:gap-8 xs:flex-row xs:justify-evenly">
                     {renderGrids(grids, "Still Life", theme)}
                     {renderGrids(grids, "Oscillators", theme)}
                     {renderGrids(grids, "Spaceships", theme)}

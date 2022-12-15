@@ -67,6 +67,19 @@ const Gun = () => {
             `text-${theme.text.className}`,
             )}
         >Gosper glider gun</header>
+        <p className={classNames(
+            "font-light",
+            "italic",
+            "text-center", 
+            "mb-5",
+            "sm:px-24",
+            "md:px-48",
+            `text-${theme.text.className}`,
+            )}>
+            The glider gun creates and releases an endless stream of gliders that wander into the void.
+            <br/>
+            Sit back, relax, and enjoy the beauty of such a device.
+        </p>
         <main>
             <CanvasGameGrid grid={grid} toggleCell={toggleCell} cellSize={2}/>
             <div className="text-center mt-5 flex flex-col w-40 mx-auto">

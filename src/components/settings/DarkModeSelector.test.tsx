@@ -37,4 +37,18 @@ describe("DarkModeSelector", () => {
         
         expect(screen.getByTitle("moon")).toBeInTheDocument();
     });
+
+    test("when light, the icon is a sun", async () => {
+        await preloadAll();
+        jest.spyOn(usehooks, "useDarkMode").mockImplementationOnce(() => ({
+            isDarkMode: false,
+            toggle: jest.fn(),
+            enable: jest.fn(),
+            disable: jest.fn(),
+        }));
+
+        render(<DarkModeSelector />);
+        
+        expect(screen.getByTitle("sun")).toBeInTheDocument();
+    });
 });

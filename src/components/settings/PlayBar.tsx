@@ -12,7 +12,6 @@ type PlayBarProps = {
     clearGrid: () => void,
 } & { className?: string };
 
-// TODO: A settings context?
 const PlayBar = ({
     playback: { isPlaying, start, pause },
     historyLength,

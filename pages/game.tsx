@@ -68,7 +68,6 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
         if (playback.isPlaying) {
             tick();
         }
-        console.log(`Average overhead: ${performanceTracker.averageOverhead}`);
     }, tickDuration);
 
     const router = useRouter();

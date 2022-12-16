@@ -1,16 +1,41 @@
+import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
 import Link from "next/link";
+import { useCallback, useState } from "react";
 import Header from "../src/components/ui/Header";
 import SubHeader from "../src/components/ui/SubHeader";
 import { useDarkMode } from "../src/hooks/use-dark-mode";
 import { randomSeed } from "../src/util/birth-function";
 import { getTheme } from "../src/util/get-theme";
+import clamp from "lodash/clamp";
 
+type SectionNumber = 1 | 2;
 
 const Index = () => {
   const { isDarkMode } = useDarkMode();
   const theme = getTheme(isDarkMode);
 
+  const [currentSectionNumber, setCurrentSectionNumber] = useState<SectionNumber>(1);
+
+  const changeSection = useCallback((action: "next" | "previous") => {
+    setCurrentSectionNumber((current) => {
+      const change = action === "next" ? 1 : -1;
+      // TODO: Can I do a version of this that types the result as a number in a range?
+      return clamp(current + change, 1, 2) as SectionNumber;
+    });
+  }, [setCurrentSectionNumber]);
+
+  const CurrentSection = useCallback(() => {
+    switch (currentSectionNumber) {
+      case 1:
+        return <FirstSection />;
+      case 2:
+        return <SecondSection />;
+    }
+  }, [currentSectionNumber]);
+
+  // TODO: Use classNames for the buttons
   return (
     <div className={`h-screen bg-${theme.windowBackground.className}`}>
       <Header text="Reactway" />
@@ -26,20 +51,29 @@ const Index = () => {
         "mx-auto",
         "shadow-lg",
         "rounded-md",
-        "p-7",
         "flex",
-        "flex-col",
-        "justify-between",
+        "flex-row",
       )}>
-        { /*<FirstSection /> */}
-        <SecondSection />
-        <div className="text-center">
-          Or just <Link href={{
-            pathname: "/game",
-            query: {
-              seed: randomSeed(),
-            }
-          }} className="underline">start playing right now</Link>
+        <div className={`flex items-center px-2 mr-3 rounded-l-md hover:bg-${theme.panelHighlight.className} hover:cursor-pointer`}
+            onClick={() => changeSection("previous")}
+        >
+          <FontAwesomeIcon className="w-4" icon={faChevronLeft} />
+        </div>
+        <div className="flex flex-col justify-between py-7">
+          <CurrentSection />
+          <div className="text-center">
+            Or just <Link href={{
+              pathname: "/game",
+              query: {
+                seed: randomSeed(),
+              }
+            }} className="underline">start playing right now</Link>
+          </div>
+        </div>
+        <div className={`flex items-center px-2 ml-3 rounded-r-md hover:bg-${theme.panelHighlight.className} hover:cursor-pointer`} 
+          onClick={() => changeSection("next")}
+        >
+          <FontAwesomeIcon className="w-4" icon={faChevronRight} />
         </div>
       </main>
     </div>

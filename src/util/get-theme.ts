@@ -17,6 +17,7 @@ type Theme = {
     windowBackground: ClassAndColor;
     text: ClassAndColor;
     panel: ClassAndColor;
+    panelHighlight: ClassAndColor;
     button: {
         hover: ClassAndColor;
     }

@@ -32,6 +32,10 @@ module.exports =  {
       className: "light-panel-background",
       color: "#E2E8F0",
     },
+    panelHighlight: {
+      className: "light-panel-highlight",
+      color: "#E2E8F0"
+    },
     button: {
       hover: {
         className: "light-button-hover",
@@ -72,6 +76,10 @@ module.exports =  {
     panel: {
       className: "dark-panel-background",
       color: "#334155",
+    },
+    panelHighlight: {
+      className: "dark-panel-highlight",
+      color: "#445266"
     },
     button: {
       hover: {

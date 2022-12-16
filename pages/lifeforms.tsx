@@ -4,12 +4,10 @@ import { useGrid } from "../src/game/use-grid";
 import { gridFromAscii } from "../src/util/create-grid-from-ascii";
 import { typesafeKeys } from "../src/util/typesafe-keys";
 import { ReactElement, useMemo } from "react";
-import { useDarkMode } from "usehooks-ts";
+import { useDarkMode } from "../src/hooks/use-dark-mode";
 import { getTheme, Theme } from "../src/util/get-theme";
 import classNames from "classnames";
-import DarkModeSelector from "../src/components/settings/DarkModeSelector";
 import ScrollContainer from "react-indiana-drag-scroll";
-import SlowIndicator from "../src/components/ui/SlowIndicator";
 
 const INITIAL_GRIDS = {
     "Still Life": {

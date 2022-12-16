@@ -1,6 +1,6 @@
 
 import { ChangeEvent, useCallback, useContext, useEffect, useMemo } from "react";
-import { useDarkMode, useDebounce } from "usehooks-ts";
+import { useDebounce } from "usehooks-ts";
 import { GridType } from "../../grid/grid";
 import { GameSettings, GameSettingsAction, GridViewType, NumberGameSetting, SettingsContext } from "../../settings/settings";
 import { typedCapitalize } from "../../util/typesafe-capitalize";
@@ -8,6 +8,7 @@ import { useNumberInput } from "../../hooks/use-number-input";
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getTheme } from "../../util/get-theme";
+import { useDarkMode } from "../../hooks/use-dark-mode";
 
 const DEBOUNCE_DELAY = 500;
 

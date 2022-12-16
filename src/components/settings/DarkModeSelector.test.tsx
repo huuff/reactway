@@ -1,9 +1,16 @@
 import { fireEvent, render, screen  } from "@testing-library/react";
-import * as usehooks from "usehooks-ts";
+import * as usehooks from "../../hooks/use-dark-mode";
 // @ts-ignore (there are no types for this)
 import preloadAll from "jest-next-dynamic";
 
 import DarkModeSelector from "./DarkModeSelector";
+
+jest.mock("../../hooks/use-dark-mode", () => {
+    return {
+        __esModule: true,
+        ...jest.requireActual("../../hooks/use-dark-mode")
+    };
+});
 
 describe("DarkModeSelector", () => {
     test("clicking toggles it", async () => {

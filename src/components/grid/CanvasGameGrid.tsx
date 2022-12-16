@@ -1,7 +1,7 @@
 import { MouseEventHandler, RefObject, useCallback, useContext, useEffect, useMemo, useRef } from "react";
 import { Coordinates, GameGridProps, Grid } from "../../grid/grid";
 import { useMouseState, usePreviousValue, useViewportState } from "beautiful-react-hooks";
-import { useDarkMode, useDebounce } from "usehooks-ts";
+import { useDebounce } from "usehooks-ts";
 import { Box2D } from "../../util/box-2d";
 import tuple from "immutable-tuple";
 import { useIsDragging } from "../../hooks/use-is-dragging";
@@ -9,6 +9,7 @@ import { getTheme, LiveStatusDependent, ClassAndColor } from "../../util/get-the
 import { PerformanceTracker, PerformanceTrackerContext } from "../../hooks/use-performance-tracker";
 import { benchmark } from "../../util/benchmark-function";
 import useClientSideOnly from "../../hooks/use-client-side-only";
+import { useDarkMode } from "../../hooks/use-dark-mode";
 
 const CELL_SIZE_MULTIPLIER = 8;
 

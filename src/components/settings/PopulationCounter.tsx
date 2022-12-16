@@ -2,8 +2,8 @@ import { faPerson } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
 import { FC, useMemo } from "react";
-import { useDarkMode } from "usehooks-ts";
 import { getTheme } from "../../util/get-theme";
+import { useDarkMode } from "../../hooks/use-dark-mode";
 
 const PopulationCounter: FC<{population: number}> = ({population}) => {
     const { isDarkMode } = useDarkMode();

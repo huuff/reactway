@@ -1,6 +1,6 @@
 import { useContext, useEffect, useMemo, WheelEvent } from "react";
 import { defaultSettings, useSettings } from "../src/settings/settings";
-import { useDarkMode, useElementSize, useInterval, useWindowSize } from "usehooks-ts";
+import { useElementSize, useInterval, useWindowSize } from "usehooks-ts";
 import { useRouter } from "next/router";
 import { randomSeed } from "../src/util/birth-function";
 import { NextPage } from "next";
@@ -12,14 +12,13 @@ import { usePlayback } from "../src/settings/use-playback";
 import GameGridView from "../src/components/grid/GameGridView";
 import { useThrottledCallback } from "beautiful-react-hooks";
 import ScrollContainer from "react-indiana-drag-scroll";
-import DarkModeSelector from "../src/components/settings/DarkModeSelector";
 import { getTheme } from "../src/util/get-theme";
 import classNames from "classnames";
-import SlowIndicator from "../src/components/ui/SlowIndicator";
 import "animate.css";
 import SettingsDrawer from "../src/components/settings/SettingsDrawer";
 import { PerformanceTrackerContext } from "../src/hooks/use-performance-tracker";
 import PopulationCounter from "../src/components/settings/PopulationCounter";
+import { useDarkMode } from "../src/hooks/use-dark-mode";
 
 type GameProps = {
     readonly seed: string;

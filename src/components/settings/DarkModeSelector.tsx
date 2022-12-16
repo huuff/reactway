@@ -1,4 +1,4 @@
-import { useDarkMode } from "usehooks-ts";
+import { useDarkMode  } from "../../hooks/use-dark-mode";
 import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ClientSideOnly from "../util/ClientSideOnly";
@@ -27,6 +27,7 @@ const DarkModeSelector = () => {
                 onClick={toggle}>
                 <FontAwesomeIcon
                     icon={icon}
+                    data-fa-title-id={isDarkMode ? "moon" : "sun"}
                     className={`w-4 h-4 ${isDarkMode ? "text-yellow-300" : "text-slate-900"}`}
                     title={isDarkMode ? "moon" : "sun"}
                 />

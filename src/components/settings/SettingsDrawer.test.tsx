@@ -1,6 +1,8 @@
 
 import { fireEvent, render, screen } from "@testing-library/react";
 import { ComponentProps } from "react";
+// @ts-ignore
+import preloadAll from "jest-next-dynamic";
 import SettingsDrawer from "./SettingsDrawer";
 import { CSSTransition } from 'react-transition-group';
 
@@ -9,10 +11,8 @@ const fakeSettingsDrawerProps: ComponentProps<typeof SettingsDrawer> = {
     historyPosition: 0,
     setHistoryPosition: jest.fn(),
     startNewGame: jest.fn(),
-    settings: jest.fn() as any,
-    dispatchSettings: jest.fn(),
     clear: jest.fn(),
-    playback: jest.fn() as any,
+    playback: expect.any(Object),
 };
 
 // https://jestjs.io/docs/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom
@@ -40,7 +40,8 @@ jest.mock('react-transition-group', () => {
 
 describe("SettingsDrawer", () => {
 
-    test("can be hidden/shown", () => {
+    test("can be hidden/shown", async () => {
+        await preloadAll();
         render(<SettingsDrawer {...fakeSettingsDrawerProps} />);
 
         // It's initially present

@@ -1,15 +1,15 @@
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
-import { useDarkMode, useToggle } from "usehooks-ts";
+import { useToggle } from "usehooks-ts";
 import { CSSTransition } from "react-transition-group";
 import PlayBar from "./PlayBar";
 import { Playback } from "../../settings/use-playback";
 import { useMemo } from "react";
 import { getTheme } from "../../util/get-theme";
-import { GameSettings, GameSettingsAction } from "../../settings/settings";
 import GameSettingsView from "./GameSettingsView";
 import ClientSideOnly from "../util/ClientSideOnly";
+import { useDarkMode } from "../../hooks/use-dark-mode";
 
 type SettingsDrawerProps = {
     readonly playback: Playback;
@@ -51,7 +51,7 @@ const SettingsDrawer = ({
                     mb-2
                     z-20
                 `}
-                data-testid="drawer"
+                    data-testid="drawer"
                 >
                     <PlayBar
                         className={`
@@ -93,7 +93,16 @@ const SettingsDrawer = ({
                 "block",
             )}
                 onClick={toggleVisible}>
-                <FontAwesomeIcon icon={drawerIcon} className="w-6 h-3 mx-auto" title="toggle-drawer" />
+                {/* This would always throw a warning on me and I was getting desperate, so I just client-sided it */ }
+                {/* Note that there are other icons where this is solved by just putting data-fa-title-id */ }
+                {/* But not this one */ }
+                <ClientSideOnly>
+                    <FontAwesomeIcon
+                        icon={drawerIcon}
+                        className="w-6 h-3 mx-auto"
+                        data-fa-title-id="toggle-drawer-icon"
+                        title="toggle-drawer" />
+                </ClientSideOnly>
             </button>
         </>
     );

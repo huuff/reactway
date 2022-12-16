@@ -1,14 +1,13 @@
 import classNames from "classnames";
 import { ChangeEvent, useMemo, useState } from "react";
-import { useDarkMode, useInterval } from "usehooks-ts";
+import { useInterval } from "usehooks-ts";
 import CanvasGameGrid from "../src/components/grid/CanvasGameGrid";
-import DarkModeSelector from "../src/components/settings/DarkModeSelector";
-import SlowIndicator from "../src/components/ui/SlowIndicator";
 import { useGrid } from "../src/game/use-grid";
 import { gridFromAscii } from "../src/util/create-grid-from-ascii";
 import { getTheme } from "../src/util/get-theme";
 import clamp from "lodash/clamp";
 import ScrollContainer from "react-indiana-drag-scroll";
+import { useDarkMode } from "../src/hooks/use-dark-mode";
 
 const Gun = () => {
     const { isDarkMode } = useDarkMode();

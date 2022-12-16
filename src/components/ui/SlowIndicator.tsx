@@ -2,15 +2,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PerformanceTrackerContext } from "../../hooks/use-performance-tracker";
 import { faExclamationCircle, faXmark } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
-import { useContext, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { isEmpty } from "lodash";
+import { SettingsContext } from "../../settings/settings";
 
-type SlowIndicatorProps = {
-    resetSettings: () => void;
-}
-
-const SlowIndicator = ({ resetSettings }: SlowIndicatorProps) => {
+const SlowIndicator = () => {
     const tracker = useContext(PerformanceTrackerContext);
+    const [ , dispatchSettings ] = useContext(SettingsContext);
+    const resetSettings = useCallback(() => dispatchSettings({type: "reset"}), [dispatchSettings]);
 
     const isSlow = tracker.isSlow || !isEmpty(tracker.disabledFeatures);
     const [ isHidden, setHidden ] = useState(false);

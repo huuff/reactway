@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { PerformanceTracker, PerformanceTrackerContext } from "../../hooks/use-performance-tracker";
+import { SettingsContext } from "../../settings/settings";
 import SlowIndicator from "./SlowIndicator";
 
 const fakePerformanceTracker: PerformanceTracker = {
@@ -17,7 +18,9 @@ describe("SlowIndicator", () => {
     test("it doesn't show when there are no performance issues", () => {
         render(
             <PerformanceTrackerContext.Provider value={fakePerformanceTracker}>
-                <SlowIndicator resetSettings={jest.fn()} />
+                <SettingsContext.Provider value={[expect.any(Object), jest.fn()]}>
+                    <SlowIndicator/>
+                </SettingsContext.Provider>
             </PerformanceTrackerContext.Provider>
         );
 
@@ -29,7 +32,9 @@ describe("SlowIndicator", () => {
 
         render(
             <PerformanceTrackerContext.Provider value={slowTracker}>
-                <SlowIndicator resetSettings={jest.fn()} />
+                <SettingsContext.Provider value={[expect.any(Object), jest.fn()]}>
+                    <SlowIndicator />
+                </SettingsContext.Provider>
             </PerformanceTrackerContext.Provider>
         );
 
@@ -41,7 +46,9 @@ describe("SlowIndicator", () => {
 
         render(
             <PerformanceTrackerContext.Provider value={slowTracker}>
-                <SlowIndicator resetSettings={jest.fn()} />
+                <SettingsContext.Provider value={[expect.any(Object), jest.fn()]}>
+                    <SlowIndicator />
+                </SettingsContext.Provider>
             </PerformanceTrackerContext.Provider>
         );
 
@@ -68,7 +75,9 @@ describe("SlowIndicator", () => {
 
         render(
             <PerformanceTrackerContext.Provider value={trackerWithDisabledFeatures}>
-                <SlowIndicator resetSettings={jest.fn()} />
+                <SettingsContext.Provider value={[expect.any(Object), jest.fn()]}>
+                    <SlowIndicator />
+                </SettingsContext.Provider>
             </PerformanceTrackerContext.Provider>
         );
 
@@ -79,16 +88,18 @@ describe("SlowIndicator", () => {
 
     test("clicking on the reset button resets settings", () => {
         const slowTracker = { ...fakePerformanceTracker, isSlow: true };
-        const resetSettings = jest.fn();
+        const dispatchSettings = jest.fn();
 
         render(
             <PerformanceTrackerContext.Provider value={slowTracker}>
-                <SlowIndicator resetSettings={resetSettings} />
+                <SettingsContext.Provider value={[expect.any(Object), dispatchSettings]}>
+                    <SlowIndicator />
+                </SettingsContext.Provider>
             </PerformanceTrackerContext.Provider>
         );
 
         fireEvent.click(screen.getByText(/Click here/), { bubbles: true });
-        expect(resetSettings).toHaveBeenCalledTimes(1);
+        expect(dispatchSettings).toHaveBeenCalledWith({type: "reset"});
     });
 
     test("dismissing", () => {
@@ -96,7 +107,7 @@ describe("SlowIndicator", () => {
         
         render(
             <PerformanceTrackerContext.Provider value={slowTracker}>
-                <SlowIndicator resetSettings={jest.fn()} />
+                <SlowIndicator />
             </PerformanceTrackerContext.Provider>
         );
 

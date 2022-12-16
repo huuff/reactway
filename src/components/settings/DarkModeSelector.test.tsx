@@ -5,7 +5,6 @@ import preloadAll from "jest-next-dynamic";
 
 import DarkModeSelector from "./DarkModeSelector";
 
-
 describe("DarkModeSelector", () => {
     test("clicking toggles it", async () => {
         await preloadAll();

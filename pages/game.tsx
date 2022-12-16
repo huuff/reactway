@@ -103,15 +103,11 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
                 </ClientSideOnly>
             </ScrollContainer>
 
-            <DarkModeSelector />
-            <SlowIndicator resetSettings={() => dispatchSettings({ type: "reset" })} />
             <SettingsDrawer
                 historyPosition={historyPosition}
                 setHistoryPosition={setHistoryPosition}
                 historyLength={historyLength}
                 clear={clear}
-                settings={settings}
-                dispatchSettings={dispatchSettings}
                 playback={playback}
                 startNewGame={startNewGame}
             />

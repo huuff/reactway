@@ -222,8 +222,6 @@ const Lifeforms = () => {
     return (
         <>
             <div className={`min-h-screen bg-${theme.windowBackground.className}`}>
-                <DarkModeSelector />
-                <SlowIndicator resetSettings={() => { }} />
                 <header className={classNames(
                     "text-3xl",
                     "font-bold",

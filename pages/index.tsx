@@ -41,6 +41,7 @@ const SectionButton: FC<{
 // TODO: Generate the link to the game in the server, so it won't throw hydration errors!
 // TODO: Disabel the buttons when it's the first or last section
 // TODO: Fix the hover color for the buttons in the light theme!
+// TODO: Slide-in/Slide-out animation when changing section
 const Index = () => {
   const { isDarkMode } = useDarkMode();
   const theme = getTheme(isDarkMode);

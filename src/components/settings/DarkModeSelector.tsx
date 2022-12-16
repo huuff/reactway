@@ -21,7 +21,7 @@ const DarkModeSelector = () => {
                 px-2
                 py-1
                 -z-100
-                bg-${theme.button.hover.className}
+                bg-${theme.panel.className}
                 `}
                 aria-label="toggle dark mode"
                 onClick={toggle}>

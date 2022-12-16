@@ -27,13 +27,13 @@ const Index = () => {
         "shadow-lg",
         "rounded-md",
         "p-7",
-        "text-center",
         "flex",
         "flex-col",
         "justify-between",
       )}>
-        <FirstSection />
-        <div>
+        { /*<FirstSection /> */}
+        <SecondSection />
+        <div className="text-center">
           Or just <Link href={{
             pathname: "/game",
             query: {
@@ -48,7 +48,7 @@ const Index = () => {
 
 const FirstSection = () => {
   return (
-    <section>
+    <section className="text-center">
       <p className="mb-2">
         Before continuing, there are some things you <span className="italic">don&apos;t</span> need to know.
       </p>
@@ -70,7 +70,24 @@ const FirstSection = () => {
 };
 
 const SecondSection = () => {
-
+  return (
+    <section>
+      <p className="text-center mb-6">
+        Want to know the rules of <span className="italic">life</span>?
+      </p>
+      <ul className="list-disc mx-14">
+        <li>Any live cell with fewer than two live neighbours dies, as if by underpopulation.</li>
+        <li>Any live cell with two or three live neighbours lives on to the next generation.</li>
+        <li>Any live cell with more than three live neighbours dies, as if by overpopulation.</li>
+        <li>Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.</li>
+      </ul>
+      <p className="text-right my-3 hover:underline">
+        <Link href="https://en.wikipedia.org/wiki/Conway's_Game_of_Life#Rules" >
+          Source: Wikipedia
+        </Link>
+      </p>
+    </section>
+  );
 };
 
 export default Index;

@@ -8,6 +8,7 @@ import { getTheme } from "../src/util/get-theme";
 import clamp from "lodash/clamp";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { useDarkMode } from "../src/hooks/use-dark-mode";
+import Header from "../src/components/ui/Header";
 
 const Gun = () => {
     const { isDarkMode } = useDarkMode();
@@ -71,14 +72,7 @@ const Gun = () => {
 
     return (
         <div className={`min-h-screen bg-${theme.windowBackground.className}`}>
-        <header className={classNames(
-            "text-3xl",
-            "font-bold",
-            "text-center", 
-            "mb-8",
-            `text-${theme.text.className}`,
-            )}
-        >Gosper glider gun</header>
+        <Header text="Gosper glider gun" />
         <p className={classNames(
             "font-light",
             "italic",

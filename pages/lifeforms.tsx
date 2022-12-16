@@ -8,6 +8,7 @@ import { useDarkMode } from "../src/hooks/use-dark-mode";
 import { getTheme, Theme } from "../src/util/get-theme";
 import classNames from "classnames";
 import ScrollContainer from "react-indiana-drag-scroll";
+import Header from "../src/components/ui/Header";
 
 const INITIAL_GRIDS = {
     "Still Life": {
@@ -220,14 +221,7 @@ const Lifeforms = () => {
     return (
         <>
             <div className={`min-h-screen bg-${theme.windowBackground.className}`}>
-                <header className={classNames(
-                    "text-3xl",
-                    "font-bold",
-                    "text-center",
-                    "mb-5",
-                    `text-${theme.text.className}`,
-                )}
-                >Lifeforms</header>
+                <Header text="Lifeforms" />
                 <p className={classNames(
                     "font-light",
                     "italic",

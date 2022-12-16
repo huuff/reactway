@@ -2,23 +2,52 @@ import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
 import Link from "next/link";
-import { useCallback, useState } from "react";
+import { FC, useCallback, useState } from "react";
 import Header from "../src/components/ui/Header";
 import SubHeader from "../src/components/ui/SubHeader";
 import { useDarkMode } from "../src/hooks/use-dark-mode";
 import { randomSeed } from "../src/util/birth-function";
-import { getTheme } from "../src/util/get-theme";
+import { getTheme, Theme } from "../src/util/get-theme";
 import clamp from "lodash/clamp";
 
 type SectionNumber = 1 | 2;
 
+type ChangeSection = "next" | "previous";
+
+const SectionButton: FC<{ 
+  theme: Theme, 
+  type: ChangeSection, 
+  changeSection: (change: ChangeSection) => void 
+}> = ({ theme, type, changeSection }) => {
+  return (
+    <div className={classNames(
+      "flex",
+      "items-center",
+      "px-2",
+      { ["ml-3"]: type === "next"},
+      { ["mr-3"]: type === "previous"},
+      { ["rounded-l-md"]: type === "previous" },
+      { ["rounded-r-md"]: type === "next" },
+      `hover:bg-${theme.panelHighlight.className}`,
+      "hover:cursor-pointer",
+    )}
+      onClick={() => changeSection(type)}
+    >
+      <FontAwesomeIcon className="w-4" icon={type === "next" ? faChevronRight : faChevronLeft} />
+    </div>
+  );
+};
+
+// TODO: Generate the link to the game in the server, so it won't throw hydration errors!
+// TODO: Disabel the buttons when it's the first or last section
+// TODO: Fix the hover color for the buttons in the light theme!
 const Index = () => {
   const { isDarkMode } = useDarkMode();
   const theme = getTheme(isDarkMode);
 
   const [currentSectionNumber, setCurrentSectionNumber] = useState<SectionNumber>(1);
 
-  const changeSection = useCallback((action: "next" | "previous") => {
+  const changeSection = useCallback((action: ChangeSection) => {
     setCurrentSectionNumber((current) => {
       const change = action === "next" ? 1 : -1;
       // TODO: Can I do a version of this that types the result as a number in a range?
@@ -35,7 +64,6 @@ const Index = () => {
     }
   }, [currentSectionNumber]);
 
-  // TODO: Use classNames for the buttons
   return (
     <div className={`h-screen bg-${theme.windowBackground.className}`}>
       <Header text="Reactway" />
@@ -54,11 +82,7 @@ const Index = () => {
         "flex",
         "flex-row",
       )}>
-        <div className={`flex items-center px-2 mr-3 rounded-l-md hover:bg-${theme.panelHighlight.className} hover:cursor-pointer`}
-            onClick={() => changeSection("previous")}
-        >
-          <FontAwesomeIcon className="w-4" icon={faChevronLeft} />
-        </div>
+        <SectionButton theme={theme} type="previous" changeSection={changeSection} />
         <div className="flex flex-col justify-between py-7">
           <CurrentSection />
           <div className="text-center">
@@ -70,11 +94,7 @@ const Index = () => {
             }} className="underline">start playing right now</Link>
           </div>
         </div>
-        <div className={`flex items-center px-2 ml-3 rounded-r-md hover:bg-${theme.panelHighlight.className} hover:cursor-pointer`} 
-          onClick={() => changeSection("next")}
-        >
-          <FontAwesomeIcon className="w-4" icon={faChevronRight} />
-        </div>
+        <SectionButton theme={theme} type="next" changeSection={changeSection} />
       </main>
     </div>
   );

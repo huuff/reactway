@@ -1,18 +1,13 @@
 
-import { ChangeEvent, useCallback, useEffect, useMemo } from "react";
+import { ChangeEvent, useCallback, useContext, useEffect, useMemo } from "react";
 import { useDarkMode, useDebounce } from "usehooks-ts";
 import { GridType } from "../../grid/grid";
-import { GameSettings, GameSettingsAction, GridViewType, NumberGameSetting } from "../../settings/settings";
+import { GameSettings, GameSettingsAction, GridViewType, NumberGameSetting, SettingsContext } from "../../settings/settings";
 import { typedCapitalize } from "../../util/typesafe-capitalize";
 import { useNumberInput } from "../../hooks/use-number-input";
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getTheme } from "../../util/get-theme";
-
-type GameSettingsViewProps = {
-    settings: GameSettings;
-    dispatchSettings: React.Dispatch<GameSettingsAction>;
-}
 
 const DEBOUNCE_DELAY = 500;
 
@@ -37,9 +32,10 @@ function useNumberSetting<T extends Exclude<NumberGameSetting, "cellSize">>(
     return { value, onChange, setValue };
 }
 
-const GameSettingsView = ({ settings, dispatchSettings }: GameSettingsViewProps) => {
+const GameSettingsView = () => {
     const { isDarkMode } = useDarkMode();
     const theme = useMemo(() => getTheme(isDarkMode), [isDarkMode]);
+    const [ settings, dispatchSettings ] = useContext(SettingsContext);
 
     const heightInput = useNumberSetting("height", settings, dispatchSettings);
     const widthInput = useNumberSetting("width", settings, dispatchSettings);

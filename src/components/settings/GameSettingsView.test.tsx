@@ -1,5 +1,5 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
-import { defaultSettings, GameSettings } from "../../settings/settings";
+import { fireEvent, render, screen } from "@testing-library/react";
+import {  GameSettings, SettingsContext } from "../../settings/settings";
 import GameSettingsView from "./GameSettingsView";
 import * as usehooks from "usehooks-ts";
 
@@ -33,7 +33,11 @@ jest.spyOn(usehooks, "useDebounce").mockImplementation((v) => v);
 describe("GameSettingsView", () => {
 
     test("it shows all correct settings", () => {
-        render(<GameSettingsView settings={testSettings} dispatchSettings={jest.fn()} />);
+        render(
+            <SettingsContext.Provider value={[testSettings, jest.fn()]}>
+                <GameSettingsView />
+            </SettingsContext.Provider>
+        );
 
         expect(screen.getByRole("combobox", { name: "View:" })).toHaveValue("ascii");
         expect(screen.getByRole("combobox", { name: "Type:" })).toHaveValue("map");
@@ -46,7 +50,12 @@ describe("GameSettingsView", () => {
 
     test("changing settings", () => {
         const mockDispatch = jest.fn();
-        render(<GameSettingsView settings={testSettings} dispatchSettings={mockDispatch} />);
+
+        render(
+            <SettingsContext.Provider value={[testSettings, mockDispatch]}>
+                <GameSettingsView />
+            </SettingsContext.Provider>
+        );
 
         fireEvent.change(screen.getByRole("combobox", { name: /View/ }), { target: { value: "canvas" } });
         expect(mockDispatch).toHaveBeenCalledWith({ type: "setView", value: "canvas" });

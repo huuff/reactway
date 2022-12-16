@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useMemo } from "react";
+import { createContext, useMemo } from "react";
 import { GridType } from "../grid/grid";
 import { StringObject, toStringObject } from "../util/to-string-object";
 import { useLocalStorage } from "usehooks-ts";
@@ -188,6 +188,8 @@ function useSettings(
     return [settings, dispatchSettings];
 }
 
+const SettingsContext = createContext<ReturnType<typeof useSettings>>([globalDefaultSettings, (a) => {}]);
+
 
 export type {
     GameSettings,
@@ -197,4 +199,4 @@ export type {
     GameSettingsNumberAction,
     NumberGameSetting,
 };
-export { useSettings, globalDefaultSettings as defaultSettings, };
+export { useSettings, globalDefaultSettings as defaultSettings, SettingsContext};

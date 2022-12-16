@@ -17,8 +17,6 @@ type SettingsDrawerProps = {
     readonly historyLength: number;
     readonly setHistoryPosition: (newPosition: number) => void;
     readonly startNewGame: () => void;
-    readonly settings: GameSettings;
-    readonly dispatchSettings: (action: GameSettingsAction) => void;
     readonly clear: () => void;
 };
 
@@ -28,8 +26,6 @@ const SettingsDrawer = ({
     historyPosition,
     setHistoryPosition,
     startNewGame,
-    settings,
-    dispatchSettings,
     clear,
 }: SettingsDrawerProps) => {
     const [isVisible, toggleVisible] = useToggle(true);
@@ -75,10 +71,7 @@ const SettingsDrawer = ({
                         clearGrid={clear}
                     />
                     <ClientSideOnly>
-                        <GameSettingsView
-                            settings={settings}
-                            dispatchSettings={dispatchSettings}
-                        />
+                        <GameSettingsView />
                     </ClientSideOnly>
                 </div>
             </CSSTransition>

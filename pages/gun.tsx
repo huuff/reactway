@@ -9,6 +9,7 @@ import clamp from "lodash/clamp";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { useDarkMode } from "../src/hooks/use-dark-mode";
 import Header from "../src/components/ui/Header";
+import SubHeader from "../src/components/ui/SubHeader";
 
 const Gun = () => {
     const { isDarkMode } = useDarkMode();
@@ -73,19 +74,11 @@ const Gun = () => {
     return (
         <div className={`min-h-screen bg-${theme.windowBackground.className}`}>
         <Header text="Gosper glider gun" />
-        <p className={classNames(
-            "font-light",
-            "italic",
-            "text-center", 
-            "mb-5",
-            "sm:px-24",
-            "md:px-48",
-            `text-${theme.text.className}`,
-            )}>
+        <SubHeader>
             The glider gun releases an endless stream of gliders that wander into the void.
             <br/>
             Sit back, relax, and enjoy the beauty of such a device.
-        </p>
+        </SubHeader>
         <main>
             <ScrollContainer className="h-52 mx-auto cursor-move">
                 <CanvasGameGrid grid={grid} toggleCell={toggleCell} cellSize={2}/>

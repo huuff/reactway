@@ -9,6 +9,7 @@ import { getTheme, Theme } from "../src/util/get-theme";
 import classNames from "classnames";
 import ScrollContainer from "react-indiana-drag-scroll";
 import Header from "../src/components/ui/Header";
+import SubHeader from "../src/components/ui/SubHeader";
 
 const INITIAL_GRIDS = {
     "Still Life": {
@@ -222,21 +223,13 @@ const Lifeforms = () => {
         <>
             <div className={`min-h-screen bg-${theme.windowBackground.className}`}>
                 <Header text="Lifeforms" />
-                <p className={classNames(
-                    "font-light",
-                    "italic",
-                    "text-center",
-                    "mb-5",
-                    "sm:px-24",
-                    "md:px-48",
-                    `text-${theme.text.className}`,
-                )}>
+                <SubHeader>
                     The grid belongs to its inhabitants.
                     <br />
                     They possess the power to choose its fate.
                     <br />
                     But they prefer to preserve the balance.
-                </p>
+                </SubHeader>
                 <main className="flex sm:flex-col sm:px-32 sm:gap-8 md:flex-row md:justify-evenly">
                     {renderGrids(grids, "Still Life", theme)}
                     {renderGrids(grids, "Oscillators", theme)}

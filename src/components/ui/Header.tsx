@@ -3,7 +3,7 @@ import { FC } from "react";
 import { getTheme } from "../../util/get-theme";
 import { useDarkMode } from "../../hooks/use-dark-mode";
 
-const Header: FC<{ text: string }> = ({ text }) => {
+const Header: FC<{ text: string, className?: string }> = ({ text, className }) => {
     const { isDarkMode } = useDarkMode();
     const theme = getTheme(isDarkMode);
 
@@ -14,7 +14,7 @@ const Header: FC<{ text: string }> = ({ text }) => {
             "text-center",
             "mb-5",
             `text-${theme.text.className}`,
-        )}>
+        ) + (` ${className}` || "")}>
             {text}
         </header>
     );

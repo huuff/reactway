@@ -42,7 +42,6 @@ type Section = FC<{theme: Theme}>;
 
 // TODO: Generate the link to the game in the server, so it won't throw hydration errors!
 // TODO: Disable the buttons when it's the first or last section
-// TODO: Fix the hover color for the buttons in the light theme!
 // TODO: Slide-in/Slide-out animation when changing section
 // TODO: Make it responsive
 const Index = () => {
@@ -170,7 +169,7 @@ const ThirdSection: Section = ({theme}) => {
       {/* TODO: Add a label that says "example" */}
       <input 
         type="text"
-        className={`mt-5 w-5/6 bg-${theme.panelHighlight.className}`}
+        className={`mt-5 w-5/6 bg-${theme.panelHighlight.className} py-1 px-2`}
         readOnly
         value="https://localhost:3000/game?seed=0be686b1-207e-4065-8d64-257d111feeb5&height=50&width=100&tickDuration=700&cellSize=4"
       />

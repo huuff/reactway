@@ -34,7 +34,7 @@ module.exports =  {
     },
     panelHighlight: {
       className: "light-panel-highlight",
-      color: "#E2E8F0"
+      color: "#D1D7E1"
     },
     button: {
       hover: {

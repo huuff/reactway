@@ -2,7 +2,7 @@ import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
 import Link from "next/link";
-import { FC, useCallback, useState } from "react";
+import { cloneElement, ComponentProps, FC, ReactElement, ReactNode, useCallback, useState } from "react";
 import Header from "../src/components/ui/Header";
 import SubHeader from "../src/components/ui/SubHeader";
 import { useDarkMode } from "../src/hooks/use-dark-mode";
@@ -12,6 +12,8 @@ import clamp from "lodash/clamp";
 import { GetServerSideProps, NextPage } from "next";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import "animate.css";
+import { TransitionGroupProps } from "react-transition-group/TransitionGroup";
+import { CSSTransitionClassNames } from "react-transition-group/CSSTransition";
 
 type SectionNumber = 1 | 2 | 3;
 
@@ -75,6 +77,8 @@ const Index: NextPage<{ seed: string, host?: string, proto?: string }> = ({ seed
     }
   }, [currentSectionNumber, theme, host, proto]);
 
+  const childFactoryCreator = (classNames: CSSTransitionClassNames) => (child: ReactElement) => cloneElement(child, {classNames});
+
   return (
     <div className={`h-screen bg-${theme.windowBackground.className}`}>
       <Header text="Reactway" />
@@ -100,7 +104,13 @@ const Index: NextPage<{ seed: string, host?: string, proto?: string }> = ({ seed
           isEnabled={currentSectionNumber !== 1} 
         />
         <div className="flex flex-col justify-between py-7 flex-grow">
-          <TransitionGroup className="overflow-hidden relative flex-grow">
+          <TransitionGroup
+             className="overflow-hidden relative flex-grow" 
+             childFactory={childFactoryCreator({
+              enterActive: movingDirection === "previous" ? 'animate__slideInLeft' :  'animate__slideInRight',
+              exitActive: movingDirection === "previous" ?'animate__slideOutRight': "animate__slideOutLeft",
+            })}
+            >
             <CSSTransition key={currentSectionNumber} timeout={500}
               classNames={{
                 enterActive: movingDirection === "previous" ? 'animate__slideInLeft' :  'animate__slideInRight',

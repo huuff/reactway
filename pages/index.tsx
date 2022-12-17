@@ -2,7 +2,7 @@ import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
 import Link from "next/link";
-import { cloneElement, ComponentProps, FC, ReactElement, ReactNode, useCallback, useState } from "react";
+import { cloneElement, ComponentProps, FC, ReactElement, ReactNode, useCallback, useMemo, useState } from "react";
 import Header from "../src/components/ui/Header";
 import SubHeader from "../src/components/ui/SubHeader";
 import { useDarkMode } from "../src/hooks/use-dark-mode";
@@ -80,6 +80,10 @@ const Index: NextPage<{ seed: string, host?: string, proto?: string }> = ({ seed
   // This is necessary so CSS transitions are applied dynamically and not on mounting/unmounting, so we can
   // apply a different animation depending on whether the clicked button is "next" or "previous"
   const childFactoryCreator = (classNames: CSSTransitionClassNames) => (child: ReactElement) => cloneElement(child, {classNames});
+  const transitionClassNames: CSSTransitionClassNames = useMemo(() => ({
+    enterActive: movingDirection === "previous" ? 'animate__slideInLeft' :  'animate__slideInRight',
+    exitActive: movingDirection === "previous" ?'animate__slideOutRight': "animate__slideOutLeft",
+  }), [movingDirection]);
 
   return (
     <div className={`h-screen bg-${theme.windowBackground.className}`}>
@@ -108,16 +112,10 @@ const Index: NextPage<{ seed: string, host?: string, proto?: string }> = ({ seed
         <div className="flex flex-col justify-between py-7 flex-grow">
           <TransitionGroup
              className="overflow-hidden relative flex-grow" 
-             childFactory={childFactoryCreator({
-              enterActive: movingDirection === "previous" ? 'animate__slideInLeft' :  'animate__slideInRight',
-              exitActive: movingDirection === "previous" ?'animate__slideOutRight': "animate__slideOutLeft",
-            })}
+             childFactory={childFactoryCreator(transitionClassNames)}
             >
             <CSSTransition key={currentSectionNumber} timeout={500}
-              classNames={{
-                enterActive: movingDirection === "previous" ? 'animate__slideInLeft' :  'animate__slideInRight',
-                exitActive: movingDirection === "previous" ?'animate__slideOutRight': "animate__slideOutLeft",
-              }}
+              classNames={transitionClassNames}
             >
               <CurrentSection className="animate__animated animate__faster absolute" />
             </CSSTransition>

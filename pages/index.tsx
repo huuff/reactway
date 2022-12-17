@@ -77,6 +77,8 @@ const Index: NextPage<{ seed: string, host?: string, proto?: string }> = ({ seed
     }
   }, [currentSectionNumber, theme, host, proto]);
 
+  // This is necessary so CSS transitions are applied dynamically and not on mounting/unmounting, so we can
+  // apply a different animation depending on whether the clicked button is "next" or "previous"
   const childFactoryCreator = (classNames: CSSTransitionClassNames) => (child: ReactElement) => cloneElement(child, {classNames});
 
   return (

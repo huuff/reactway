@@ -21,7 +21,7 @@ const SectionButton: FC<{
   changeSection: (change: ChangeSection) => void 
 }> = ({ theme, type, changeSection }) => {
   return (
-    <div className={classNames(
+    <button className={classNames(
       "flex",
       "items-center",
       "px-2",
@@ -35,7 +35,7 @@ const SectionButton: FC<{
       onClick={() => changeSection(type)}
     >
       <FontAwesomeIcon className="w-4" icon={type === "next" ? faChevronRight : faChevronLeft} />
-    </div>
+    </button>
   );
 };
 

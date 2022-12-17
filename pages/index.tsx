@@ -9,6 +9,7 @@ import { useDarkMode } from "../src/hooks/use-dark-mode";
 import { randomSeed } from "../src/util/birth-function";
 import { getTheme, Theme } from "../src/util/get-theme";
 import clamp from "lodash/clamp";
+import { NextPage } from "next";
 
 type SectionNumber = 1 | 2 | 3;
 
@@ -40,11 +41,10 @@ const SectionButton: FC<{
 
 type Section = FC<{theme: Theme}>;
 
-// TODO: Generate the link to the game in the server, so it won't throw hydration errors!
 // TODO: Disable the buttons when it's the first or last section
 // TODO: Slide-in/Slide-out animation when changing section
 // TODO: Make it responsive
-const Index = () => {
+const Index: NextPage<{seed: string}> = ({ seed }) => {
   const { isDarkMode } = useDarkMode();
   const theme = getTheme(isDarkMode); 
 
@@ -93,9 +93,7 @@ const Index = () => {
           <div className="text-center">
             Or just <Link href={{
               pathname: "/game",
-              query: {
-                seed: randomSeed(),
-              }
+              query: { seed },
             }} className="underline">start playing right now</Link>
           </div>
         </div>
@@ -175,6 +173,12 @@ const ThirdSection: Section = ({theme}) => {
       />
     </section>
   );
+};
+
+Index.getInitialProps = () => {
+  return {
+    seed: randomSeed(),
+  };
 };
 
 export default Index;

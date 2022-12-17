@@ -9,7 +9,7 @@ import { useDarkMode } from "../src/hooks/use-dark-mode";
 import { randomSeed } from "../src/util/birth-function";
 import { getTheme, Theme } from "../src/util/get-theme";
 import clamp from "lodash/clamp";
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 
 type SectionNumber = 1 | 2 | 3;
 
@@ -42,11 +42,11 @@ const SectionButton: FC<{
   );
 };
 
-type Section = FC<{theme: Theme}>;
+type Section<T> = FC<{theme: Theme} & T>;
 
 // TODO: Slide-in/Slide-out animation when changing section
 // TODO: Make it responsive
-const Index: NextPage<{seed: string}> = ({ seed }) => {
+const Index: NextPage<{seed: string, host?: string}> = ({ seed }) => {
   const { isDarkMode } = useDarkMode();
   const theme = getTheme(isDarkMode); 
 
@@ -105,7 +105,7 @@ const Index: NextPage<{seed: string}> = ({ seed }) => {
   );
 };
 
-const FirstSection: Section = ({theme}) => {
+const FirstSection: Section<{}> = ({theme}) => {
   return (
     <section className="text-center">
       <p className="mb-2">
@@ -128,7 +128,7 @@ const FirstSection: Section = ({theme}) => {
   );
 };
 
-const SecondSection: Section = ({theme}) => {
+const SecondSection: Section<{}> = ({theme}) => {
   return (
     <section>
       <p className="text-center mb-6">
@@ -149,7 +149,7 @@ const SecondSection: Section = ({theme}) => {
   );
 };
 
-const ThirdSection: Section = ({theme}) => {
+const ThirdSection: Section<{host?: string}> = ({theme, host}) => {
   return (
     <section className="text-center">
       <p className="my-3">
@@ -165,7 +165,6 @@ const ThirdSection: Section = ({theme}) => {
         give them the exact same configuration as yours.
       </p>
 
-      {/* TODO: Pass the exact address of the deployment environment from the server and put it here */}
       <div className="mt-4 w-5/6 mx-auto">
         <label htmlFor="example-url" className={`text-${theme.panelMuted.className}`}>Example</label>
         <input 
@@ -174,16 +173,20 @@ const ThirdSection: Section = ({theme}) => {
           name="example-url"
           className={`bg-${theme.panelHighlight.className} py-1 px-2 w-full`}
           readOnly
-          value="https://localhost:3000/game?seed=0be686b1-207e-4065-8d64-257d111feeb5&height=50&width=100&tickDuration=700&cellSize=4"
+          // TODO: I'm unsure about this! so far, it doesn't work in development (host is always undefined). We'll see in production
+          value={`https://${host}/game?seed=0be686b1-207e-4065-8d64-257d111feeb5&height=50&width=100&tickDuration=700&cellSize=4`}
         />
       </div>
     </section>
   );
 };
 
-Index.getInitialProps = () => {
+export const getServerSideProps: GetServerSideProps = async ({req}) => {
   return {
-    seed: randomSeed(),
+    props: {
+      seed: randomSeed(),
+      host: req?.headers.host,
+    }
   };
 };
 

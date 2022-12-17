@@ -10,7 +10,7 @@ import { randomSeed } from "../src/util/birth-function";
 import { getTheme, Theme } from "../src/util/get-theme";
 import clamp from "lodash/clamp";
 
-type SectionNumber = 1 | 2;
+type SectionNumber = 1 | 2 | 3;
 
 type ChangeSection = "next" | "previous";
 
@@ -38,13 +38,16 @@ const SectionButton: FC<{
   );
 };
 
+type Section = FC<{theme: Theme}>;
+
 // TODO: Generate the link to the game in the server, so it won't throw hydration errors!
-// TODO: Disabel the buttons when it's the first or last section
+// TODO: Disable the buttons when it's the first or last section
 // TODO: Fix the hover color for the buttons in the light theme!
 // TODO: Slide-in/Slide-out animation when changing section
+// TODO: Make it responsive
 const Index = () => {
   const { isDarkMode } = useDarkMode();
-  const theme = getTheme(isDarkMode);
+  const theme = getTheme(isDarkMode); 
 
   const [currentSectionNumber, setCurrentSectionNumber] = useState<SectionNumber>(1);
 
@@ -52,18 +55,20 @@ const Index = () => {
     setCurrentSectionNumber((current) => {
       const change = action === "next" ? 1 : -1;
       // TODO: Can I do a version of this that types the result as a number in a range?
-      return clamp(current + change, 1, 2) as SectionNumber;
+      return clamp(current + change, 1, 3) as SectionNumber;
     });
   }, [setCurrentSectionNumber]);
 
   const CurrentSection = useCallback(() => {
     switch (currentSectionNumber) {
       case 1:
-        return <FirstSection />;
+        return <FirstSection theme={theme}/>;
       case 2:
-        return <SecondSection />;
+        return <SecondSection theme={theme}/>;
+      case 3:
+        return <ThirdSection theme={theme}/>;
     }
-  }, [currentSectionNumber]);
+  }, [currentSectionNumber, theme]);
 
   return (
     <div className={`h-screen bg-${theme.windowBackground.className}`}>
@@ -101,7 +106,7 @@ const Index = () => {
   );
 };
 
-const FirstSection = () => {
+const FirstSection: Section = ({theme}) => {
   return (
     <section className="text-center">
       <p className="mb-2">
@@ -124,7 +129,7 @@ const FirstSection = () => {
   );
 };
 
-const SecondSection = () => {
+const SecondSection: Section = ({theme}) => {
   return (
     <section>
       <p className="text-center mb-6">
@@ -141,6 +146,34 @@ const SecondSection = () => {
           Source: Wikipedia
         </Link>
       </p>
+    </section>
+  );
+};
+
+const ThirdSection: Section = ({theme}) => {
+  return (
+    <section className="text-center">
+      <p className="my-3">
+        The development of each game is completely deterministic, based on a seed.
+      </p>
+
+      <p className="my-3">
+        You&apos;ll find all possible settings of configurations in the drawer at the bottom of the screen.
+      </p>
+
+      <p className="my-3">
+        Settings will be synchronized with your search bar, which means that sharing it with anyone is guaranteed to 
+        give them the exact same configuration as yours.
+      </p>
+
+      {/* TODO: Pass the exact address of the deployment environment from the server and put it here */}
+      {/* TODO: Add a label that says "example" */}
+      <input 
+        type="text"
+        className={`mt-5 w-5/6 bg-${theme.panelHighlight.className}`}
+        readOnly
+        value="https://localhost:3000/game?seed=0be686b1-207e-4065-8d64-257d111feeb5&height=50&width=100&tickDuration=700&cellSize=4"
+      />
     </section>
   );
 };

@@ -16,8 +16,10 @@ type Theme = {
     };
     windowBackground: ClassAndColor;
     text: ClassAndColor;
+    // TODO: Maybe I should merge "highlight" and "muted" into a "panel" object?
     panel: ClassAndColor;
     panelHighlight: ClassAndColor;
+    panelMuted: ClassAndColor;
     button: {
         hover: ClassAndColor;
     }

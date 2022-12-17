@@ -36,6 +36,10 @@ module.exports =  {
       className: "light-panel-highlight",
       color: "#D1D7E1"
     },
+    panelMuted: {
+      className: "light-panel-muted",
+      color: "#707070",
+    },
     button: {
       hover: {
         className: "light-button-hover",
@@ -80,6 +84,10 @@ module.exports =  {
     panelHighlight: {
       className: "dark-panel-highlight",
       color: "#445266"
+    },
+    panelMuted: {
+      className: "dark-panel-muted",
+      color: "#515151",
     },
     button: {
       hover: {

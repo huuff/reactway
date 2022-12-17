@@ -18,8 +18,9 @@ type ChangeSection = "next" | "previous";
 const SectionButton: FC<{ 
   theme: Theme, 
   type: ChangeSection, 
-  changeSection: (change: ChangeSection) => void 
-}> = ({ theme, type, changeSection }) => {
+  changeSection: (change: ChangeSection) => void ,
+  isEnabled: boolean,
+}> = ({ theme, type, changeSection, isEnabled }) => {
   return (
     <button className={classNames(
       "flex",
@@ -29,10 +30,12 @@ const SectionButton: FC<{
       { ["mr-3"]: type === "previous"},
       { ["rounded-l-md"]: type === "previous" },
       { ["rounded-r-md"]: type === "next" },
-      `hover:bg-${theme.panelHighlight.className}`,
-      "hover:cursor-pointer",
+      {[`hover:bg-${theme.panelHighlight.className}`]: isEnabled},
+      {["hover:cursor-pointer"]: isEnabled },
+      { [`text-${theme.panelMuted.className}`]: !isEnabled}
     )}
-      onClick={() => changeSection(type)}
+      onClick={() => isEnabled && changeSection(type)}
+      disabled={!isEnabled}
     >
       <FontAwesomeIcon className="w-4" icon={type === "next" ? faChevronRight : faChevronLeft} />
     </button>
@@ -41,7 +44,6 @@ const SectionButton: FC<{
 
 type Section = FC<{theme: Theme}>;
 
-// TODO: Disable the buttons when it's the first or last section
 // TODO: Slide-in/Slide-out animation when changing section
 // TODO: Make it responsive
 const Index: NextPage<{seed: string}> = ({ seed }) => {
@@ -87,7 +89,7 @@ const Index: NextPage<{seed: string}> = ({ seed }) => {
         "flex",
         "flex-row",
       )}>
-        <SectionButton theme={theme} type="previous" changeSection={changeSection} />
+        <SectionButton theme={theme} type="previous" changeSection={changeSection} isEnabled={currentSectionNumber !== 1}/>
         <div className="flex flex-col justify-between py-7">
           <CurrentSection />
           <div className="text-center">
@@ -97,7 +99,7 @@ const Index: NextPage<{seed: string}> = ({ seed }) => {
             }} className="underline">start playing right now</Link>
           </div>
         </div>
-        <SectionButton theme={theme} type="next" changeSection={changeSection} />
+        <SectionButton theme={theme} type="next" changeSection={changeSection} isEnabled={currentSectionNumber !== 3}/>
       </main>
     </div>
   );

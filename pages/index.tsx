@@ -10,15 +10,17 @@ import { randomSeed } from "../src/util/birth-function";
 import { getTheme, Theme } from "../src/util/get-theme";
 import clamp from "lodash/clamp";
 import { GetServerSideProps, NextPage } from "next";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
+import "animate.css";
 
 type SectionNumber = 1 | 2 | 3;
 
 type ChangeSection = "next" | "previous";
 
-const SectionButton: FC<{ 
-  theme: Theme, 
-  type: ChangeSection, 
-  changeSection: (change: ChangeSection) => void ,
+const SectionButton: FC<{
+  theme: Theme,
+  type: ChangeSection,
+  changeSection: (change: ChangeSection) => void,
   isEnabled: boolean,
 }> = ({ theme, type, changeSection, isEnabled }) => {
   return (
@@ -26,13 +28,13 @@ const SectionButton: FC<{
       "flex",
       "items-center",
       "px-2",
-      { ["ml-3"]: type === "next"},
-      { ["mr-3"]: type === "previous"},
+      { ["ml-3"]: type === "next" },
+      { ["mr-3"]: type === "previous" },
       { ["rounded-l-md"]: type === "previous" },
       { ["rounded-r-md"]: type === "next" },
-      {[`hover:bg-${theme.panelHighlight.className}`]: isEnabled},
-      {["hover:cursor-pointer"]: isEnabled },
-      { [`text-${theme.panelMuted.className}`]: !isEnabled}
+      { [`hover:bg-${theme.panelHighlight.className}`]: isEnabled },
+      { ["hover:cursor-pointer"]: isEnabled },
+      { [`text-${theme.panelMuted.className}`]: !isEnabled }
     )}
       onClick={() => isEnabled && changeSection(type)}
       disabled={!isEnabled}
@@ -42,32 +44,34 @@ const SectionButton: FC<{
   );
 };
 
-type Section<T> = FC<{theme: Theme} & T>;
+type Section<T = {}> = FC<{ theme: Theme, className?: string } & T>;
 
-// TODO: Slide-in/Slide-out animation when changing section
 // TODO: Make it responsive
-const Index: NextPage<{seed: string, host?: string, proto?: string}> = ({ seed, host, proto }) => {
+const Index: NextPage<{ seed: string, host?: string, proto?: string }> = ({ seed, host, proto }) => {
   const { isDarkMode } = useDarkMode();
-  const theme = getTheme(isDarkMode); 
+  const theme = getTheme(isDarkMode);
 
   const [currentSectionNumber, setCurrentSectionNumber] = useState<SectionNumber>(1);
+
+  const [ movingDirection, setMovingDirection ] = useState<ChangeSection>("previous");
 
   const changeSection = useCallback((action: ChangeSection) => {
     setCurrentSectionNumber((current) => {
       const change = action === "next" ? 1 : -1;
+      setMovingDirection(action);
       // TODO: Can I do a version of this that types the result as a number in a range?
       return clamp(current + change, 1, 3) as SectionNumber;
     });
   }, [setCurrentSectionNumber]);
 
-  const CurrentSection = useCallback(() => {
+  const CurrentSection = useCallback<FC<{className?: string}>>(({className}) => {
     switch (currentSectionNumber) {
       case 1:
-        return <FirstSection theme={theme}/>;
+        return <FirstSection theme={theme} className={className}/>;
       case 2:
-        return <SecondSection theme={theme}/>;
+        return <SecondSection theme={theme} className={className}/>;
       case 3:
-        return <ThirdSection theme={theme} host={host} proto={proto}/>;
+        return <ThirdSection theme={theme} className={className} host={host} proto={proto} />;
     }
   }, [currentSectionNumber, theme, host, proto]);
 
@@ -89,9 +93,23 @@ const Index: NextPage<{seed: string, host?: string, proto?: string}> = ({ seed, 
         "flex",
         "flex-row",
       )}>
-        <SectionButton theme={theme} type="previous" changeSection={changeSection} isEnabled={currentSectionNumber !== 1}/>
-        <div className="flex flex-col justify-between py-7">
-          <CurrentSection />
+        <SectionButton 
+          theme={theme} 
+          type="previous" 
+          changeSection={changeSection} 
+          isEnabled={currentSectionNumber !== 1} 
+        />
+        <div className="flex flex-col justify-between py-7 flex-grow">
+          <TransitionGroup className="overflow-hidden relative flex-grow">
+            <CSSTransition key={currentSectionNumber} timeout={500}
+              classNames={{
+                enterActive: movingDirection === "previous" ? 'animate__slideInLeft' :  'animate__slideInRight',
+                exitActive: movingDirection === "previous" ?'animate__slideOutRight': "animate__slideOutLeft",
+              }}
+            >
+              <CurrentSection className="animate__animated animate__faster absolute" />
+            </CSSTransition>
+          </TransitionGroup>
           <div className="text-center">
             Or just <Link href={{
               pathname: "/game",
@@ -99,15 +117,20 @@ const Index: NextPage<{seed: string, host?: string, proto?: string}> = ({ seed, 
             }} className="underline">start playing right now</Link>
           </div>
         </div>
-        <SectionButton theme={theme} type="next" changeSection={changeSection} isEnabled={currentSectionNumber !== 3}/>
+        <SectionButton 
+          theme={theme} 
+          type="next" 
+          changeSection={changeSection}
+           isEnabled={currentSectionNumber !== 3} 
+          />
       </main>
     </div>
   );
 };
 
-const FirstSection: Section<{}> = ({theme}) => {
+const FirstSection: Section = ({ className }) => {
   return (
-    <section className="text-center">
+    <section className={`text-center ${className}`}>
       <p className="mb-2">
         Before continuing, there are some things you <span className="italic">don&apos;t</span> need to know.
       </p>
@@ -128,9 +151,9 @@ const FirstSection: Section<{}> = ({theme}) => {
   );
 };
 
-const SecondSection: Section<{}> = ({theme}) => {
+const SecondSection: Section = ({ theme, className }) => {
   return (
-    <section>
+    <section className={`${className}`}>
       <p className="text-center mb-6">
         Want to know the rules of <span className="italic">life</span>?
       </p>
@@ -149,9 +172,9 @@ const SecondSection: Section<{}> = ({theme}) => {
   );
 };
 
-const ThirdSection: Section<{host?: string, proto?: string}> = ({theme, host, proto}) => {
+const ThirdSection: Section<{ host?: string, proto?: string }> = ({ theme, className, host, proto }) => {
   return (
-    <section className="text-center">
+    <section className={`text-center ${className}`}>
       <p className="my-3">
         The development of each game is completely deterministic, based on a seed.
       </p>
@@ -161,13 +184,13 @@ const ThirdSection: Section<{host?: string, proto?: string}> = ({theme, host, pr
       </p>
 
       <p className="my-3">
-        Settings will be synchronized with your search bar, which means that sharing it with anyone is guaranteed to 
+        Settings will be synchronized with your search bar, which means that sharing it with anyone is guaranteed to
         give them the exact same configuration as yours.
       </p>
 
       <div className="mt-4 w-5/6 mx-auto">
         <label htmlFor="example-url" className={`text-${theme.panelMuted.className}`}>Example</label>
-        <input 
+        <input
           type="text"
           id="example-url"
           name="example-url"
@@ -180,7 +203,7 @@ const ThirdSection: Section<{host?: string, proto?: string}> = ({theme, host, pr
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({req}) => {
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   return {
     props: {
       seed: randomSeed(),

@@ -3,7 +3,7 @@ import { defaultSettings, useSettings } from "../src/settings/settings";
 import { useElementSize, useInterval, useWindowSize } from "usehooks-ts";
 import { useRouter } from "next/router";
 import { randomSeed } from "../src/util/birth-function";
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { toStringObject } from "../src/util/to-string-object";
 import { getGridFactory } from "../src/grid/grid-factory";
 import ClientSideOnly from "../src/components/util/ClientSideOnly";
@@ -116,14 +116,6 @@ const Game: NextPage<GameProps> = ({ seed }: GameProps) => {
     );
 };
 
-Game.getInitialProps = async ({ query }) => {
-    if (typeof query.seed === "string") {
-        return { seed: query.seed };
-    } else {
-        return { seed: "fixed seed" };
-    }
-};
-
 function useIsGridBiggerThanViewport(): [((node: HTMLDivElement | null) => void), boolean] {
     const { width: windowWidth, height: windowHeight } = useWindowSize();
     const [ref, { width: gridWidth, height: gridHeight }] = useElementSize<HTMLDivElement>();
@@ -133,5 +125,13 @@ function useIsGridBiggerThanViewport(): [((node: HTMLDivElement | null) => void)
         gridWidth > windowWidth || gridHeight > windowHeight,
     ];
 }
+
+export const getServerSideProps: GetServerSideProps =  async ({ query }) => {
+    if (typeof query.seed === "string") {
+        return { props: { seed: query.seed } };
+    } else {
+        return { props: { seed: "fixed seed" } };
+    }
+};
 
 export default Game;

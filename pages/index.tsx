@@ -46,7 +46,7 @@ type Section<T> = FC<{theme: Theme} & T>;
 
 // TODO: Slide-in/Slide-out animation when changing section
 // TODO: Make it responsive
-const Index: NextPage<{seed: string, host?: string}> = ({ seed }) => {
+const Index: NextPage<{seed: string, host?: string, proto?: string}> = ({ seed, host, proto }) => {
   const { isDarkMode } = useDarkMode();
   const theme = getTheme(isDarkMode); 
 
@@ -67,9 +67,9 @@ const Index: NextPage<{seed: string, host?: string}> = ({ seed }) => {
       case 2:
         return <SecondSection theme={theme}/>;
       case 3:
-        return <ThirdSection theme={theme}/>;
+        return <ThirdSection theme={theme} host={host} proto={proto}/>;
     }
-  }, [currentSectionNumber, theme]);
+  }, [currentSectionNumber, theme, host, proto]);
 
   return (
     <div className={`h-screen bg-${theme.windowBackground.className}`}>
@@ -149,7 +149,7 @@ const SecondSection: Section<{}> = ({theme}) => {
   );
 };
 
-const ThirdSection: Section<{host?: string}> = ({theme, host}) => {
+const ThirdSection: Section<{host?: string, proto?: string}> = ({theme, host, proto}) => {
   return (
     <section className="text-center">
       <p className="my-3">
@@ -173,8 +173,7 @@ const ThirdSection: Section<{host?: string}> = ({theme, host}) => {
           name="example-url"
           className={`bg-${theme.panelHighlight.className} py-1 px-2 w-full`}
           readOnly
-          // TODO: I'm unsure about this! so far, it doesn't work in development (host is always undefined). We'll see in production
-          value={`https://${host}/game?seed=0be686b1-207e-4065-8d64-257d111feeb5&height=50&width=100&tickDuration=700&cellSize=4`}
+          value={`${proto}://${host}/game?seed=0be686b1-207e-4065-8d64-257d111feeb5&height=50&width=100&tickDuration=700&cellSize=4`}
         />
       </div>
     </section>
@@ -186,6 +185,7 @@ export const getServerSideProps: GetServerSideProps = async ({req}) => {
     props: {
       seed: randomSeed(),
       host: req?.headers.host,
+      proto: req.headers["x-forwarded-proto"] ?? "http",
     }
   };
 };

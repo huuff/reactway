@@ -166,13 +166,17 @@ const ThirdSection: Section = ({theme}) => {
       </p>
 
       {/* TODO: Pass the exact address of the deployment environment from the server and put it here */}
-      {/* TODO: Add a label that says "example" */}
-      <input 
-        type="text"
-        className={`mt-5 w-5/6 bg-${theme.panelHighlight.className} py-1 px-2`}
-        readOnly
-        value="https://localhost:3000/game?seed=0be686b1-207e-4065-8d64-257d111feeb5&height=50&width=100&tickDuration=700&cellSize=4"
-      />
+      <div className="mt-4 w-5/6 mx-auto">
+        <label htmlFor="example-url" className={`text-${theme.panelMuted.className}`}>Example</label>
+        <input 
+          type="text"
+          id="example-url"
+          name="example-url"
+          className={`bg-${theme.panelHighlight.className} py-1 px-2 w-full`}
+          readOnly
+          value="https://localhost:3000/game?seed=0be686b1-207e-4065-8d64-257d111feeb5&height=50&width=100&tickDuration=700&cellSize=4"
+        />
+      </div>
     </section>
   );
 };

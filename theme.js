@@ -87,7 +87,7 @@ module.exports =  {
     },
     panelMuted: {
       className: "dark-panel-muted",
-      color: "#515151",
+      color: "#707070",
     },
     button: {
       hover: {

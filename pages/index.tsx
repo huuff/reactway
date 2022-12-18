@@ -1,4 +1,4 @@
-import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faChevronRight, faDice, faPlay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
 import Link from "next/link";
@@ -14,6 +14,7 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import "animate.css";
 import { TransitionGroupProps } from "react-transition-group/TransitionGroup";
 import { CSSTransitionClassNames } from "react-transition-group/CSSTransition";
+import { useRouter } from "next/router";
 
 type SectionNumber = 1 | 2 | 3;
 
@@ -53,9 +54,11 @@ const Index: NextPage<{ seed: string, host?: string, proto?: string }> = ({ seed
   const { isDarkMode } = useDarkMode();
   const theme = getTheme(isDarkMode);
 
+  const router = useRouter();
+
   const [currentSectionNumber, setCurrentSectionNumber] = useState<SectionNumber>(1);
 
-  const [ movingDirection, setMovingDirection ] = useState<ChangeSection>("previous");
+  const [movingDirection, setMovingDirection] = useState<ChangeSection>("previous");
 
   const changeSection = useCallback((action: ChangeSection) => {
     setCurrentSectionNumber((current) => {
@@ -66,12 +69,12 @@ const Index: NextPage<{ seed: string, host?: string, proto?: string }> = ({ seed
     });
   }, [setCurrentSectionNumber]);
 
-  const CurrentSection = useCallback<FC<{className?: string}>>(({className}) => {
+  const CurrentSection = useCallback<FC<{ className?: string }>>(({ className }) => {
     switch (currentSectionNumber) {
       case 1:
-        return <FirstSection theme={theme} className={className}/>;
+        return <FirstSection theme={theme} className={className} />;
       case 2:
-        return <SecondSection theme={theme} className={className}/>;
+        return <SecondSection theme={theme} className={className} />;
       case 3:
         return <ThirdSection theme={theme} className={className} host={host} proto={proto} />;
     }
@@ -79,11 +82,23 @@ const Index: NextPage<{ seed: string, host?: string, proto?: string }> = ({ seed
 
   // This is necessary so CSS transitions are applied dynamically and not on mounting/unmounting, so we can
   // apply a different animation depending on whether the clicked button is "next" or "previous"
-  const childFactoryCreator = (classNames: CSSTransitionClassNames) => (child: ReactElement) => cloneElement(child, {classNames});
+  const childFactoryCreator = (classNames: CSSTransitionClassNames) => (child: ReactElement) => cloneElement(child, { classNames });
   const transitionClassNames: CSSTransitionClassNames = useMemo(() => ({
-    enterActive: movingDirection === "previous" ? 'animate__slideInLeft' :  'animate__slideInRight',
-    exitActive: movingDirection === "previous" ?'animate__slideOutRight': "animate__slideOutLeft",
+    enterActive: movingDirection === "previous" ? 'animate__slideInLeft' : 'animate__slideInRight',
+    exitActive: movingDirection === "previous" ? 'animate__slideOutRight' : "animate__slideOutLeft",
   }), [movingDirection]);
+
+  const [seedInput, setSeedInput] = useState("");
+  const startGame = useCallback(() => {
+    if (seedInput) {
+      router.push({
+        pathname: "game",
+        query: {
+          seed: seedInput
+        }
+      })
+    }
+  }, [seedInput, router]);
 
   return (
     <div className={`h-screen bg-${theme.windowBackground.className}`}>
@@ -103,17 +118,17 @@ const Index: NextPage<{ seed: string, host?: string, proto?: string }> = ({ seed
         "flex",
         "flex-row",
       )}>
-        <SectionButton 
-          theme={theme} 
-          type="previous" 
-          changeSection={changeSection} 
-          isEnabled={currentSectionNumber !== 1} 
+        <SectionButton
+          theme={theme}
+          type="previous"
+          changeSection={changeSection}
+          isEnabled={currentSectionNumber !== 1}
         />
         <div className="flex flex-col justify-between py-7 flex-grow">
           <TransitionGroup
-             className="overflow-hidden relative flex-grow" 
-             childFactory={childFactoryCreator(transitionClassNames)}
-            >
+            className="overflow-hidden relative flex-grow"
+            childFactory={childFactoryCreator(transitionClassNames)}
+          >
             <CSSTransition key={currentSectionNumber} timeout={500}
               classNames={transitionClassNames}
             >
@@ -127,13 +142,36 @@ const Index: NextPage<{ seed: string, host?: string, proto?: string }> = ({ seed
             }} className="underline">start playing right now</Link>
           </div>
         </div>
-        <SectionButton 
-          theme={theme} 
-          type="next" 
+        <SectionButton
+          theme={theme}
+          type="next"
           changeSection={changeSection}
-           isEnabled={currentSectionNumber !== 3} 
-          />
+          isEnabled={currentSectionNumber !== 3}
+        />
       </main>
+
+      {/* TODO: Show some visual feedback that you can't start a game without a valid seed (disabled button) */}
+      {/* TODO: Are the colors ok? Especially for light/dark modes */}
+      <div className={`mx-auto w-fit mt-20 flex gap-1 text-${theme.text.className}`}>
+        <button 
+          className={`hover:bg-${theme.panelHighlight.className} px-2 py-1 rounded-lg`}
+          onClick={() => setSeedInput(randomSeed())}
+          >
+          <FontAwesomeIcon icon={faDice} className="w-5" />
+        </button>
+        <input
+          placeholder="Input a seed to start a game"
+          className="px-2 py-1 rounded-md"
+          value={seedInput}
+          onChange={(e) => setSeedInput(e.target.value)}
+        />
+        <button 
+          className={`hover:bg-${theme.panelHighlight.className} px-2 py-1 rounded-lg`}
+          onClick={startGame}
+          >
+          <FontAwesomeIcon icon={faPlay} className="w-4" />
+        </button>
+      </div>
     </div>
   );
 };

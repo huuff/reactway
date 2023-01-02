@@ -96,7 +96,7 @@ const Index: NextPage<{ seed: string, host?: string, proto?: string }> = ({ seed
         query: {
           seed: seedInput
         }
-      })
+      });
     }
   }, [seedInput, router]);
 
@@ -151,7 +151,6 @@ const Index: NextPage<{ seed: string, host?: string, proto?: string }> = ({ seed
       </main>
 
       {/* TODO: Show some visual feedback that you can't start a game without a valid seed (disabled button) */}
-      {/* TODO: Are the colors ok? Especially for light/dark modes */}
       <div className={`mx-auto w-fit mt-20 flex gap-1 text-${theme.text.className}`}>
         <button 
           className={`hover:bg-${theme.panelHighlight.className} px-2 py-1 rounded-lg`}
@@ -161,7 +160,7 @@ const Index: NextPage<{ seed: string, host?: string, proto?: string }> = ({ seed
         </button>
         <input
           placeholder="Input a seed to start a game"
-          className="px-2 py-1 rounded-md"
+          className={`px-2 py-1 rounded-md bg-${theme.panelHighlight.className}`}
           value={seedInput}
           onChange={(e) => setSeedInput(e.target.value)}
         />

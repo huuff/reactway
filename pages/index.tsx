@@ -177,6 +177,11 @@ const Index: NextPage<{ seed: string, host?: string, proto?: string }> = ({ seed
           <FontAwesomeIcon icon={faPlay} className="w-4" />
         </button>
       </div>
+
+      <div className={`w-full sm:w-3/4 md:w-2/4 mt-14 mx-auto flex justify-between text-${theme.text.className}`}>
+            <Link href="/lifeforms" className="hover:underline">Know its inhabitants</Link>
+            <Link href="/gun" className="hover:underline">Shoot life into it</Link>
+      </div>
     </div>
   );
 };

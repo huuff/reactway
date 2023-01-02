@@ -49,7 +49,6 @@ const SectionButton: FC<{
 
 type Section<T = {}> = FC<{ theme: Theme, className?: string } & T>;
 
-// TODO: Make it responsive
 const Index: NextPage<{ seed: string, host?: string, proto?: string }> = ({ seed, host, proto }) => {
   const { isDarkMode } = useDarkMode();
   const theme = getTheme(isDarkMode);
